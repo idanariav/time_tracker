@@ -9,7 +9,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.glance.ColorFilter
 import androidx.glance.GlanceId
+import androidx.glance.Image
+import androidx.glance.ImageProvider
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
 import androidx.glance.LocalSize
@@ -39,6 +42,7 @@ import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.height
 import androidx.glance.layout.padding
+import androidx.glance.layout.size
 import androidx.glance.layout.width
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
@@ -49,6 +53,7 @@ import com.idanariav.timetracker.data.Session
 import com.idanariav.timetracker.tracking.Graph
 import com.idanariav.timetracker.ui.MainActivity
 import com.idanariav.timetracker.ui.TimeFmt
+import com.idanariav.timetracker.ui.iconBitmap
 
 suspend fun refreshWidgets(context: Context) {
     ActivityWidget().updateAll(context)
@@ -73,6 +78,17 @@ private fun switchAction(id: Long) = actionRunCallback<SwitchActivityAction>(act
 
 private fun contentColor(bg: Color) = ColorProvider(if (bg.luminance() > 0.5f) Color.Black else Color.White)
 
+/** Lucide icon rendered once in white, then tinted by Glance. */
+@Composable
+private fun WidgetIcon(icon: String, tint: ColorProvider, sizeDp: Int) {
+    Image(
+        provider = ImageProvider(iconBitmap(icon, android.graphics.Color.WHITE, 64)),
+        contentDescription = null,
+        colorFilter = ColorFilter.tint(tint),
+        modifier = GlanceModifier.size(sizeDp.dp),
+    )
+}
+
 @Composable
 private fun WidgetFrame(content: @Composable () -> Unit) {
     Column(
@@ -84,8 +100,12 @@ private fun WidgetFrame(content: @Composable () -> Unit) {
 @Composable
 private fun CurrentHeader(running: Session?, current: ActivityItem?) {
     Row(GlanceModifier.fillMaxWidth().padding(horizontal = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+        if (running != null && current != null) {
+            WidgetIcon(current.icon, GlanceTheme.colors.onSurface, 18)
+            Spacer(GlanceModifier.width(6.dp))
+        }
         Text(
-            text = if (running != null && current != null) "${current.emoji} ${current.name}" else "Not tracking",
+            text = if (running != null && current != null) current.name else "Not tracking",
             style = TextStyle(color = GlanceTheme.colors.onSurface, fontSize = 15.sp, fontWeight = FontWeight.Bold),
             maxLines = 1,
             modifier = GlanceModifier.defaultWeight().clickable(actionStartActivity<MainActivity>()),
@@ -115,7 +135,7 @@ private fun Tile(a: ActivityItem, active: Boolean, height: Int = 58) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(a.emoji, style = TextStyle(fontSize = 20.sp))
+            WidgetIcon(a.icon, if (active) contentColor(c) else GlanceTheme.colors.onSurface, 22)
             Text(
                 a.name, maxLines = 1,
                 style = TextStyle(

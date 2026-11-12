@@ -16,15 +16,15 @@ object Seed {
             val health = dao.putGoal(Goal(name = "Health", color = 0xFF81C784.toInt(), targetMinutes = 60, sortOrder = 3))
             val fun_ = dao.putGoal(Goal(name = "Leisure", color = 0xFFFFB74D.toInt(), targetMinutes = 120, isLimit = true, sortOrder = 4))
             val acts = listOf(
-                ActivityItem(name = "Sleep", emoji = "😴", color = 0xFF9575CD.toInt(), goalId = rest),
-                ActivityItem(name = "Work", emoji = "💼", color = 0xFF64B5F6.toInt(), goalId = work),
-                ActivityItem(name = "Email", emoji = "📧", color = 0xFF4FC3F7.toInt(), goalId = work),
-                ActivityItem(name = "Exercise", emoji = "🏃", color = 0xFF81C784.toInt(), goalId = health),
-                ActivityItem(name = "Eat", emoji = "🍽️", color = 0xFFAED581.toInt(), goalId = health),
-                ActivityItem(name = "Commute", emoji = "🚗", color = 0xFF90A4AE.toInt()),
-                ActivityItem(name = "Chores", emoji = "🧹", color = 0xFFA1887F.toInt()),
-                ActivityItem(name = "Reading", emoji = "📚", color = 0xFF4DB6AC.toInt(), goalId = fun_),
-                ActivityItem(name = "TV", emoji = "📺", color = 0xFFFFB74D.toInt(), goalId = fun_),
+                ActivityItem(name = "Sleep", icon = "Moon", color = 0xFF9575CD.toInt(), goalId = rest),
+                ActivityItem(name = "Work", icon = "Briefcase", color = 0xFF64B5F6.toInt(), goalId = work),
+                ActivityItem(name = "Email", icon = "Mail", color = 0xFF4FC3F7.toInt(), goalId = work),
+                ActivityItem(name = "Exercise", icon = "Footprints", color = 0xFF81C784.toInt(), goalId = health),
+                ActivityItem(name = "Eat", icon = "Utensils", color = 0xFFAED581.toInt(), goalId = health),
+                ActivityItem(name = "Commute", icon = "Car", color = 0xFF90A4AE.toInt()),
+                ActivityItem(name = "Chores", icon = "Brush", color = 0xFFA1887F.toInt()),
+                ActivityItem(name = "Reading", icon = "BookOpen", color = 0xFF4DB6AC.toInt(), goalId = fun_),
+                ActivityItem(name = "TV", icon = "Tv", color = 0xFFFFB74D.toInt(), goalId = fun_),
             ).mapIndexed { i, a -> a.copy(sortOrder = i) }
             val ids = acts.map { dao.putActivity(it) }
             dao.putRule(Rule(activityId = ids[0], startMinute = 22 * 60, endMinute = 2 * 60))

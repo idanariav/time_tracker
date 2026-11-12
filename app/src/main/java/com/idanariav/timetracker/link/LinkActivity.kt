@@ -41,9 +41,9 @@ class LinkActivity : Activity() {
             when {
                 a == null -> "Unknown activity (was it deleted?)"
                 uri.getQueryParameter("toggle") == "1" ->
-                    if (Graph.tracker.toggle(a.id)) "${a.emoji} ${a.name} started" else "${a.emoji} ${a.name} stopped"
-                Graph.tracker.switchTo(a.id) == null -> "${a.emoji} ${a.name} already running"
-                else -> "${a.emoji} ${a.name} started"
+                    if (Graph.tracker.toggle(a.id)) "${a.name} started" else "${a.name} stopped"
+                Graph.tracker.switchTo(a.id) == null -> "${a.name} already running"
+                else -> "${a.name} started"
             }
         }
         else -> "Unknown link"

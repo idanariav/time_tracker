@@ -1,5 +1,6 @@
 package com.idanariav.timetracker.data
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
@@ -19,7 +20,8 @@ data class Goal(
 data class ActivityItem(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val name: String,
-    val emoji: String,
+    /** Lucide icon name (see ui/Icons.kt). Column keeps its v1 name. */
+    @ColumnInfo(name = "emoji") val icon: String,
     val color: Int,
     val goalId: Long? = null,
     val archived: Boolean = false,

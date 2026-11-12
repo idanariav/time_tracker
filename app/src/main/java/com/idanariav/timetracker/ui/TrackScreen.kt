@@ -1,5 +1,8 @@
 package com.idanariav.timetracker.ui
 
+import com.composables.icons.lucide.Lucide
+import com.composables.icons.lucide.Plus
+import androidx.compose.material3.Icon
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -13,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -46,7 +50,6 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.idanariav.timetracker.data.ActivityItem
 import com.idanariav.timetracker.data.Session
 import com.idanariav.timetracker.domain.formatElapsed
@@ -75,8 +78,8 @@ fun TrackScreen(padding: PaddingValues, snackbar: SnackbarHostState, onEditActiv
         haptic.performHapticFeedback(HapticFeedbackType.LongPress)
         scope.launch {
             val change = Graph.tracker.switchTo(a.id)
-            if (change == null) notify("${a.emoji} ${a.name} is already running", null)
-            else notify("${a.emoji} ${a.name} started", change)
+            if (change == null) notify("${a.name} is already running", null)
+            else notify("${a.name} started", change)
         }
     }
 
@@ -104,7 +107,7 @@ fun TrackScreen(padding: PaddingValues, snackbar: SnackbarHostState, onEditActiv
                     )
                     LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         rowItems(suggestions, key = { it.id }) { a ->
-                            AssistChip(onClick = { switch(a) }, label = { Text("${a.emoji} ${a.name}") })
+                            AssistChip(onClick = { switch(a) }, label = { Text(a.name) }, leadingIcon = { ChipIcon(a) })
                         }
                     }
                 }
@@ -121,7 +124,7 @@ fun TrackScreen(padding: PaddingValues, snackbar: SnackbarHostState, onEditActiv
                     .padding(vertical = 12.dp).fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Text("＋", fontSize = 28.sp)
+                Icon(Lucide.Plus, null, modifier = Modifier.size(28.dp))
                 Spacer(Modifier.height(4.dp))
                 Text("New", style = MaterialTheme.typography.labelMedium)
             }
@@ -156,7 +159,7 @@ private fun CurrentCard(running: Session?, act: ActivityItem?, onStop: () -> Uni
         }
         val now = rememberNow(1000)
         Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-            EmojiBadge(act.emoji, act.color, 56.dp)
+            IconBadge(act.icon, act.color, 56.dp)
             Column(Modifier.weight(1f).padding(start = 16.dp)) {
                 Text(act.name, style = MaterialTheme.typography.titleLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 Text(
@@ -189,7 +192,10 @@ private fun ActivityTile(a: ActivityItem, active: Boolean, onClick: () -> Unit, 
             .padding(vertical = 12.dp, horizontal = 4.dp).fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Text(a.emoji, fontSize = 28.sp)
+        Icon(
+            activityIcon(a.icon), null, modifier = Modifier.size(28.dp),
+            tint = if (active) onColor(c) else readableTint(a.color),
+        )
         Spacer(Modifier.height(4.dp))
         Text(
             a.name, style = MaterialTheme.typography.labelMedium, maxLines = 1, overflow = TextOverflow.Ellipsis,

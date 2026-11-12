@@ -1,5 +1,6 @@
 package com.idanariav.timetracker.ui
 
+import androidx.compose.material3.Icon
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -124,7 +125,11 @@ private fun GoalCard(row: GoalRow) {
             }
             row.items.forEach { (a, ms) ->
                 Row(Modifier.padding(top = 6.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Text("${a.emoji}  ${a.name}", style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f))
+                    Icon(activityIcon(a.icon), null, tint = readableTint(a.color), modifier = Modifier.size(18.dp))
+                    Text(
+                        a.name, style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.weight(1f).padding(start = 8.dp),
+                    )
                     Text(formatDuration(ms), style = MaterialTheme.typography.bodyMedium)
                 }
             }

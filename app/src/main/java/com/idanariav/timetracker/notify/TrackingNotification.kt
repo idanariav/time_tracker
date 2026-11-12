@@ -1,5 +1,7 @@
 package com.idanariav.timetracker.notify
 
+import com.idanariav.timetracker.ui.iconBitmap
+import com.idanariav.timetracker.ui.onColorInt
 import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -49,7 +51,8 @@ object TrackingNotification {
         )
         val b = NotificationCompat.Builder(context, CHANNEL)
             .setSmallIcon(R.drawable.ic_stat_timer)
-            .setContentTitle("${act.emoji} ${act.name}")
+            .setContentTitle(act.name)
+            .setLargeIcon(iconBitmap(act.icon, onColorInt(act.color), 128, act.color))
             .setContentText("Since ${TimeFmt.clock(running.startTime)}")
             .setWhen(running.startTime)
             .setShowWhen(true)
@@ -62,7 +65,7 @@ object TrackingNotification {
             .setContentIntent(open)
             .addAction(0, "Stop", actionIntent(context, ActionReceiver.STOP, 0L))
         Graph.suggestionsNow(2).forEach { s ->
-            b.addAction(0, "${s.emoji} ${s.name}", actionIntent(context, ActionReceiver.SWITCH, s.id))
+            b.addAction(0, s.name, actionIntent(context, ActionReceiver.SWITCH, s.id))
         }
         nm.notify(ID, b.build())
     }

@@ -1,6 +1,6 @@
 # Time Tracker
 
-A fast, private, offline Android time tracker (Kotlin · Jetpack Compose · Room · Glance widgets).
+A fast, private, offline Android time tracker (Kotlin · Jetpack Compose · Room · Glance widgets · Lucide icons).
 No internet permission, no cloud backup — all data stays on the device.
 
 ## Build & install
@@ -12,7 +12,7 @@ adb install -r app/build/outputs/apk/release/app-release.apk   # signed with the
 
 ## Features
 
-- **Track** — grid of activities (emoji + color). Tap switches (only one runs at a time), long-press edits, Undo snackbar for mis-taps, "Suggested now" chips.
+- **Track** — grid of activities ([Lucide](https://lucide.dev) icon + color). Tap switches (only one runs at a time), long-press edits, Undo snackbar for mis-taps, "Suggested now" chips.
 - **Goals** — goals group activities and have an optional daily target or limit; day-by-day navigation.
 - **Log** — per-day list, newest first. Tap an entry to edit; tap an *Untracked* gap to backfill it; ＋ adds an entry.
   The editor has −30/−15/+15/+30, **Last** (previous entry's end), **Next** (next entry's start) and **Now** anchors, a time picker, notes, and "still running".
@@ -40,3 +40,9 @@ adb install -r app/build/outputs/apk/release/app-release.apk   # signed with the
 - `data/` Room entities, DAO, prefs · `domain/` pure logic (periods, stats, overlap resolution, suggestions, CSV) — unit-tested in `app/src/test`
 - `tracking/Tracker.kt` the only writer; keeps the one-running invariant and refreshes widgets/notification/shortcuts
 - `ui/` Compose screens · `widget/` Glance widgets · `notify/` notification + boot receiver · `link/` URI handler + NFC writer
+
+## Icons
+
+All icons come from [Lucide](https://lucide.dev) via `com.composables:icons-lucide`. Activities store the icon *name*
+(curated list in `ui/Icons.kt`); surfaces that can't draw an `ImageVector` (widgets, notification, launcher
+shortcuts) get a bitmap from `iconBitmap()`. DB v2 migrates v1 emoji to the closest Lucide icon.

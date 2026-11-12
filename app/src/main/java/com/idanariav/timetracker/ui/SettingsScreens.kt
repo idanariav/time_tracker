@@ -1,5 +1,11 @@
 package com.idanariav.timetracker.ui
 
+import com.composables.icons.lucide.Lucide
+import com.composables.icons.lucide.ArrowLeft
+import com.composables.icons.lucide.Plus
+import com.composables.icons.lucide.ChevronUp
+import com.composables.icons.lucide.ChevronDown
+import com.composables.icons.lucide.Trash2
 import android.Manifest
 import android.content.Intent
 import android.nfc.NfcAdapter
@@ -25,12 +31,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -89,12 +89,12 @@ private fun SubScreen(
         topBar = {
             TopAppBar(
                 title = { Text(title) },
-                navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back") } },
+                navigationIcon = { IconButton(onClick = onBack) { Icon(Lucide.ArrowLeft, "Back") } },
                 actions = { actions() },
             )
         },
         floatingActionButton = {
-            if (fab != null) FloatingActionButton(onClick = fab) { Icon(Icons.Default.Add, "Add") }
+            if (fab != null) FloatingActionButton(onClick = fab) { Icon(Lucide.Plus, "Add") }
         },
         content = content,
     )
@@ -223,16 +223,16 @@ fun ActivitiesScreen(onBack: () -> Unit, push: (Route) -> Unit) {
                 val a = active[i]
                 ListItem(
                     modifier = Modifier.clickable { push(Route.EditActivity(a.id)) },
-                    leadingContent = { EmojiBadge(a.emoji, a.color) },
+                    leadingContent = { IconBadge(a.icon, a.color) },
                     headlineContent = { Text(a.name) },
                     supportingContent = { Text(a.goalId?.let { goalName[it] } ?: "No goal") },
                     trailingContent = {
                         Row {
                             IconButton(onClick = { move(i, -1) }, enabled = i > 0) {
-                                Icon(Icons.Default.KeyboardArrowUp, "Move up")
+                                Icon(Lucide.ChevronUp, "Move up")
                             }
                             IconButton(onClick = { move(i, 1) }, enabled = i < active.lastIndex) {
-                                Icon(Icons.Default.KeyboardArrowDown, "Move down")
+                                Icon(Lucide.ChevronDown, "Move down")
                             }
                         }
                     },
@@ -243,7 +243,7 @@ fun ActivitiesScreen(onBack: () -> Unit, push: (Route) -> Unit) {
                 items(archived, key = { it.id }) { a ->
                     ListItem(
                         modifier = Modifier.clickable { push(Route.EditActivity(a.id)) },
-                        leadingContent = { EmojiBadge(a.emoji, a.color) },
+                        leadingContent = { IconBadge(a.icon, a.color) },
                         headlineContent = { Text(a.name, color = MaterialTheme.colorScheme.onSurfaceVariant) },
                     )
                 }
@@ -260,7 +260,7 @@ fun ActivityEditorScreen(id: Long?, onBack: () -> Unit) {
     val scope = rememberCoroutineScope()
     var original by remember { mutableStateOf<ActivityItem?>(null) }
     var name by remember { mutableStateOf("") }
-    var emoji by remember { mutableStateOf("⭐") }
+    var icon by remember { mutableStateOf("Star") }
     var color by remember { mutableIntStateOf(Palette[5]) }
     var goalId by remember { mutableStateOf<Long?>(null) }
     var archived by remember { mutableStateOf(false) }
@@ -270,7 +270,7 @@ fun ActivityEditorScreen(id: Long?, onBack: () -> Unit) {
 
     LaunchedEffect(id) {
         if (id != null) Graph.dao.activity(id)?.let { a ->
-            original = a; name = a.name; emoji = a.emoji; color = a.color; goalId = a.goalId; archived = a.archived
+            original = a; name = a.name; icon = a.icon; color = a.color; goalId = a.goalId; archived = a.archived
             sessionCount = Graph.dao.sessionCount(a.id)
         }
     }
@@ -278,19 +278,19 @@ fun ActivityEditorScreen(id: Long?, onBack: () -> Unit) {
     SubScreen(
         if (id == null) "New activity" else "Edit activity", onBack,
         actions = {
-            if (id != null) IconButton(onClick = { confirmDelete = true }) { Icon(Icons.Default.Delete, "Delete") }
+            if (id != null) IconButton(onClick = { confirmDelete = true }) { Icon(Lucide.Trash2, "Delete") }
         },
     ) { p ->
         Column(Modifier.padding(p).verticalScroll(rememberScrollState()).padding(16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                EmojiBadge(emoji, color, 56.dp)
+                IconBadge(icon, color, 56.dp)
                 OutlinedTextField(
                     name, { name = it }, label = { Text("Name") }, singleLine = true,
                     modifier = Modifier.weight(1f).padding(start = 12.dp),
                 )
             }
             SectionTitle("Icon")
-            EmojiPicker(emoji) { emoji = it }
+            IconPicker(icon, color) { icon = it }
             SectionTitle("Color")
             ColorPicker(color) { color = it }
             SectionTitle("Goal")
@@ -319,9 +319,9 @@ fun ActivityEditorScreen(id: Long?, onBack: () -> Unit) {
                 modifier = Modifier.fillMaxWidth().padding(top = 24.dp),
                 onClick = {
                     scope.launch {
-                        val base = original ?: ActivityItem(name = "", emoji = "", color = 0)
+                        val base = original ?: ActivityItem(name = "", icon = "", color = 0)
                         Graph.tracker.saveActivity(
-                            base.copy(name = name.trim(), emoji = emoji, color = color, goalId = goalId, archived = archived),
+                            base.copy(name = name.trim(), icon = icon, color = color, goalId = goalId, archived = archived),
                         )
                         onBack()
                     }
@@ -477,7 +477,7 @@ private fun Rule.describe(after: ActivityItem?): String {
         0b1100000 -> "weekends"
         else -> DayLetters.filterIndexed { i, _ -> days and (1 shl i) != 0 }.joinToString(" ")
     }
-    return "$time · $days" + (after?.let { " · after ${it.emoji} ${it.name}" } ?: "")
+    return "$time · $days" + (after?.let { " · after ${it.name}" } ?: "")
 }
 
 @Composable
@@ -507,7 +507,7 @@ fun RulesScreen(onBack: () -> Unit) {
                 val a = byId[r.activityId]
                 ListItem(
                     modifier = Modifier.clickable { editing = r },
-                    leadingContent = { EmojiBadge(a?.emoji ?: "❔", a?.color ?: 0xFF9E9E9E.toInt()) },
+                    leadingContent = { IconBadge(a?.icon ?: "Circle", a?.color ?: 0xFF9E9E9E.toInt()) },
                     headlineContent = { Text(a?.name ?: "(deleted)") },
                     supportingContent = { Text(r.describe(r.afterActivityId?.let { byId[it] })) },
                     trailingContent = {
@@ -540,7 +540,7 @@ private fun RuleDialog(initial: Rule, acts: List<ActivityItem>, onDismiss: () ->
                 Text("Suggest", style = MaterialTheme.typography.labelLarge)
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                     acts.forEach { a ->
-                        FilterChip(activityId == a.id, { activityId = a.id }, label = { Text("${a.emoji} ${a.name}") })
+                        FilterChip(activityId == a.id, { activityId = a.id }, label = { Text(a.name) }, leadingIcon = { ChipIcon(a) })
                     }
                 }
                 Row(Modifier.padding(top = 12.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -564,7 +564,7 @@ private fun RuleDialog(initial: Rule, acts: List<ActivityItem>, onDismiss: () ->
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                     FilterChip(after == null, { after = null }, label = { Text("Anything") })
                     acts.filter { it.id != activityId }.forEach { a ->
-                        FilterChip(after == a.id, { after = a.id }, label = { Text("${a.emoji} ${a.name}") })
+                        FilterChip(after == a.id, { after = a.id }, label = { Text(a.name) }, leadingIcon = { ChipIcon(a) })
                     }
                 }
                 if (initial.id != 0L) {

@@ -1,5 +1,7 @@
 package com.idanariav.timetracker.ui
 
+import com.composables.icons.lucide.Lucide
+import com.composables.icons.lucide.Share2
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -13,8 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -54,7 +54,7 @@ import com.idanariav.timetracker.tracking.Graph
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
-private data class Slice(val key: Long, val label: String, val color: Int, val ms: Long)
+private data class Slice(val key: Long, val label: String, val color: Int, val ms: Long, val icon: String? = null)
 
 private const val NO_GOAL = -1L
 private const val GREY = 0xFF9E9E9E.toInt()
@@ -82,14 +82,14 @@ fun AnalysisScreen(padding: PaddingValues) {
     val keyOf: (Session) -> Long = { s ->
         if (!byGoal) s.activityId else actById[s.activityId]?.goalId?.takeIf { it in goalById } ?: NO_GOAL
     }
-    fun describe(key: Long): Pair<String, Int> = if (!byGoal) {
-        actById[key]?.let { "${it.emoji}  ${it.name}" to it.color } ?: ("(deleted)" to GREY)
+    fun slice(key: Long, ms: Long): Slice = if (!byGoal) {
+        actById[key]?.let { Slice(key, it.name, it.color, ms, it.icon) } ?: Slice(key, "(deleted)", GREY, ms)
     } else {
-        goalById[key]?.let { it.name to it.color } ?: ("No goal" to GREY)
+        goalById[key]?.let { Slice(key, it.name, it.color, ms) } ?: Slice(key, "No goal", GREY, ms)
     }
     val counted = sessions.filter { it.counts(now, settings.minMs) }
     val slices = totalsBy(counted, from, to, now, 0, keyOf)
-        .map { (k, ms) -> describe(k).let { (l, c) -> Slice(k, l, c, ms) } }
+        .map { (k, ms) -> slice(k, ms) }
         .sortedByDescending { it.ms }
     val colorOf = slices.associate { it.key to Color(it.color) }
     val total = slices.sumOf { it.ms }
@@ -116,7 +116,7 @@ fun AnalysisScreen(padding: PaddingValues) {
                     )
                 }
                 IconButton(onClick = { scope.launch { CsvExport.share(ctx, from, to, period.label()) } }) {
-                    Icon(Icons.Default.Share, "Export this period as CSV")
+                    Icon(Lucide.Share2, "Export this period as CSV")
                 }
             }
             Column(Modifier.padding(horizontal = 16.dp)) {
@@ -156,7 +156,10 @@ fun AnalysisScreen(padding: PaddingValues) {
         items(slices, key = { it.key }) { s ->
             val pct = if (total > 0) s.ms * 100f / total else 0f
             ListItem(
-                leadingContent = { Box(Modifier.size(14.dp).clip(CircleShape).background(Color(s.color))) },
+                leadingContent = {
+                    if (s.icon != null) IconBadge(s.icon, s.color, 32.dp)
+                    else Box(Modifier.size(14.dp).clip(CircleShape).background(Color(s.color)))
+                },
                 headlineContent = { Text(s.label) },
                 supportingContent = {
                     Column {

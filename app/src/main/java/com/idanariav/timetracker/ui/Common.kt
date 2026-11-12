@@ -18,15 +18,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TimePicker
@@ -42,11 +38,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.composables.icons.lucide.ChevronLeft
+import com.composables.icons.lucide.ChevronRight
+import com.composables.icons.lucide.Lucide
+import com.idanariav.timetracker.data.ActivityItem
 import com.idanariav.timetracker.domain.toLocalDate
 import kotlinx.coroutines.delay
 import java.time.Instant
@@ -85,14 +87,6 @@ val Palette = listOf(
     0xFF4DB6AC, 0xFF81C784, 0xFFAED581, 0xFFDCE775, 0xFFFFD54F, 0xFFFFB74D, 0xFFFF8A65, 0xFFA1887F, 0xFF90A4AE,
 ).map { it.toInt() }
 
-val EmojiChoices = listOf(
-    "😴", "🛌", "💼", "💻", "📧", "📞", "🤝", "📝", "📚", "🎓", "🧠", "✍️",
-    "🏃", "🏋️", "🧘", "🚴", "🚶", "⚽", "🏊", "🍽️", "☕", "🍳", "🛒", "🧹",
-    "🧺", "🚿", "🚗", "🚌", "✈️", "🏠", "👪", "❤️", "🧒", "🐶", "📺", "🎮",
-    "🎬", "🎵", "🎸", "🎨", "📷", "🌳", "🙏", "🩺", "💊", "💰", "🔧", "🪴",
-    "📱", "🎉", "⭐", "🧩",
-)
-
 @Composable
 fun AppTheme(content: @Composable () -> Unit) {
     val dark = isSystemInDarkTheme()
@@ -117,12 +111,23 @@ fun rememberNow(periodMs: Long = 1000): Long {
     return now
 }
 
+/** Solid color circle with the activity's Lucide icon in black or white. */
 @Composable
-fun EmojiBadge(emoji: String, color: Int, size: Dp = 40.dp) {
-    Box(
-        Modifier.size(size).clip(CircleShape).background(Color(color).copy(alpha = 0.25f)),
-        contentAlignment = Alignment.Center,
-    ) { Text(emoji, fontSize = (size.value * 0.5f).sp) }
+fun IconBadge(icon: String, color: Int, size: Dp = 40.dp) {
+    val c = Color(color)
+    Box(Modifier.size(size).clip(CircleShape).background(c), contentAlignment = Alignment.Center) {
+        Icon(activityIcon(icon), null, tint = onColor(c), modifier = Modifier.size(size * 0.5f))
+    }
+}
+
+/** The activity color pulled toward the text color so it stays readable on light and dark surfaces. */
+@Composable
+fun readableTint(color: Int): Color = lerp(Color(color), MaterialTheme.colorScheme.onSurface, 0.35f)
+
+/** Small colored icon for chips (FilterChip/AssistChip leadingIcon). */
+@Composable
+fun ChipIcon(a: ActivityItem) {
+    Icon(activityIcon(a.icon), null, tint = readableTint(a.color), modifier = Modifier.size(18.dp))
 }
 
 @Composable
@@ -137,11 +142,11 @@ fun SectionTitle(text: String, modifier: Modifier = Modifier) {
 @Composable
 fun PeriodHeader(label: String, onPrev: () -> Unit, onNext: () -> Unit, onReset: () -> Unit, canGoNext: Boolean) {
     Row(Modifier.fillMaxWidth().padding(horizontal = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-        IconButton(onClick = onPrev) { Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, "Previous") }
+        IconButton(onClick = onPrev) { Icon(Lucide.ChevronLeft, "Previous") }
         TextButton(onClick = onReset, modifier = Modifier.weight(1f)) {
             Text(label, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
         }
-        IconButton(onClick = onNext, enabled = canGoNext) { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, "Next") }
+        IconButton(onClick = onNext, enabled = canGoNext) { Icon(Lucide.ChevronRight, "Next") }
     }
 }
 
@@ -164,24 +169,24 @@ fun ColorPicker(selected: Int, onSelect: (Int) -> Unit) {
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun EmojiPicker(selected: String, onSelect: (String) -> Unit) {
+fun IconPicker(selected: String, color: Int, onSelect: (String) -> Unit) {
+    val c = Color(color)
     FlowRow(horizontalArrangement = Arrangement.spacedBy(4.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        EmojiChoices.forEach { e ->
+        ActivityIcons.forEach { (name, vector) ->
+            val isSel = name == selected
             Box(
                 Modifier.size(44.dp).clip(CircleShape)
-                    .background(if (e == selected) MaterialTheme.colorScheme.primaryContainer else Color.Transparent)
-                    .clickable { onSelect(e) },
+                    .background(if (isSel) c else Color.Transparent)
+                    .clickable { onSelect(name) },
                 contentAlignment = Alignment.Center,
-            ) { Text(e, fontSize = 22.sp) }
+            ) {
+                Icon(
+                    vector, name, modifier = Modifier.size(22.dp),
+                    tint = if (isSel) onColor(c) else MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
         }
     }
-    OutlinedTextField(
-        value = if (selected in EmojiChoices) "" else selected,
-        onValueChange = { v -> if (v.isNotBlank()) onSelect(v.trim().take(8)) },
-        label = { Text("…or type any emoji") },
-        singleLine = true,
-        modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
-    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -219,3 +224,5 @@ fun Context.findActivity(): Activity? {
 /** Black or white, whichever reads better on [bg]. */
 fun onColor(bg: Color): Color =
     if (0.299 * bg.red + 0.587 * bg.green + 0.114 * bg.blue > 0.6) Color.Black else Color.White
+
+fun onColorInt(color: Int): Int = onColor(Color(color)).toArgb()

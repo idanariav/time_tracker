@@ -102,7 +102,8 @@ fun SessionEditorSheet(initial: Session, onDismiss: () -> Unit) {
                 acts.forEach { a ->
                     FilterChip(
                         selected = a.id == activityId, onClick = { activityId = a.id },
-                        label = { Text("${a.emoji} ${a.name}") },
+                        label = { Text(a.name) },
+                        leadingIcon = { ChipIcon(a) },
                     )
                 }
             }

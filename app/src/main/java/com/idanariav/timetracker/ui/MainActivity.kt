@@ -1,5 +1,11 @@
 package com.idanariav.timetracker.ui
 
+import com.composables.icons.lucide.Lucide
+import com.composables.icons.lucide.Timer
+import com.composables.icons.lucide.Target
+import com.composables.icons.lucide.List
+import com.composables.icons.lucide.ChartColumn
+import com.composables.icons.lucide.Settings
 import android.Manifest
 import android.os.Build
 import android.os.Bundle
@@ -9,12 +15,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.List
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -93,10 +93,10 @@ private fun RequestNotificationPermission() {
 private data class Tab(val title: String, val label: String, val icon: androidx.compose.ui.graphics.vector.ImageVector)
 
 private val tabs = listOf(
-    Tab("Time Tracker", "Track", Icons.Default.Home),
-    Tab("Goals", "Goals", Icons.Default.Star),
-    Tab("Log", "Log", Icons.AutoMirrored.Filled.List),
-    Tab("Analysis", "Analysis", Icons.Default.DateRange),
+    Tab("Time Tracker", "Track", Lucide.Timer),
+    Tab("Goals", "Goals", Lucide.Target),
+    Tab("Log", "Log", Lucide.List),
+    Tab("Analysis", "Analysis", Lucide.ChartColumn),
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -108,7 +108,7 @@ private fun MainTabs(push: (Route) -> Unit) {
         topBar = {
             TopAppBar(
                 title = { Text(tabs[tab].title) },
-                actions = { IconButton(onClick = { push(Route.Settings) }) { Icon(Icons.Default.Settings, "Settings") } },
+                actions = { IconButton(onClick = { push(Route.Settings) }) { Icon(Lucide.Settings, "Settings") } },
             )
         },
         bottomBar = {

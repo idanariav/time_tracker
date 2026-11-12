@@ -1,5 +1,7 @@
 package com.idanariav.timetracker.ui
 
+import com.composables.icons.lucide.Lucide
+import com.composables.icons.lucide.Plus
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -7,8 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
@@ -111,7 +111,7 @@ fun LogScreen(padding: PaddingValues) {
         FloatingActionButton(
             onClick = { if (defaultActivity != 0L) editing = newEntry() },
             modifier = Modifier.align(Alignment.BottomEnd).padding(padding).padding(16.dp),
-        ) { Icon(Icons.Default.Add, "Add entry") }
+        ) { Icon(Lucide.Plus, "Add entry") }
     }
 
     editing?.let { SessionEditorSheet(it, onDismiss = { editing = null }) }
@@ -123,7 +123,7 @@ private fun EntryRow(s: Session, a: ActivityItem?, now: Long, minMs: Long, onCli
     val endText = s.endTime?.let { TimeFmt.dayTime(it) } ?: "now"
     ListItem(
         modifier = Modifier.clickable(onClick = onClick).alpha(if (ignored) 0.5f else 1f),
-        leadingContent = { EmojiBadge(a?.emoji ?: "❔", a?.color ?: 0xFF9E9E9E.toInt()) },
+        leadingContent = { IconBadge(a?.icon ?: "Circle", a?.color ?: 0xFF9E9E9E.toInt()) },
         headlineContent = { Text((a?.name ?: "(deleted)") + if (s.endTime == null) "  •  running" else "") },
         supportingContent = {
             Text(
@@ -141,7 +141,7 @@ private fun GapRow(g: LogRow.Gap, onClick: () -> Unit) {
     ListItem(
         modifier = Modifier.clickable(onClick = onClick),
         colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        leadingContent = { Text("  ＋", color = MaterialTheme.colorScheme.primary) },
+        leadingContent = { Icon(Lucide.Plus, null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.padding(horizontal = 8.dp)) },
         headlineContent = {
             Text("Untracked", fontStyle = FontStyle.Italic, color = MaterialTheme.colorScheme.onSurfaceVariant)
         },
