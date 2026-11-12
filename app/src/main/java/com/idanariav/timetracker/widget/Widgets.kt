@@ -1,6 +1,11 @@
 package com.idanariav.timetracker.widget
 
 import android.content.Context
+import android.os.SystemClock
+import android.widget.RemoteViews
+import androidx.glance.LocalContext
+import androidx.glance.appwidget.AndroidRemoteViews
+import com.idanariav.timetracker.R
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -48,6 +53,8 @@ import androidx.glance.layout.height
 import androidx.glance.layout.padding
 import androidx.glance.layout.size
 import androidx.glance.layout.width
+import androidx.glance.layout.wrapContentHeight
+import androidx.glance.layout.wrapContentWidth
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
@@ -130,6 +137,22 @@ private fun WidgetFrame(opacity: Int, content: @Composable () -> Unit) {
     ) { content() }
 }
 
+/**
+ * Live elapsed time since [startTime]. A RemoteViews Chronometer ticks on the launcher side, so
+ * the count stays right between (rate-limited) widget updates. Its base is on the elapsedRealtime
+ * clock, derived from wall-clock elapsed time at render; a reboot re-renders widgets (BootReceiver).
+ */
+@Composable
+private fun ElapsedChronometer(startTime: Long) {
+    val context = LocalContext.current
+    val base = SystemClock.elapsedRealtime() - (System.currentTimeMillis() - startTime)
+    val views = RemoteViews(context.packageName, R.layout.widget_chronometer).apply {
+        setChronometer(R.id.chrono, base, null, true)
+    }
+    // Without an explicit wrap, the embedded view fills the row and squeezes out the name/Stop.
+    AndroidRemoteViews(views, GlanceModifier.wrapContentWidth().wrapContentHeight())
+}
+
 @Composable
 private fun CurrentHeader(running: Session?, current: ActivityItem?) {
     Row(GlanceModifier.fillMaxWidth().padding(horizontal = 4.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -144,8 +167,9 @@ private fun CurrentHeader(running: Session?, current: ActivityItem?) {
             modifier = GlanceModifier.defaultWeight().clickable(actionStartActivity<MainActivity>()),
         )
         if (running != null) {
+            ElapsedChronometer(running.startTime)
             Text(
-                "since ${TimeFmt.clock(running.startTime)}",
+                " · since ${TimeFmt.clock(running.startTime)}",
                 style = TextStyle(color = GlanceTheme.colors.onSurfaceVariant, fontSize = 12.sp),
             )
             Spacer(GlanceModifier.width(8.dp))
