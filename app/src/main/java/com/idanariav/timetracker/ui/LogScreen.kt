@@ -1,18 +1,17 @@
 package com.idanariav.timetracker.ui
 
-import com.composables.icons.lucide.Lucide
-import com.composables.icons.lucide.Plus
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,38 +23,20 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.composables.icons.lucide.Lucide
+import com.composables.icons.lucide.Plus
 import com.idanariav.timetracker.data.ActivityItem
 import com.idanariav.timetracker.data.Session
 import com.idanariav.timetracker.domain.Period
 import com.idanariav.timetracker.domain.PeriodKind
 import com.idanariav.timetracker.domain.counts
 import com.idanariav.timetracker.domain.durationMs
-import com.idanariav.timetracker.domain.formatDuration
-import com.idanariav.timetracker.domain.startMillis
 import com.idanariav.timetracker.tracking.Graph
 import java.time.LocalDate
-
-private sealed interface LogRow {
-    data class Entry(val s: Session) : LogRow
-    data class Gap(val from: Long, val to: Long) : LogRow
-}
-
-/** Gaps of at least a minute between entries (within the day, up to now) become tappable "Untracked" rows. */
-private fun buildRows(sessions: List<Session>, dayFrom: Long, dayTo: Long, now: Long): List<LogRow> {
-    val rows = mutableListOf<LogRow>()
-    var cursor = dayFrom
-    for (s in sessions.sortedBy { it.startTime }) {
-        if (s.startTime - cursor >= 60_000) rows += LogRow.Gap(cursor, s.startTime)
-        rows += LogRow.Entry(s)
-        cursor = maxOf(cursor, s.endTime ?: now)
-    }
-    val limit = minOf(dayTo, now)
-    if (limit - cursor >= 60_000) rows += LogRow.Gap(cursor, limit)
-    return rows.asReversed() // newest first
-}
 
 @Composable
 fun LogScreen(padding: PaddingValues) {
@@ -71,6 +52,8 @@ fun LogScreen(padding: PaddingValues) {
     val byId = acts.associateBy { it.id }
     val today = LocalDate.now()
     val defaultActivity = acts.firstOrNull { !it.archived }?.id ?: 0L
+    // Entries that don't count (shorter than the minimum) are hidden; newest first.
+    val shown = sessions.filter { it.counts(now, settings.minMs) }.sortedByDescending { it.startTime }
 
     fun newEntry(): Session {
         val lastEnd = sessions.mapNotNull { it.endTime }.filter { it <= minOf(to, now) }.maxOrNull()
@@ -95,18 +78,10 @@ fun LogScreen(padding: PaddingValues) {
                     onReset = { day = LocalDate.now() }, canGoNext = day < today,
                 )
             }
-            val rows = buildRows(sessions, from, to, now)
-            if (rows.isEmpty()) {
+            if (shown.isEmpty()) {
                 item { Text("Nothing logged.", modifier = Modifier.padding(24.dp)) }
             }
-            items(rows, key = { r -> if (r is LogRow.Entry) "s${r.s.id}" else "g${(r as LogRow.Gap).from}" }) { r ->
-                when (r) {
-                    is LogRow.Entry -> EntryRow(r.s, byId[r.s.activityId], now, settings.minMs) { editing = r.s }
-                    is LogRow.Gap -> GapRow(r) {
-                        editing = Session(activityId = defaultActivity, startTime = r.from, endTime = r.to)
-                    }
-                }
-            }
+            items(shown, key = { it.id }) { s -> EntryRow(s, byId[s.activityId], now) { editing = s } }
         }
         FloatingActionButton(
             onClick = { if (defaultActivity != 0L) editing = newEntry() },
@@ -117,35 +92,34 @@ fun LogScreen(padding: PaddingValues) {
     editing?.let { SessionEditorSheet(it, onDismiss = { editing = null }) }
 }
 
+/** One line: icon · activity · start – end · minutes. Tap to edit (notes live in the editor). */
 @Composable
-private fun EntryRow(s: Session, a: ActivityItem?, now: Long, minMs: Long, onClick: () -> Unit) {
-    val ignored = !s.counts(now, minMs)
-    val endText = s.endTime?.let { TimeFmt.dayTime(it) } ?: "now"
-    ListItem(
-        modifier = Modifier.clickable(onClick = onClick).alpha(if (ignored) 0.5f else 1f),
-        leadingContent = { IconBadge(a?.icon ?: "Circle", a?.color ?: 0xFF9E9E9E.toInt()) },
-        headlineContent = { Text((a?.name ?: "(deleted)") + if (s.endTime == null) "  •  running" else "") },
-        supportingContent = {
-            Text(
-                TimeFmt.range(TimeFmt.dayTime(s.startTime), endText) +
-                    (if (s.note.isNotBlank()) "\n${s.note}" else "") +
-                    (if (ignored) "\nIgnored (shorter than the minimum)" else ""),
-            )
-        },
-        trailingContent = { Text(formatDuration(s.durationMs(now)), style = MaterialTheme.typography.titleSmall) },
-    )
-}
-
-@Composable
-private fun GapRow(g: LogRow.Gap, onClick: () -> Unit) {
-    ListItem(
-        modifier = Modifier.clickable(onClick = onClick),
-        colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        leadingContent = { Icon(Lucide.Plus, null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.padding(horizontal = 8.dp)) },
-        headlineContent = {
-            Text("Untracked", fontStyle = FontStyle.Italic, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        },
-        supportingContent = { Text("${TimeFmt.range(TimeFmt.clock(g.from), TimeFmt.clock(g.to))} · tap to fill") },
-        trailingContent = { Text(formatDuration(g.to - g.from), color = MaterialTheme.colorScheme.onSurfaceVariant) },
-    )
+private fun EntryRow(s: Session, a: ActivityItem?, now: Long, onClick: () -> Unit) {
+    Row(
+        Modifier.fillMaxWidth().clickable(onClick = onClick).padding(horizontal = 16.dp, vertical = 10.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        IconBadge(a?.icon ?: "Circle", a?.color ?: 0xFF9E9E9E.toInt(), 28.dp)
+        Text(
+            a?.name ?: "(deleted)",
+            style = MaterialTheme.typography.bodyLarge,
+            fontWeight = if (s.endTime == null) FontWeight.SemiBold else FontWeight.Normal,
+            maxLines = 1, overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.weight(1f).padding(horizontal = 12.dp),
+        )
+        Text(
+            TimeFmt.range(TimeFmt.clock(s.startTime), s.endTime?.let { TimeFmt.clock(it) } ?: "now"),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            maxLines = 1,
+        )
+        Text(
+            "${s.durationMs(now) / 60_000} min",
+            style = MaterialTheme.typography.bodyMedium,
+            fontWeight = FontWeight.Medium,
+            textAlign = TextAlign.End,
+            maxLines = 1,
+            modifier = Modifier.width(64.dp),
+        )
+    }
 }

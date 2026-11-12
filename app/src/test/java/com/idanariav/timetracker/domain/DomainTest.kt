@@ -105,7 +105,7 @@ class SuggestTest {
 
     @Test fun wrappingWindowUsesStartDay() {
         // Fri 22:00 → 02:00 rule (Friday only)
-        val r = Rule(activityId = 1, days = 1 shl 4, startMinute = 22 * 60, endMinute = 2 * 60)
+        val r = Rule(suggestIds = listOf(1), days = 1 shl 4, startMinute = 22 * 60, endMinute = 2 * 60)
         assertTrue(ruleMatches(r, LocalDateTime.of(2026, 11, 13, 23, 0), null)) // Fri 23:00
         assertTrue(ruleMatches(r, LocalDateTime.of(2026, 11, 14, 1, 0), null)) // Sat 01:00
         assertFalse(ruleMatches(r, LocalDateTime.of(2026, 11, 15, 1, 0), null)) // Sun 01:00
@@ -113,7 +113,7 @@ class SuggestTest {
     }
 
     @Test fun afterActivityCondition() {
-        val r = Rule(activityId = 3, startMinute = 0, endMinute = 0, afterActivityId = 2)
+        val r = Rule(suggestIds = listOf(3), afterActivityId = 2)
         val now = LocalDateTime.of(2026, 11, 12, 18, 0)
         assertTrue(ruleMatches(r, now, 2))
         assertFalse(ruleMatches(r, now, 1))
@@ -121,11 +121,31 @@ class SuggestTest {
 
     @Test fun rulesFirstThenHistoryAndRunningExcluded() {
         val now = LocalDateTime.of(2026, 11, 12, 22, 30)
-        val rule = Rule(activityId = 1, startMinute = 22 * 60, endMinute = 6 * 60)
+        val rule = Rule(suggestIds = listOf(1), startMinute = 22 * 60, endMinute = 6 * 60)
         val historyStart = LocalDateTime.of(2026, 11, 11, 22, 15).toInstant(UTC).toEpochMilli()
         val history = listOf(Session(1, 3, historyStart, historyStart + 60 * M))
         val out = suggest(acts, listOf(rule), history, running = Session(9, 2, 0, null), now, 5, UTC)
         assertEquals(listOf(1L, 3L), out.map { it.id })
+    }
+
+    @Test fun activityTriggerSuggestsItsListFirstInOrder() {
+        val acts4 = acts + ActivityItem(4, "Email", "Mail", 0)
+        val now = LocalDateTime.of(2026, 11, 12, 22, 30)
+        val rules = listOf(
+            Rule(suggestIds = listOf(1), startMinute = 22 * 60, endMinute = 6 * 60), // time: Sleep
+            Rule(suggestIds = listOf(4, 3), afterActivityId = 2), // while Work: Email, TV
+        )
+        val whileWork = suggest(acts4, rules, emptyList(), running = Session(9, 2, 0, null), now, 3, UTC)
+        assertEquals(listOf(4L, 3L, 1L), whileWork.map { it.id })
+        // Not triggered when something else runs.
+        val whileTv = suggest(acts4, rules, emptyList(), running = Session(9, 3, 0, null), now, 1, UTC)
+        assertEquals(listOf(1L), whileTv.map { it.id })
+    }
+
+    @Test fun idListRoundTrips() {
+        val c = com.idanariav.timetracker.data.Converters()
+        assertEquals(listOf(3L, 5L), c.stringToIds(c.idsToString(listOf(3L, 5L))))
+        assertEquals(emptyList<Long>(), c.stringToIds(""))
     }
 }
 
@@ -169,6 +189,12 @@ class GroupingTest {
         assertEquals(1, groupActivities(acts, listOf(g1, g2), grouped = false).size)
         assertEquals(1, groupActivities(acts, emptyList(), grouped = true).size)
         assertTrue(groupActivities(emptyList(), listOf(g1), true).isEmpty())
+    }
+
+    @Test fun searchMatchesNameOrGroupIgnoringCase() {
+        assertEquals(listOf(10L, 14L), filterActivities(acts, listOf(g1, g2), " work").map { it.id }) // group "Work" + name "Work"
+        assertEquals(listOf(11L), filterActivities(acts, listOf(g1, g2), "MUTE").map { it.id })
+        assertEquals(acts.size, filterActivities(acts, listOf(g1, g2), "  ").size)
     }
 
     @Test fun goalsSumTheirMembersAndMayOverlap() {

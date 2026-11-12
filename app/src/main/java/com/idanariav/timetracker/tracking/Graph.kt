@@ -12,7 +12,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.time.LocalDateTime
@@ -31,7 +30,7 @@ object Graph {
     fun init(context: Context) {
         val app = context.applicationContext
         db = Room.databaseBuilder(app, AppDatabase::class.java, "tracker.db")
-            .addMigrations(AppDatabase.MIGRATION_1_2, AppDatabase.MIGRATION_2_3)
+            .addMigrations(AppDatabase.MIGRATION_1_2, AppDatabase.MIGRATION_2_3, AppDatabase.MIGRATION_3_4)
             .build()
         prefs = Prefs(app)
         tracker = Tracker(app, db, prefs)
@@ -47,7 +46,7 @@ object Graph {
         )
     }
 
-    private suspend fun rulesOnce() = dao.rules().first()
+    private suspend fun rulesOnce() = dao.rulesOnce()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     fun suggestionFlow(limit: Int): Flow<List<ActivityItem>> =

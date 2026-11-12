@@ -101,7 +101,14 @@ class Tracker(private val context: Context, private val db: AppDatabase, private
     suspend fun deleteActivity(id: Long) {
         db.withTransaction {
             dao.deleteSessionsFor(id)
-            dao.deleteRulesFor(id)
+            // Drop the activity from rules; remove rules it triggers or that suggest nothing else.
+            dao.rulesOnce().forEach { r ->
+                val left = r.suggestIds - id
+                when {
+                    r.afterActivityId == id || left.isEmpty() -> dao.deleteRule(r.id)
+                    left.size != r.suggestIds.size -> dao.putRule(r.copy(suggestIds = left))
+                }
+            }
             dao.deleteLinksForActivity(id)
             dao.deleteActivity(id)
         }

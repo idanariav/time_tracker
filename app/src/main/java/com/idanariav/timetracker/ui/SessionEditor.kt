@@ -40,6 +40,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.idanariav.timetracker.data.Session
 import com.idanariav.timetracker.domain.endTimeAfter
+import com.idanariav.timetracker.domain.filterActivities
 import com.idanariav.timetracker.domain.formatDuration
 import com.idanariav.timetracker.domain.withTimeOfDay
 import com.idanariav.timetracker.tracking.Graph
@@ -58,6 +59,8 @@ private const val MIN = 60_000L
 @Composable
 fun SessionEditorSheet(initial: Session, onDismiss: () -> Unit) {
     val acts by remember { Graph.dao.activeActivities() }.collectAsState(emptyList())
+    val groups by remember { Graph.dao.groups() }.collectAsState(emptyList())
+    var query by remember { mutableStateOf("") }
     val scope = rememberCoroutineScope()
     val isNew = initial.id == 0L
     var activityId by remember { mutableLongStateOf(initial.activityId) }
@@ -98,8 +101,12 @@ fun SessionEditorSheet(initial: Session, onDismiss: () -> Unit) {
                 style = MaterialTheme.typography.titleLarge,
             )
             Spacer(Modifier.height(12.dp))
+            SearchField(query, { query = it }, Modifier.padding(bottom = 8.dp))
+            val shown = filterActivities(acts, groups, query).let { m ->
+                if (m.none { it.id == activityId }) acts.filter { it.id == activityId } + m else m
+            }
             FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                acts.forEach { a ->
+                shown.forEach { a ->
                     FilterChip(
                         selected = a.id == activityId, onClick = { activityId = a.id },
                         label = { Text(a.name) },

@@ -29,3 +29,13 @@ fun goalMembers(links: List<GoalActivity>): Map<Long, Set<Long>> =
 /** Time per goal = sum of its member activities' time. Goals may overlap, so these don't add up to the total. */
 fun goalTotals(links: List<GoalActivity>, perActivity: Map<Long, Long>): Map<Long, Long> =
     goalMembers(links).mapValues { (_, ids) -> ids.sumOf { perActivity[it] ?: 0L } }
+
+/** Activities whose name or group name contains [query] (case-insensitive); all of them for a blank query. */
+fun filterActivities(activities: List<ActivityItem>, groups: List<Group>, query: String): List<ActivityItem> {
+    val q = query.trim()
+    if (q.isEmpty()) return activities
+    val groupNames = groups.associate { it.id to it.name }
+    return activities.filter {
+        it.name.contains(q, ignoreCase = true) || (groupNames[it.groupId]?.contains(q, ignoreCase = true) ?: false)
+    }
+}

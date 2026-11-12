@@ -48,6 +48,8 @@ import androidx.compose.ui.unit.sp
 import com.composables.icons.lucide.ChevronLeft
 import com.composables.icons.lucide.ChevronRight
 import com.composables.icons.lucide.Lucide
+import com.composables.icons.lucide.Search
+import com.composables.icons.lucide.X
 import com.idanariav.timetracker.data.ActivityItem
 import com.idanariav.timetracker.domain.toLocalDate
 import kotlinx.coroutines.delay
@@ -229,3 +231,30 @@ fun onColor(bg: Color): Color =
     if (0.299 * bg.red + 0.587 * bg.green + 0.114 * bg.blue > 0.6) Color.Black else Color.White
 
 fun onColorInt(color: Int): Int = onColor(Color(color)).toArgb()
+
+/** Compact single-line search box with a clear button; [onDone] fires on the keyboard's action key. */
+@Composable
+fun SearchField(
+    query: String,
+    onQueryChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    placeholder: String = "Search activities",
+    onDone: () -> Unit = {},
+) {
+    androidx.compose.material3.OutlinedTextField(
+        value = query,
+        onValueChange = onQueryChange,
+        placeholder = { Text(placeholder) },
+        leadingIcon = { Icon(Lucide.Search, null, Modifier.size(20.dp)) },
+        trailingIcon = {
+            if (query.isNotEmpty()) {
+                IconButton(onClick = { onQueryChange("") }) { Icon(Lucide.X, "Clear search", Modifier.size(20.dp)) }
+            }
+        },
+        singleLine = true,
+        shape = androidx.compose.foundation.shape.RoundedCornerShape(28.dp),
+        keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(imeAction = androidx.compose.ui.text.input.ImeAction.Done),
+        keyboardActions = androidx.compose.foundation.text.KeyboardActions(onDone = { onDone() }),
+        modifier = modifier.fillMaxWidth(),
+    )
+}

@@ -2,14 +2,16 @@ package com.idanariav.timetracker.data
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 
 @Database(
     entities = [Group::class, Goal::class, GoalActivity::class, ActivityItem::class, Session::class, Rule::class],
-    version = 3,
+    version = 4,
     exportSchema = true,
 )
+@TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun dao(): TrackerDao
 
@@ -63,6 +65,24 @@ abstract class AppDatabase : RoomDatabase() {
                 )
                 db.execSQL("DROP TABLE activities")
                 db.execSQL("ALTER TABLE activities_new RENAME TO activities")
+            }
+        }
+
+        /** v4: a rule suggests a list of activities (suggestIds) instead of a single activityId. */
+        val MIGRATION_3_4 = object : Migration(3, 4) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    "CREATE TABLE IF NOT EXISTS `rules_new` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                        "`suggestIds` TEXT NOT NULL, `days` INTEGER NOT NULL, `startMinute` INTEGER NOT NULL, " +
+                        "`endMinute` INTEGER NOT NULL, `afterActivityId` INTEGER, `enabled` INTEGER NOT NULL, " +
+                        "`sortOrder` INTEGER NOT NULL)",
+                )
+                db.execSQL(
+                    "INSERT INTO rules_new (id, suggestIds, days, startMinute, endMinute, afterActivityId, enabled, sortOrder) " +
+                        "SELECT id, CAST(activityId AS TEXT), days, startMinute, endMinute, afterActivityId, enabled, sortOrder FROM rules",
+                )
+                db.execSQL("DROP TABLE rules")
+                db.execSQL("ALTER TABLE rules_new RENAME TO rules")
             }
         }
 

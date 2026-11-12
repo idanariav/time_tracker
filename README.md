@@ -16,9 +16,11 @@ adb install -r app/build/outputs/apk/release/app-release.apk   # signed with the
   A *goal* is a daily target or limit over any set of activities, independent of groups and possibly overlapping
   (e.g. "Screen time ≤ 2h" tracking only TV, while Reading is also in the Leisure group).
 - **Track** — grid of activities ([Lucide](https://lucide.dev) icon + color), sectioned by group, with a compact tile size
-  (top-bar toggle). Tap switches (only one runs at a time), long-press edits, Undo snackbar for mis-taps, "Suggested now" chips.
+  (top-bar toggle). Tap switches (only one runs at a time), long-press edits, Undo snackbar for mis-taps, "Suggested now" chips,
+  and a search bar (name or group; Enter on a single match starts it).
 - **Goals** — each goal's time today vs its target/limit; day-by-day navigation.
-- **Log** — per-day list, newest first. Tap an entry to edit; tap an *Untracked* gap to backfill it; ＋ adds an entry.
+- **Log** — per-day list, newest first, one line per entry (activity · start – end · minutes); entries below the
+  short-entry threshold are hidden. Tap an entry to edit; ＋ adds/backfills an entry (search the activity list in the editor).
   The editor has −30/−15/+15/+30, **Last** (previous entry's end), **Next** (next entry's start) and **Now** anchors, a time picker, notes, and "still running".
   Saving trims/splits overlapping entries automatically.
 - **Analysis** — Day / Week / Month with ‹ › navigation (tap the label to jump back to today), by activity, group or goal, 24h timeline or daily stacked bars, CSV export of the shown period.
@@ -29,7 +31,8 @@ adb install -r app/build/outputs/apk/release/app-release.apk   # signed with the
 - **Widgets** — *Activities* (current + all activities, sectioned by group), *Smart suggestions* (rule- and habit-based;
   refreshes every 15 min) and a 1×1 *Quick pick* (current activity; tap for top 3 suggestions + searchable list).
   Each widget has its own settings (background opacity, compact tiles, sectioning), shown when placed and via reconfigure.
-- **Smart rules** — suggest activity X on certain days/time windows (can cross midnight), optionally only while Y is running. Empty slots are filled from what you usually start around this time (last 4 weeks).
+- **Smart rules** — two kinds, each suggesting one or more activities in a chosen order: *time of day* (days + window,
+  may cross midnight) and *while activity X is running* (e.g. while Work → Email, Commute; these rank first). Empty slots are filled from what you usually start around this time (last 4 weeks).
 - **NFC** — Settings → Activities → (activity) → *Write NFC tag*. Tapping the tag toggles that activity.
 - **Launcher shortcuts** — long-press the app icon for the first 4 activities.
 

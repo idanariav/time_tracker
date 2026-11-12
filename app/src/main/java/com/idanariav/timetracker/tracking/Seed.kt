@@ -42,8 +42,10 @@ object Seed {
                 val gid = dao.putGoal(g)
                 dao.insertLinks(members.map { GoalActivity(gid, it) })
             }
-            dao.putRule(Rule(activityId = sleep, startMinute = 22 * 60, endMinute = 2 * 60))
-            dao.putRule(Rule(activityId = ids[4], startMinute = 12 * 60, endMinute = 14 * 60))
+            dao.putRule(Rule(suggestIds = listOf(sleep), startMinute = 22 * 60, endMinute = 2 * 60))
+            dao.putRule(Rule(suggestIds = listOf(ids[4]), startMinute = 12 * 60, endMinute = 14 * 60))
+            // Activity trigger example: while Work runs, Email and Commute are likely next.
+            dao.putRule(Rule(suggestIds = listOf(email, ids[5]), afterActivityId = workAct))
         }
         prefs.seeded = true
     }

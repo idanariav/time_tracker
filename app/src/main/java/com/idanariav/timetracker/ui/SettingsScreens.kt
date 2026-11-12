@@ -1,5 +1,9 @@
 package com.idanariav.timetracker.ui
 
+import com.composables.icons.lucide.Clock
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SegmentedButton
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.ArrowLeft
 import com.composables.icons.lucide.Plus
@@ -64,6 +68,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.idanariav.timetracker.data.ActivityItem
 import com.idanariav.timetracker.data.Goal
@@ -138,7 +143,7 @@ fun SettingsScreen(onBack: () -> Unit, push: (Route) -> Unit) {
             item {
                 ListItem(
                     headlineContent = { Text("Smart suggestions") },
-                    supportingContent = { Text("Rules for the smart widget, e.g. “after 22:00 → Sleep”") },
+                    supportingContent = { Text("e.g. “after 22:00 → Sleep” or “while Work runs → Email, Commute”") },
                     modifier = Modifier.clickable { push(Route.Rules) },
                 )
             }
@@ -608,16 +613,19 @@ private fun GroupDialog(initial: Group, onDismiss: () -> Unit) {
 
 private val DayLetters = listOf("M", "T", "W", "T", "F", "S", "S")
 
-private fun Rule.describe(after: ActivityItem?): String {
-    fun hm(m: Int) = "%02d:%02d".format(m / 60, m % 60)
+private fun hm(m: Int) = "%02d:%02d".format(m / 60, m % 60)
+
+/** "22:00 – 02:00 · every day" for time rules, "While Work is running" for activity rules. */
+private fun Rule.triggerText(byId: Map<Long, ActivityItem>): String {
+    afterActivityId?.let { return "While ${byId[it]?.name ?: "(deleted)"} is running" }
     val time = if (startMinute == endMinute) "All day" else TimeFmt.range(hm(startMinute), hm(endMinute))
-    val days = when (days) {
+    val d = when (days) {
         Rule.ALL_DAYS -> "every day"
         0b0011111 -> "weekdays"
         0b1100000 -> "weekends"
         else -> DayLetters.filterIndexed { i, _ -> days and (1 shl i) != 0 }.joinToString(" ")
     }
-    return "$time · $days" + (after?.let { " · after ${it.name}" } ?: "")
+    return "$time · $d"
 }
 
 @Composable
@@ -629,27 +637,36 @@ fun RulesScreen(onBack: () -> Unit) {
     var editing by remember { mutableStateOf<Rule?>(null) }
     SubScreen(
         "Smart suggestions", onBack,
-        fab = {
-            acts.firstOrNull { !it.archived }?.let { editing = Rule(activityId = it.id, startMinute = 22 * 60, endMinute = 6 * 60) }
-        },
+        fab = { editing = Rule(suggestIds = emptyList(), startMinute = 22 * 60, endMinute = 6 * 60) },
     ) { p ->
         LazyColumn(contentPadding = p) {
             item {
                 Text(
-                    "The smart widget, the notification and the Track tab suggest activities whose rules match now, " +
-                        "then fill in with what you usually do around this time.",
+                    "The Track tab, widgets, quick pick and notification suggest activities from rules that match now — " +
+                        "“while X is running” rules first — then fill in with what you usually do around this time.",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(16.dp),
                 )
             }
             items(rules, key = { it.id }) { r ->
-                val a = byId[r.activityId]
+                val trigger = r.afterActivityId?.let { byId[it] }
                 ListItem(
                     modifier = Modifier.clickable { editing = r },
-                    leadingContent = { IconBadge(a?.icon ?: "Circle", a?.color ?: 0xFF9E9E9E.toInt()) },
-                    headlineContent = { Text(a?.name ?: "(deleted)") },
-                    supportingContent = { Text(r.describe(r.afterActivityId?.let { byId[it] })) },
+                    leadingContent = {
+                        if (trigger != null) {
+                            IconBadge(trigger.icon, trigger.color)
+                        } else {
+                            Box(
+                                Modifier.size(40.dp).clip(CircleShape).background(MaterialTheme.colorScheme.secondaryContainer),
+                                contentAlignment = Alignment.Center,
+                            ) { Icon(Lucide.Clock, null, Modifier.size(20.dp), tint = MaterialTheme.colorScheme.onSecondaryContainer) }
+                        }
+                    },
+                    headlineContent = { Text(r.triggerText(byId)) },
+                    supportingContent = {
+                        Text("Suggest: " + r.suggestIds.mapNotNull { byId[it]?.name }.ifEmpty { listOf("nothing") }.joinToString(", "))
+                    },
                     trailingContent = {
                         Switch(r.enabled, { v -> scope.launch { Graph.tracker.saveRule(r.copy(enabled = v)) } })
                     },
@@ -660,51 +677,80 @@ fun RulesScreen(onBack: () -> Unit) {
     editing?.let { RuleDialog(it, acts.filter { a -> !a.archived }) { editing = null } }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
+@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
 private fun RuleDialog(initial: Rule, acts: List<ActivityItem>, onDismiss: () -> Unit) {
     val scope = rememberCoroutineScope()
-    var activityId by remember { mutableStateOf(initial.activityId) }
+    var byActivity by remember { mutableStateOf(initial.isActivityTrigger) }
+    var after by remember { mutableStateOf(initial.afterActivityId) }
+    var suggestIds by remember { mutableStateOf(initial.suggestIds) }
     var start by remember { mutableIntStateOf(initial.startMinute) }
     var end by remember { mutableIntStateOf(initial.endMinute) }
     var days by remember { mutableIntStateOf(initial.days) }
-    var after by remember { mutableStateOf(initial.afterActivityId) }
     var picking by remember { mutableStateOf<String?>(null) }
-    fun hm(m: Int) = "%02d:%02d".format(m / 60, m % 60)
+    val valid = suggestIds.isNotEmpty() && if (byActivity) after != null else days != 0
 
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(if (initial.id == 0L) "New rule" else "Edit rule") },
         text = {
             Column(Modifier.verticalScroll(rememberScrollState())) {
-                Text("Suggest", style = MaterialTheme.typography.labelLarge)
-                FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                    acts.forEach { a ->
-                        FilterChip(activityId == a.id, { activityId = a.id }, label = { Text(a.name) }, leadingIcon = { ChipIcon(a) })
+                SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
+                    listOf("Time of day", "After activity").forEachIndexed { i, l ->
+                        SegmentedButton(
+                            selected = byActivity == (i == 1), onClick = { byActivity = i == 1 },
+                            shape = SegmentedButtonDefaults.itemShape(i, 2),
+                        ) { Text(l) }
                     }
                 }
-                Row(Modifier.padding(top = 12.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Text("From")
-                    TextButton(onClick = { picking = "start" }) { Text(hm(start), style = MaterialTheme.typography.titleMedium) }
-                    Text("to")
-                    TextButton(onClick = { picking = "end" }) { Text(hm(end), style = MaterialTheme.typography.titleMedium) }
-                }
-                Text(
-                    "Same start and end = all day. Windows can cross midnight.",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-                Text("On", style = MaterialTheme.typography.labelLarge, modifier = Modifier.padding(top = 12.dp))
-                FlowRow(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                    DayLetters.forEachIndexed { i, l ->
-                        FilterChip(days and (1 shl i) != 0, { days = days xor (1 shl i) }, label = { Text(l) })
+                if (byActivity) {
+                    SectionTitle("While this is running")
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                        acts.forEach { a ->
+                            FilterChip(
+                                after == a.id,
+                                { after = a.id; suggestIds = suggestIds - a.id },
+                                label = { Text(a.name) }, leadingIcon = { ChipIcon(a) },
+                            )
+                        }
+                    }
+                } else {
+                    Row(Modifier.padding(top = 12.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Text("From")
+                        TextButton(onClick = { picking = "start" }) { Text(hm(start), style = MaterialTheme.typography.titleMedium) }
+                        Text("to")
+                        TextButton(onClick = { picking = "end" }) { Text(hm(end), style = MaterialTheme.typography.titleMedium) }
+                    }
+                    Text(
+                        "Same start and end = all day. Windows can cross midnight.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                    Text("On", style = MaterialTheme.typography.labelLarge, modifier = Modifier.padding(top = 12.dp))
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                        DayLetters.forEachIndexed { i, l ->
+                            FilterChip(days and (1 shl i) != 0, { days = days xor (1 shl i) }, label = { Text(l) })
+                        }
                     }
                 }
-                Text("Only while running", style = MaterialTheme.typography.labelLarge, modifier = Modifier.padding(top = 12.dp))
+                SectionTitle("Suggest (in the order you tap)")
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                    FilterChip(after == null, { after = null }, label = { Text("Anything") })
-                    acts.filter { it.id != activityId }.forEach { a ->
-                        FilterChip(after == a.id, { after = a.id }, label = { Text(a.name) }, leadingIcon = { ChipIcon(a) })
+                    acts.filter { !byActivity || it.id != after }.forEach { a ->
+                        val pos = suggestIds.indexOf(a.id)
+                        FilterChip(
+                            pos >= 0,
+                            { suggestIds = if (pos >= 0) suggestIds - a.id else suggestIds + a.id },
+                            label = { Text(a.name) },
+                            leadingIcon = {
+                                if (pos >= 0) {
+                                    Box(Modifier.size(18.dp), contentAlignment = Alignment.Center) {
+                                        Text("${pos + 1}", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
+                                    }
+                                } else {
+                                    ChipIcon(a)
+                                }
+                            },
+                        )
                     }
                 }
                 if (initial.id != 0L) {
@@ -715,10 +761,14 @@ private fun RuleDialog(initial: Rule, acts: List<ActivityItem>, onDismiss: () ->
             }
         },
         confirmButton = {
-            TextButton(enabled = days != 0, onClick = {
+            TextButton(enabled = valid, onClick = {
                 scope.launch {
                     Graph.tracker.saveRule(
-                        initial.copy(activityId = activityId, startMinute = start, endMinute = end, days = days, afterActivityId = after),
+                        if (byActivity) {
+                            initial.copy(suggestIds = suggestIds, afterActivityId = after, days = Rule.ALL_DAYS, startMinute = 0, endMinute = 0)
+                        } else {
+                            initial.copy(suggestIds = suggestIds, afterActivityId = null, days = days, startMinute = start, endMinute = end)
+                        },
                     )
                     onDismiss()
                 }

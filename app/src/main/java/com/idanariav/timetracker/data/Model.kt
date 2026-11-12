@@ -61,22 +61,34 @@ data class Session(
 )
 
 /**
- * Smart-widget rule: suggest [activityId] on the given [days] (bit 0 = Monday … bit 6 = Sunday)
- * between [startMinute] and [endMinute] (minutes of day; the window may wrap past midnight;
- * equal values mean all day), optionally only when [afterActivityId] is currently running.
+ * Suggestion rule: when it matches, suggest [suggestIds] (in that order). Two kinds of trigger:
+ *  - time: the given [days] (bit 0 = Monday … bit 6 = Sunday) between [startMinute] and [endMinute]
+ *    (minutes of day; may wrap past midnight; equal values = all day);
+ *  - activity: [afterActivityId] is currently running (stored as all-day, every day).
  */
 @Entity(tableName = "rules")
 data class Rule(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    val activityId: Long,
+    val suggestIds: List<Long>,
     val days: Int = ALL_DAYS,
-    val startMinute: Int,
-    val endMinute: Int,
+    val startMinute: Int = 0,
+    val endMinute: Int = 0,
     val afterActivityId: Long? = null,
     val enabled: Boolean = true,
     val sortOrder: Int = 0,
 ) {
+    val isActivityTrigger: Boolean get() = afterActivityId != null
+
     companion object {
         const val ALL_DAYS = 0b1111111
     }
+}
+
+/** Room storage for id lists ("3,5,8"). */
+class Converters {
+    @androidx.room.TypeConverter
+    fun idsToString(ids: List<Long>): String = ids.joinToString(",")
+
+    @androidx.room.TypeConverter
+    fun stringToIds(s: String): List<Long> = s.split(',').mapNotNull { it.trim().toLongOrNull() }
 }

@@ -53,6 +53,10 @@ import androidx.compose.ui.unit.dp
 import com.idanariav.timetracker.data.ActivityItem
 import com.idanariav.timetracker.data.Group
 import com.idanariav.timetracker.domain.groupActivities
+import com.idanariav.timetracker.domain.filterActivities
+import com.idanariav.timetracker.domain.Section
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.shape.CircleShape
 import com.idanariav.timetracker.data.Session
@@ -72,6 +76,8 @@ fun TrackScreen(padding: PaddingValues, snackbar: SnackbarHostState, onEditActiv
     val scope = rememberCoroutineScope()
     val haptic = LocalHapticFeedback.current
     var editing by remember { mutableStateOf<Session?>(null) }
+    var query by rememberSaveable { mutableStateOf("") }
+    val focus = LocalFocusManager.current
     val active = all.filter { !it.archived }
     val current = all.firstOrNull { it.id == running?.activityId }
 
@@ -83,6 +89,7 @@ fun TrackScreen(padding: PaddingValues, snackbar: SnackbarHostState, onEditActiv
 
     fun switch(a: ActivityItem) {
         haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+        if (query.isNotEmpty()) { query = ""; focus.clearFocus() }
         scope.launch {
             val change = Graph.tracker.switchTo(a.id)
             if (change == null) notify("${a.name} is already running", null)
@@ -120,7 +127,25 @@ fun TrackScreen(padding: PaddingValues, snackbar: SnackbarHostState, onEditActiv
                 }
             }
         }
-        val sections = groupActivities(active, groups, settings.groupActivities)
+        item(span = { GridItemSpan(maxLineSpan) }, key = "search") {
+            val matches = filterActivities(active, groups, query)
+            SearchField(
+                query, { query = it },
+                modifier = Modifier.padding(horizontal = 4.dp, vertical = 4.dp),
+                // Enter with a single match starts it.
+                onDone = { matches.singleOrNull()?.let { switch(it) } ?: focus.clearFocus() },
+            )
+        }
+        val sections = if (query.isBlank()) {
+            groupActivities(active, groups, settings.groupActivities)
+        } else {
+            listOf(Section(null, filterActivities(active, groups, query)))
+        }
+        if (query.isNotBlank() && sections.first().activities.isEmpty()) {
+            item(span = { GridItemSpan(maxLineSpan) }, key = "nomatch") {
+                Text("No activity matches “${query.trim()}”", Modifier.padding(12.dp), color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+        }
         sections.forEach { section ->
             if (sections.size > 1 || section.group != null) {
                 item(span = { GridItemSpan(maxLineSpan) }, key = "group-${section.group?.id ?: -1}") {

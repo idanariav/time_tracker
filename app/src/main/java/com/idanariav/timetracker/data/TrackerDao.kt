@@ -154,6 +154,6 @@ interface TrackerDao {
     @Query("DELETE FROM rules WHERE id = :id")
     suspend fun deleteRule(id: Long)
 
-    @Query("DELETE FROM rules WHERE activityId = :activityId OR afterActivityId = :activityId")
-    suspend fun deleteRulesFor(activityId: Long)
+    @Query("SELECT * FROM rules ORDER BY sortOrder, id")
+    suspend fun rulesOnce(): List<Rule>
 }

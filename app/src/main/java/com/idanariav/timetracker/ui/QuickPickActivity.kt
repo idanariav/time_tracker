@@ -54,6 +54,7 @@ import com.composables.icons.lucide.Search
 import com.idanariav.timetracker.data.ActivityItem
 import com.idanariav.timetracker.domain.formatElapsed
 import com.idanariav.timetracker.domain.groupActivities
+import com.idanariav.timetracker.domain.filterActivities
 import com.idanariav.timetracker.tracking.Graph
 import kotlinx.coroutines.launch
 
@@ -142,13 +143,9 @@ private fun QuickPick(onDone: () -> Unit) {
                         modifier = Modifier.fillMaxWidth().focusRequester(focus),
                     )
                     val q = query.trim()
-                    val groupNames = groups.associate { it.id to it.name }
                     LazyColumn(Modifier.fillMaxWidth().heightIn(max = 360.dp).padding(top = 8.dp)) {
                         if (q.isNotEmpty()) {
-                            val hits = active.filter {
-                                it.name.contains(q, ignoreCase = true) ||
-                                    (groupNames[it.groupId]?.contains(q, ignoreCase = true) ?: false)
-                            }
+                            val hits = filterActivities(active, groups, q)
                             if (hits.isEmpty()) item { Text("No match", Modifier.padding(12.dp)) }
                             items(hits, key = { it.id }) { a -> PickRow(a, big = false) { pick(a) } }
                         } else {

@@ -28,7 +28,7 @@ fun ruleMatches(rule: Rule, now: LocalDateTime, runningActivityId: Long?): Boole
 }
 
 /**
- * Ordered suggestions: activities whose rules match now (activity-specific "after X" rules first),
+ * Ordered suggestions: activities whose rules match now ("while X is running" rules first, each in its listed order),
  * then what was usually started around this time of day over [history], then the user's grid order.
  * The running activity is never suggested.
  */
@@ -45,7 +45,7 @@ fun suggest(
     val out = LinkedHashSet<Long>()
     rules.filter { ruleMatches(it, now, running?.activityId) }
         .sortedBy { if (it.afterActivityId != null) 0 else 1 }
-        .forEach { out += it.activityId }
+        .forEach { out += it.suggestIds }
 
     val nowMin = now.hour * 60 + now.minute
     val score = HashMap<Long, Int>()
