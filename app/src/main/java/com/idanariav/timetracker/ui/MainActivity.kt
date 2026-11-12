@@ -1,0 +1,133 @@
+package com.idanariav.timetracker.ui
+
+import android.Manifest
+import android.os.Build
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
+import com.idanariav.timetracker.notify.TrackingNotification
+import com.idanariav.timetracker.tracking.Graph
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContent { AppTheme { AppRoot() } }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        TimeFmt.init(this) // pick up 12/24h changes
+    }
+}
+
+sealed interface Route {
+    data object Settings : Route
+    data object Activities : Route
+    data class EditActivity(val id: Long?) : Route
+    data object Goals : Route
+    data object Rules : Route
+}
+
+@Composable
+private fun AppRoot() {
+    val stack = remember { mutableStateListOf<Route>() }
+    val push: (Route) -> Unit = { stack.add(it) }
+    val pop: () -> Unit = { if (stack.isNotEmpty()) stack.removeAt(stack.lastIndex) }
+    BackHandler(enabled = stack.isNotEmpty(), onBack = pop)
+    RequestNotificationPermission()
+
+    when (val top = stack.lastOrNull()) {
+        null -> MainTabs(push)
+        Route.Settings -> SettingsScreen(onBack = pop, push = push)
+        Route.Activities -> ActivitiesScreen(onBack = pop, push = push)
+        is Route.EditActivity -> ActivityEditorScreen(top.id, onBack = pop)
+        Route.Goals -> GoalsManageScreen(onBack = pop)
+        Route.Rules -> RulesScreen(onBack = pop)
+    }
+}
+
+@Composable
+private fun RequestNotificationPermission() {
+    if (Build.VERSION.SDK_INT < 33) return
+    val ctx = LocalContext.current
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
+        Graph.tracker.refreshSurfaces()
+    }
+    LaunchedEffect(Unit) {
+        if (Graph.prefs.settings.value.notificationEnabled && !TrackingNotification.canPost(ctx)) {
+            launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
+    }
+}
+
+private data class Tab(val title: String, val label: String, val icon: androidx.compose.ui.graphics.vector.ImageVector)
+
+private val tabs = listOf(
+    Tab("Time Tracker", "Track", Icons.Default.Home),
+    Tab("Goals", "Goals", Icons.Default.Star),
+    Tab("Log", "Log", Icons.AutoMirrored.Filled.List),
+    Tab("Analysis", "Analysis", Icons.Default.DateRange),
+)
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun MainTabs(push: (Route) -> Unit) {
+    var tab by rememberSaveable { mutableIntStateOf(0) }
+    val snackbar = remember { SnackbarHostState() }
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(tabs[tab].title) },
+                actions = { IconButton(onClick = { push(Route.Settings) }) { Icon(Icons.Default.Settings, "Settings") } },
+            )
+        },
+        bottomBar = {
+            NavigationBar {
+                tabs.forEachIndexed { i, t ->
+                    NavigationBarItem(
+                        selected = tab == i, onClick = { tab = i },
+                        icon = { Icon(t.icon, null) }, label = { Text(t.label) },
+                    )
+                }
+            }
+        },
+        snackbarHost = { SnackbarHost(snackbar) },
+    ) { padding ->
+        when (tab) {
+            0 -> TrackScreen(padding, snackbar, onEditActivity = { push(Route.EditActivity(it)) })
+            1 -> GoalsScreen(padding, onManage = { push(Route.Goals) })
+            2 -> LogScreen(padding)
+            else -> AnalysisScreen(padding)
+        }
+    }
+}

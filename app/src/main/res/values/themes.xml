@@ -1,0 +1,5 @@
+<resources>
+    <style name="Theme.TimeTracker" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">#FFFDFBFF</item>
+    </style>
+</resources>
