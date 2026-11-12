@@ -39,3 +39,29 @@ fun filterActivities(activities: List<ActivityItem>, groups: List<Group>, query:
         it.name.contains(q, ignoreCase = true) || (groupNames[it.groupId]?.contains(q, ignoreCase = true) ?: false)
     }
 }
+
+/** Group filter value meaning "activities without a (known) group". `null` means all groups. */
+const val OTHER_GROUP = -1L
+
+/** Activities in the group selected by [groupFilter] (null = all, [OTHER_GROUP] = ungrouped). */
+fun filterByGroup(activities: List<ActivityItem>, groups: List<Group>, groupFilter: Long?): List<ActivityItem> {
+    val ids = groups.map { it.id }.toSet()
+    return when (groupFilter) {
+        null -> activities
+        OTHER_GROUP -> activities.filter { it.groupId == null || it.groupId !in ids }
+        else -> activities.filter { it.groupId == groupFilter }
+    }
+}
+
+/** True when some activity has no (known) group, i.e. an "Other" section/filter is needed. */
+fun hasUngrouped(activities: List<ActivityItem>, groups: List<Group>): Boolean =
+    filterByGroup(activities, groups, OTHER_GROUP).isNotEmpty()
+
+/** Moves [item] up/down past its neighbour *within the same group*; returns the new full order (unchanged if at an edge). */
+fun moveWithinGroup(ordered: List<ActivityItem>, item: ActivityItem, delta: Int): List<ActivityItem> {
+    val sameGroup = ordered.filter { it.groupId == item.groupId }
+    val j = sameGroup.indexOfFirst { it.id == item.id } + delta
+    if (j !in sameGroup.indices) return ordered
+    val other = sameGroup[j]
+    return ordered.map { if (it.id == item.id) other else if (it.id == other.id) item else it }
+}

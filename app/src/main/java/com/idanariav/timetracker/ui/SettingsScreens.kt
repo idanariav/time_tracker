@@ -1,5 +1,11 @@
 package com.idanariav.timetracker.ui
 
+import com.idanariav.timetracker.domain.moveWithinGroup
+import com.idanariav.timetracker.domain.hasUngrouped
+import com.idanariav.timetracker.domain.OTHER_GROUP
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.runtime.saveable.rememberSaveable
 import com.composables.icons.lucide.Clock
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.SegmentedButtonDefaults
@@ -236,57 +242,67 @@ fun ActivitiesScreen(onBack: () -> Unit, push: (Route) -> Unit) {
     val all by remember { Graph.dao.allActivities() }.collectAsState(emptyList())
     val groups by remember { Graph.dao.groups() }.collectAsState(emptyList())
     val scope = rememberCoroutineScope()
+    var query by rememberSaveable { mutableStateOf("") }
+    var groupFilter by rememberSaveable { mutableStateOf<Long?>(null) }
     val active = all.filter { !it.archived }
     val archived = all.filter { it.archived }
-    val groupName = groups.associate { it.id to it.name }
+    val sections = browseSections(active, groups, query, groupFilter, sectioned = true)
 
-    fun move(i: Int, delta: Int) {
-        val j = i + delta
-        if (j !in active.indices) return
-        val list = active.toMutableList()
-        list[i] = active[j].also { list[j] = active[i] }
-        scope.launch { Graph.tracker.reorderActivities(list) }
+    fun move(a: ActivityItem, delta: Int) {
+        val reordered = moveWithinGroup(active, a, delta)
+        if (reordered != active) scope.launch { Graph.tracker.reorderActivities(reordered) }
     }
 
-    SubScreen("Activities", onBack, fab = { push(Route.EditActivity(null)) }) { p ->
-        LazyColumn(contentPadding = p) {
-            items(active.size, key = { active[it].id }) { i ->
-                val a = active[i]
-                ListItem(
-                    modifier = Modifier.clickable { push(Route.EditActivity(a.id)) },
-                    leadingContent = { IconBadge(a.icon, a.color) },
-                    headlineContent = { Text(a.name) },
-                    supportingContent = { Text(a.groupId?.let { groupName[it] } ?: "No group") },
-                    trailingContent = {
-                        Row {
-                            IconButton(onClick = { move(i, -1) }, enabled = i > 0) {
-                                Icon(Lucide.ChevronUp, "Move up")
-                            }
-                            IconButton(onClick = { move(i, 1) }, enabled = i < active.lastIndex) {
-                                Icon(Lucide.ChevronDown, "Move down")
-                            }
-                        }
-                    },
-                )
+    SubScreen(
+        "Activities", onBack,
+        fab = { push(Route.EditActivity(null, groupFilter?.takeIf { it != OTHER_GROUP })) },
+    ) { p ->
+        Column(Modifier.padding(top = p.calculateTopPadding())) {
+            SearchField(query, { query = it }, Modifier.padding(horizontal = 12.dp))
+            if (query.isBlank() && groups.isNotEmpty()) {
+                GroupFilterRow(groups, hasUngrouped(active, groups), groupFilter, { groupFilter = it }, Modifier.padding(top = 6.dp))
             }
-            if (archived.isNotEmpty()) {
-                item { SectionTitle("Archived", Modifier.padding(horizontal = 16.dp)) }
-                items(archived, key = { it.id }) { a ->
-                    ListItem(
-                        modifier = Modifier.clickable { push(Route.EditActivity(a.id)) },
-                        leadingContent = { IconBadge(a.icon, a.color) },
-                        headlineContent = { Text(a.name, color = MaterialTheme.colorScheme.onSurfaceVariant) },
-                    )
+            LazyColumn(contentPadding = PaddingValues(bottom = p.calculateBottomPadding() + 88.dp)) {
+                sections.forEach { section ->
+                    if (query.isBlank() && groupFilter == null && (section.group != null || sections.size > 1)) {
+                        item(key = "h${section.group?.id ?: OTHER_GROUP}") { SectionHeader(section.group) }
+                    }
+                    items(section.activities, key = { it.id }) { a ->
+                        val pos = section.activities.indexOf(a)
+                        ListItem(
+                            modifier = Modifier.clickable { push(Route.EditActivity(a.id)) },
+                            leadingContent = { IconBadge(a.icon, a.color) },
+                            headlineContent = { Text(a.name) },
+                            trailingContent = {
+                                // Reorder within the group (hidden while searching, where order isn't meaningful).
+                                if (query.isBlank()) Row {
+                                    IconButton(onClick = { move(a, -1) }, enabled = pos > 0) { Icon(Lucide.ChevronUp, "Move up") }
+                                    IconButton(onClick = { move(a, 1) }, enabled = pos < section.activities.lastIndex) {
+                                        Icon(Lucide.ChevronDown, "Move down")
+                                    }
+                                }
+                            },
+                        )
+                    }
+                }
+                if (archived.isNotEmpty() && query.isBlank() && groupFilter == null) {
+                    item { SectionTitle("Archived", Modifier.padding(horizontal = 16.dp)) }
+                    items(archived, key = { it.id }) { a ->
+                        ListItem(
+                            modifier = Modifier.clickable { push(Route.EditActivity(a.id)) },
+                            leadingContent = { IconBadge(a.icon, a.color) },
+                            headlineContent = { Text(a.name, color = MaterialTheme.colorScheme.onSurfaceVariant) },
+                        )
+                    }
                 }
             }
-            item { Spacer(Modifier.height(88.dp)) }
         }
     }
 }
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun ActivityEditorScreen(id: Long?, onBack: () -> Unit) {
+fun ActivityEditorScreen(id: Long?, initialGroupId: Long? = null, onBack: () -> Unit) {
     val goals by remember { Graph.dao.goals() }.collectAsState(emptyList())
     val groups by remember { Graph.dao.groups() }.collectAsState(emptyList())
     val scope = rememberCoroutineScope()
@@ -294,7 +310,7 @@ fun ActivityEditorScreen(id: Long?, onBack: () -> Unit) {
     var name by remember { mutableStateOf("") }
     var icon by remember { mutableStateOf("Star") }
     var color by remember { mutableIntStateOf(Palette[5]) }
-    var groupId by remember { mutableStateOf<Long?>(null) }
+    var groupId by remember { mutableStateOf(initialGroupId) }
     var goalIds by remember { mutableStateOf(emptySet<Long>()) }
     var archived by remember { mutableStateOf(false) }
     var sessionCount by remember { mutableIntStateOf(0) }
@@ -460,12 +476,14 @@ fun GoalsManageScreen(onBack: () -> Unit) {
             }
         }
     }
-    editing?.let { GoalDialog(it, acts.filter { a -> !a.archived }) { editing = null } }
+    val groups by remember { Graph.dao.groups() }.collectAsState(emptyList())
+    editing?.let { GoalDialog(it, acts.filter { a -> !a.archived }, groups) { editing = null } }
 }
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun GoalDialog(initial: Goal, activities: List<ActivityItem>, onDismiss: () -> Unit) {
+private fun GoalDialog(initial: Goal, activities: List<ActivityItem>, groups: List<Group>, onDismiss: () -> Unit) {
+    var picking by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
     var tracked by remember { mutableStateOf(emptySet<Long>()) }
     LaunchedEffect(initial.id) { if (initial.id != 0L) tracked = Graph.dao.activityIdsFor(initial.id).toSet() }
@@ -496,17 +514,12 @@ private fun GoalDialog(initial: Goal, activities: List<ActivityItem>, onDismiss:
                     Text("Treat as a limit (stay under)", Modifier.weight(1f))
                     Switch(limit, { limit = it })
                 }
-                SectionTitle("Tracks these activities")
-                FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                    activities.forEach { a ->
-                        FilterChip(
-                            a.id in tracked,
-                            { tracked = if (a.id in tracked) tracked - a.id else tracked + a.id },
-                            label = { Text(a.name) },
-                            leadingIcon = { ChipIcon(a) },
-                        )
-                    }
-                }
+                Spacer(Modifier.height(12.dp))
+                val names = activities.filter { it.id in tracked }.map { it.name }
+                PickerField(
+                    "Tracks", null, onClick = { picking = true },
+                    summary = if (names.isEmpty()) "Choose activities…" else "${names.size}: " + names.joinToString(", "),
+                )
                 if (initial.id != 0L) {
                     TextButton(onClick = { confirmDelete = true }) {
                         Text("Delete goal", color = MaterialTheme.colorScheme.error)
@@ -527,6 +540,12 @@ private fun GoalDialog(initial: Goal, activities: List<ActivityItem>, onDismiss:
         },
         dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } },
     )
+    if (picking) {
+        ActivityPickerSheet(
+            "Goal tracks", activities, groups, tracked.toList(), multi = true,
+            onDismiss = { picking = false }, onConfirm = { tracked = it.toSet() },
+        )
+    }
     if (confirmDelete) {
         ConfirmDialog(
             "Delete “${initial.name}”?", "Only the goal is removed; activities and log entries stay.", "Delete",
@@ -541,6 +560,7 @@ private fun GoalDialog(initial: Goal, activities: List<ActivityItem>, onDismiss:
 @Composable
 fun GroupsManageScreen(onBack: () -> Unit) {
     val groups by remember { Graph.dao.groups() }.collectAsState(emptyList())
+    val scope = rememberCoroutineScope()
     val acts by remember { Graph.dao.allActivities() }.collectAsState(emptyList())
     var editing by remember { mutableStateOf<Group?>(null) }
     SubScreen("Groups", onBack, fab = { editing = Group(name = "", color = Palette[5]) }) { p ->
@@ -548,13 +568,27 @@ fun GroupsManageScreen(onBack: () -> Unit) {
             if (groups.isEmpty()) item {
                 Text("Groups organize activities into sections on the Track tab, widgets and analysis.", Modifier.padding(16.dp))
             }
-            items(groups, key = { it.id }) { g ->
+            items(groups.size, key = { groups[it].id }) { i ->
+                val g = groups[i]
                 ListItem(
                     modifier = Modifier.clickable { editing = g },
                     leadingContent = { Box(Modifier.size(20.dp).clip(CircleShape).background(Color(g.color))) },
                     headlineContent = { Text(g.name) },
                     supportingContent = {
-                        Text(acts.filter { it.groupId == g.id && !it.archived }.joinToString(", ") { it.name }.ifEmpty { "Empty" })
+                        Text(
+                            acts.filter { it.groupId == g.id && !it.archived }.joinToString(", ") { it.name }.ifEmpty { "Empty" },
+                            maxLines = 2, overflow = TextOverflow.Ellipsis,
+                        )
+                    },
+                    trailingContent = {
+                        Row {
+                            IconButton(onClick = { scope.launch { Graph.tracker.moveGroup(groups, i, -1) } }, enabled = i > 0) {
+                                Icon(Lucide.ChevronUp, "Move up")
+                            }
+                            IconButton(onClick = { scope.launch { Graph.tracker.moveGroup(groups, i, 1) } }, enabled = i < groups.lastIndex) {
+                                Icon(Lucide.ChevronDown, "Move down")
+                            }
+                        }
                     },
                 )
             }
@@ -674,12 +708,16 @@ fun RulesScreen(onBack: () -> Unit) {
             }
         }
     }
-    editing?.let { RuleDialog(it, acts.filter { a -> !a.archived }) { editing = null } }
+    val groups by remember { Graph.dao.groups() }.collectAsState(emptyList())
+    editing?.let { RuleDialog(it, acts.filter { a -> !a.archived }, groups) { editing = null } }
 }
 
 @OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
-private fun RuleDialog(initial: Rule, acts: List<ActivityItem>, onDismiss: () -> Unit) {
+private fun RuleDialog(initial: Rule, acts: List<ActivityItem>, groups: List<Group>, onDismiss: () -> Unit) {
+    var pickTrigger by remember { mutableStateOf(false) }
+    var pickSuggest by remember { mutableStateOf(false) }
+    val actById = acts.associateBy { it.id }
     val scope = rememberCoroutineScope()
     var byActivity by remember { mutableStateOf(initial.isActivityTrigger) }
     var after by remember { mutableStateOf(initial.afterActivityId) }
@@ -704,16 +742,8 @@ private fun RuleDialog(initial: Rule, acts: List<ActivityItem>, onDismiss: () ->
                     }
                 }
                 if (byActivity) {
-                    SectionTitle("While this is running")
-                    FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                        acts.forEach { a ->
-                            FilterChip(
-                                after == a.id,
-                                { after = a.id; suggestIds = suggestIds - a.id },
-                                label = { Text(a.name) }, leadingIcon = { ChipIcon(a) },
-                            )
-                        }
-                    }
+                    Spacer(Modifier.height(12.dp))
+                    PickerField("While this is running", after?.let { actById[it] }, onClick = { pickTrigger = true })
                 } else {
                     Row(Modifier.padding(top = 12.dp), verticalAlignment = Alignment.CenterVertically) {
                         Text("From")
@@ -733,26 +763,12 @@ private fun RuleDialog(initial: Rule, acts: List<ActivityItem>, onDismiss: () ->
                         }
                     }
                 }
-                SectionTitle("Suggest (in the order you tap)")
-                FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                    acts.filter { !byActivity || it.id != after }.forEach { a ->
-                        val pos = suggestIds.indexOf(a.id)
-                        FilterChip(
-                            pos >= 0,
-                            { suggestIds = if (pos >= 0) suggestIds - a.id else suggestIds + a.id },
-                            label = { Text(a.name) },
-                            leadingIcon = {
-                                if (pos >= 0) {
-                                    Box(Modifier.size(18.dp), contentAlignment = Alignment.Center) {
-                                        Text("${pos + 1}", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
-                                    }
-                                } else {
-                                    ChipIcon(a)
-                                }
-                            },
-                        )
-                    }
-                }
+                Spacer(Modifier.height(12.dp))
+                PickerField(
+                    "Suggest (in order)", null, onClick = { pickSuggest = true },
+                    summary = suggestIds.mapNotNull { actById[it]?.name }
+                        .mapIndexed { i, n -> "${i + 1}. $n" }.joinToString("  ").ifEmpty { "Choose…" },
+                )
                 if (initial.id != 0L) {
                     TextButton(onClick = { scope.launch { Graph.tracker.deleteRule(initial.id); onDismiss() } }) {
                         Text("Delete rule", color = MaterialTheme.colorScheme.error)
@@ -776,6 +792,19 @@ private fun RuleDialog(initial: Rule, acts: List<ActivityItem>, onDismiss: () ->
         },
         dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } },
     )
+    if (pickTrigger) {
+        ActivityPickerSheet(
+            "While this is running", acts, groups, listOfNotNull(after), multi = false,
+            onDismiss = { pickTrigger = false },
+            onConfirm = { ids -> after = ids.first(); suggestIds = suggestIds - ids.first() },
+        )
+    }
+    if (pickSuggest) {
+        ActivityPickerSheet(
+            "Suggest (tap in order)", acts.filter { !byActivity || it.id != after }, groups, suggestIds, multi = true,
+            showOrder = true, onDismiss = { pickSuggest = false }, onConfirm = { suggestIds = it },
+        )
+    }
     picking?.let { which ->
         val m = if (which == "start") start else end
         TimePickDialog(m / 60, m % 60, onDismiss = { picking = null }) { h, min ->

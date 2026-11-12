@@ -89,6 +89,9 @@ interface TrackerDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun putGroup(g: Group): Long
 
+    @Update
+    suspend fun updateGroups(list: List<Group>)
+
     @Query("DELETE FROM activity_groups WHERE id = :id")
     suspend fun deleteGroup(id: Long)
 

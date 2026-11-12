@@ -56,7 +56,7 @@ class MainActivity : ComponentActivity() {
 sealed interface Route {
     data object Settings : Route
     data object Activities : Route
-    data class EditActivity(val id: Long?) : Route
+    data class EditActivity(val id: Long?, val groupId: Long? = null) : Route
     data object Goals : Route
     data object Groups : Route
     data object Rules : Route
@@ -74,7 +74,7 @@ private fun AppRoot() {
         null -> MainTabs(push)
         Route.Settings -> SettingsScreen(onBack = pop, push = push)
         Route.Activities -> ActivitiesScreen(onBack = pop, push = push)
-        is Route.EditActivity -> ActivityEditorScreen(top.id, onBack = pop)
+        is Route.EditActivity -> ActivityEditorScreen(top.id, top.groupId, onBack = pop)
         Route.Goals -> GoalsManageScreen(onBack = pop)
         Route.Groups -> GroupsManageScreen(onBack = pop)
         Route.Rules -> RulesScreen(onBack = pop)
@@ -140,7 +140,7 @@ private fun MainTabs(push: (Route) -> Unit) {
         snackbarHost = { SnackbarHost(snackbar) },
     ) { padding ->
         when (tab) {
-            0 -> TrackScreen(padding, snackbar, onEditActivity = { push(Route.EditActivity(it)) })
+            0 -> TrackScreen(padding, snackbar, onEditActivity = { id, groupId -> push(Route.EditActivity(id, groupId)) })
             1 -> GoalsScreen(padding, onManage = { push(Route.Goals) })
             2 -> LogScreen(padding)
             else -> AnalysisScreen(padding)

@@ -50,6 +50,12 @@ import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.glance.state.PreferencesGlanceStateDefinition
 import androidx.lifecycle.lifecycleScope
 import com.idanariav.timetracker.ui.AppTheme
+import com.idanariav.timetracker.data.Group
+import com.idanariav.timetracker.domain.OTHER_GROUP
+import com.idanariav.timetracker.tracking.Graph
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.material3.FilterChip
 import com.idanariav.timetracker.ui.Palette
 import kotlinx.coroutines.launch
 
@@ -90,23 +96,26 @@ class WidgetConfigActivity : ComponentActivity() {
             val opacity = prefs?.get(WidgetPrefs.OPACITY) ?: WidgetPrefs.DEFAULT_OPACITY
             val compact = prefs?.get(WidgetPrefs.COMPACT) ?: false
             val grouped = prefs?.get(WidgetPrefs.GROUPED) ?: true
+            val groupIds = prefs?.get(WidgetPrefs.GROUP_IDS).orEmpty().split(',').mapNotNull { it.toLongOrNull() }.toSet()
+            val groups = Graph.dao.groupsOnce()
             setContent {
                 AppTheme {
-                    ConfigScreen(kind, opacity, compact, grouped, onCancel = { finish() }) { o, c, g ->
-                        commit(kind, o, c, g)
+                    ConfigScreen(kind, opacity, compact, grouped, groups, groupIds, onCancel = { finish() }) { o, c, g, ids ->
+                        commit(kind, o, c, g, ids)
                     }
                 }
             }
         }
     }
 
-    private fun commit(kind: WidgetKind, opacity: Int, compact: Boolean, grouped: Boolean) {
+    private fun commit(kind: WidgetKind, opacity: Int, compact: Boolean, grouped: Boolean, groupIds: Set<Long>) {
         lifecycleScope.launch {
             val glanceId = GlanceAppWidgetManager(this@WidgetConfigActivity).getGlanceIdBy(appWidgetId)
             updateAppWidgetState(this@WidgetConfigActivity, glanceId) { p: MutablePreferences ->
                 p[WidgetPrefs.OPACITY] = opacity
                 p[WidgetPrefs.COMPACT] = compact
                 p[WidgetPrefs.GROUPED] = grouped
+                p[WidgetPrefs.GROUP_IDS] = groupIds.joinToString(",")
             }
             val widget: GlanceAppWidget = when (kind) {
                 WidgetKind.ACTIVITIES -> ActivityWidget()
@@ -120,15 +129,19 @@ class WidgetConfigActivity : ComponentActivity() {
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun ConfigScreen(
     kind: WidgetKind,
     initOpacity: Int,
     initCompact: Boolean,
     initGrouped: Boolean,
+    groups: List<Group>,
+    initGroupIds: Set<Long>,
     onCancel: () -> Unit,
-    onSave: (opacity: Int, compact: Boolean, grouped: Boolean) -> Unit,
+    onSave: (opacity: Int, compact: Boolean, grouped: Boolean, groupIds: Set<Long>) -> Unit,
 ) {
+    var groupIds by remember { mutableStateOf(initGroupIds) }
     var opacity by remember { mutableIntStateOf(initOpacity) }
     var compact by remember { mutableStateOf(initCompact) }
     var grouped by remember { mutableStateOf(initGrouped) }
@@ -161,11 +174,27 @@ private fun ConfigScreen(
                         Text("Section by group", Modifier.weight(1f))
                         Switch(grouped, { grouped = it })
                     }
+                    if (groups.isNotEmpty()) {
+                        Text(
+                            "Groups to show", style = MaterialTheme.typography.labelLarge,
+                            modifier = Modifier.padding(top = 12.dp, bottom = 4.dp),
+                        )
+                        FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                            FilterChip(groupIds.isEmpty(), { groupIds = emptySet() }, label = { Text("All") })
+                            (groups.map { it.id to it.name } + (OTHER_GROUP to "Other")).forEach { (id, name) ->
+                                FilterChip(
+                                    id in groupIds,
+                                    { groupIds = if (id in groupIds) groupIds - id else groupIds + id },
+                                    label = { Text(name) },
+                                )
+                            }
+                        }
+                    }
                 }
                 Spacer(Modifier.height(16.dp))
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                     TextButton(onClick = onCancel) { Text("Cancel") }
-                    Button(onClick = { onSave(opacity, compact, grouped) }) { Text("Save") }
+                    Button(onClick = { onSave(opacity, compact, grouped, groupIds) }) { Text("Save") }
                 }
             }
         }

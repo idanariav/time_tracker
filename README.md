@@ -15,7 +15,9 @@ adb install -r app/build/outputs/apk/release/app-release.apk   # signed with the
 - **Groups vs goals** — a *group* organizes activities into sections (each activity is in at most one group).
   A *goal* is a daily target or limit over any set of activities, independent of groups and possibly overlapping
   (e.g. "Screen time ≤ 2h" tracking only TV, while Reading is also in the Leisure group).
-- **Track** — grid of activities ([Lucide](https://lucide.dev) icon + color), sectioned by group, with a compact tile size
+- **Built for dozens of activities** — one shared picker everywhere (search by name or group, group chips,
+  grouped list; multi-select with per-group All/None and ordered selection where it matters).
+- **Track** — pinned header (one-line running bar, search, group chips) over a scrolling grid of activities ([Lucide](https://lucide.dev) icon + color), sectioned by group, with a compact tile size
   (top-bar toggle). Tap switches (only one runs at a time), long-press edits, Undo snackbar for mis-taps, "Suggested now" chips,
   and a search bar (name or group; Enter on a single match starts it).
 - **Goals** — each goal's time today vs its target/limit; day-by-day navigation.
@@ -23,14 +25,15 @@ adb install -r app/build/outputs/apk/release/app-release.apk   # signed with the
   short-entry threshold are hidden. Tap an entry to edit; ＋ adds/backfills an entry (search the activity list in the editor).
   The editor has −30/−15/+15/+30, **Last** (previous entry's end), **Next** (next entry's start) and **Now** anchors, a time picker, notes, and "still running".
   Saving trims/splits overlapping entries automatically.
-- **Analysis** — Day / Week / Month with ‹ › navigation (tap the label to jump back to today), by activity, group or goal, 24h timeline or daily stacked bars, CSV export of the shown period.
+- **Analysis** — tap a group (Groups view) to expand its per-activity breakdown. Day / Week / Month with ‹ › navigation (tap the label to jump back to today), by activity, group or goal, 24h timeline or daily stacked bars, CSV export of the shown period.
 - **Persistence** — the running activity is just an open entry in the DB, so the timer continues across app kills and reboots.
 - **Ignore short entries** — optional threshold (30s/1m/2m/5m); short entries stay in the log but don't count.
 - **CSV export** — all data from Settings, or the current period from Analysis; opens the share sheet.
 - **Notification** — ongoing, silent, live chronometer with Stop + two suggested switches.
 - **Widgets** — *Activities* (current + all activities, sectioned by group), *Smart suggestions* (rule- and habit-based;
   refreshes every 15 min) and a 1×1 *Quick pick* (current activity; tap for top 3 suggestions + searchable list).
-  Each widget has its own settings (background opacity, compact tiles, sectioning), shown when placed and via reconfigure.
+  Each widget has its own settings (background opacity, compact tiles, sectioning, and for *Activities* which groups
+  to show), shown when placed and via reconfigure.
 - **Smart rules** — two kinds, each suggesting one or more activities in a chosen order: *time of day* (days + window,
   may cross midnight) and *while activity X is running* (e.g. while Work → Email, Commute; these rank first). Empty slots are filled from what you usually start around this time (last 4 weeks).
 - **NFC** — Settings → Activities → (activity) → *Write NFC tag*. Tapping the tag toggles that activity.

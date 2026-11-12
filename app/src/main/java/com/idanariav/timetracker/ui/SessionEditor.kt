@@ -40,7 +40,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.idanariav.timetracker.data.Session
 import com.idanariav.timetracker.domain.endTimeAfter
-import com.idanariav.timetracker.domain.filterActivities
 import com.idanariav.timetracker.domain.formatDuration
 import com.idanariav.timetracker.domain.withTimeOfDay
 import com.idanariav.timetracker.tracking.Graph
@@ -60,7 +59,8 @@ private const val MIN = 60_000L
 fun SessionEditorSheet(initial: Session, onDismiss: () -> Unit) {
     val acts by remember { Graph.dao.activeActivities() }.collectAsState(emptyList())
     val groups by remember { Graph.dao.groups() }.collectAsState(emptyList())
-    var query by remember { mutableStateOf("") }
+    val suggestions by remember { Graph.suggestionFlow(6) }.collectAsState(emptyList())
+    var picking by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
     val isNew = initial.id == 0L
     var activityId by remember { mutableLongStateOf(initial.activityId) }
@@ -101,17 +101,14 @@ fun SessionEditorSheet(initial: Session, onDismiss: () -> Unit) {
                 style = MaterialTheme.typography.titleLarge,
             )
             Spacer(Modifier.height(12.dp))
-            SearchField(query, { query = it }, Modifier.padding(bottom = 8.dp))
-            val shown = filterActivities(acts, groups, query).let { m ->
-                if (m.none { it.id == activityId }) acts.filter { it.id == activityId } + m else m
-            }
-            FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                shown.forEach { a ->
-                    FilterChip(
-                        selected = a.id == activityId, onClick = { activityId = a.id },
-                        label = { Text(a.name) },
-                        leadingIcon = { ChipIcon(a) },
-                    )
+            // One field opens the searchable, grouped picker; a few likely ones are a tap away.
+            PickerField("Activity", acts.firstOrNull { it.id == activityId }, onClick = { picking = true })
+            val quick = suggestions.filter { it.id != activityId }.take(5)
+            if (quick.isNotEmpty()) {
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.padding(top = 6.dp)) {
+                    quick.forEach { a ->
+                        FilterChip(false, { activityId = a.id }, label = { Text(a.name) }, leadingIcon = { ChipIcon(a) })
+                    }
                 }
             }
 
@@ -174,6 +171,12 @@ fun SessionEditorSheet(initial: Session, onDismiss: () -> Unit) {
         }
     }
 
+    if (picking) {
+        ActivityPickerSheet(
+            "Choose activity", acts, groups, listOf(activityId), multi = false,
+            onDismiss = { picking = false }, onConfirm = { activityId = it.first() },
+        )
+    }
     if (confirmDelete) {
         ConfirmDialog(
             "Delete entry?", "This removes it from the log. The gap stays untracked.", "Delete",

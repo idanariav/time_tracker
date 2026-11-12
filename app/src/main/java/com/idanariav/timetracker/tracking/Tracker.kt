@@ -146,6 +146,15 @@ class Tracker(private val context: Context, private val db: AppDatabase, private
         refreshSurfaces() // widgets section by group
     }
 
+    /** Swaps group [i] with its neighbour [delta] away and persists the order. */
+    suspend fun moveGroup(groups: List<Group>, i: Int, delta: Int) {
+        val j = i + delta
+        if (j !in groups.indices) return
+        val list = groups.toMutableList().apply { this[i] = groups[j]; this[j] = groups[i] }
+        dao.updateGroups(list.mapIndexed { k, g -> g.copy(sortOrder = k) })
+        refreshSurfaces()
+    }
+
     suspend fun deleteGroup(id: Long) {
         db.withTransaction {
             dao.unassignGroup(id)

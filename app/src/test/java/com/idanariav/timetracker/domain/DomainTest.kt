@@ -197,6 +197,20 @@ class GroupingTest {
         assertEquals(acts.size, filterActivities(acts, listOf(g1, g2), "  ").size)
     }
 
+    @Test fun groupFilterAllOneOrOther() {
+        assertEquals(acts.size, filterByGroup(acts, listOf(g1, g2), null).size)
+        assertEquals(listOf(10L, 14L), filterByGroup(acts, listOf(g1, g2), 1L).map { it.id })
+        assertEquals(listOf(11L, 13L), filterByGroup(acts, listOf(g1, g2), OTHER_GROUP).map { it.id })
+        assertTrue(hasUngrouped(acts, listOf(g1, g2)))
+    }
+
+    @Test fun moveWithinGroupSkipsOtherGroups() {
+        // Work group order is Email(10) then Work(14), with other groups' activities in between.
+        val moved = moveWithinGroup(acts, acts.first { it.id == 14L }, -1)
+        assertEquals(listOf(14L, 11L, 12L, 13L, 10L), moved.map { it.id })
+        assertEquals(acts, moveWithinGroup(acts, acts.first { it.id == 10L }, -1)) // already first in its group
+    }
+
     @Test fun goalsSumTheirMembersAndMayOverlap() {
         // Goal 1 = TV only (a subset of Leisure); goal 2 = TV + Reading.
         val links = listOf(GoalActivity(1, 3), GoalActivity(2, 3), GoalActivity(2, 4))

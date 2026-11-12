@@ -75,7 +75,6 @@ private fun QuickPick(onDone: () -> Unit) {
     val suggestions by remember { Graph.suggestionFlow(3) }.collectAsState(emptyList())
     val settings by Graph.prefs.settings.collectAsState()
     var expanded by rememberSaveable { mutableStateOf(false) }
-    var query by rememberSaveable { mutableStateOf("") }
     val scope = rememberCoroutineScope()
     val ctx = LocalContext.current
     val current = all.firstOrNull { it.id == running?.activityId }
@@ -133,37 +132,12 @@ private fun QuickPick(onDone: () -> Unit) {
                 }
 
                 if (expanded) {
-                    val focus = remember { FocusRequester() }
-                    LaunchedEffect(Unit) { focus.requestFocus() }
-                    OutlinedTextField(
-                        value = query, onValueChange = { query = it },
-                        placeholder = { Text("Search") },
-                        leadingIcon = { Icon(Lucide.Search, null, Modifier.size(20.dp)) },
-                        singleLine = true,
-                        modifier = Modifier.fillMaxWidth().focusRequester(focus),
+                    ActivityBrowser(
+                        active, groups, listOfNotNull(running?.activityId), multi = false,
+                        onToggle = { pick(it) },
+                        listModifier = Modifier.fillMaxWidth().heightIn(max = 380.dp).padding(top = 4.dp),
+                        autoFocus = true,
                     )
-                    val q = query.trim()
-                    LazyColumn(Modifier.fillMaxWidth().heightIn(max = 360.dp).padding(top = 8.dp)) {
-                        if (q.isNotEmpty()) {
-                            val hits = filterActivities(active, groups, q)
-                            if (hits.isEmpty()) item { Text("No match", Modifier.padding(12.dp)) }
-                            items(hits, key = { it.id }) { a -> PickRow(a, big = false) { pick(a) } }
-                        } else {
-                            groupActivities(active, groups, settings.groupActivities).forEach { section ->
-                                if (section.group != null || groups.isNotEmpty() && settings.groupActivities) {
-                                    item(key = "g${section.group?.id ?: -1}") {
-                                        Text(
-                                            section.group?.name ?: "Other",
-                                            style = MaterialTheme.typography.labelMedium,
-                                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                            modifier = Modifier.padding(start = 8.dp, top = 8.dp, bottom = 2.dp),
-                                        )
-                                    }
-                                }
-                                items(section.activities, key = { it.id }) { a -> PickRow(a, big = false) { pick(a) } }
-                            }
-                        }
-                    }
                 }
             }
         }

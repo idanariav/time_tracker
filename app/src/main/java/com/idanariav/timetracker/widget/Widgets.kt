@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.sp
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.glance.ColorFilter
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
@@ -57,6 +58,7 @@ import com.idanariav.timetracker.data.ActivityItem
 import com.idanariav.timetracker.data.Group
 import com.idanariav.timetracker.data.Session
 import com.idanariav.timetracker.domain.groupActivities
+import com.idanariav.timetracker.domain.filterByGroup
 import com.idanariav.timetracker.tracking.Graph
 import com.idanariav.timetracker.ui.MainActivity
 import com.idanariav.timetracker.ui.QuickPickActivity
@@ -75,6 +77,8 @@ object WidgetPrefs {
     val OPACITY = intPreferencesKey("opacity") // 0..100
     val COMPACT = booleanPreferencesKey("compact")
     val GROUPED = booleanPreferencesKey("grouped")
+    /** Comma-separated group ids to show (Activities widget); empty = all groups. -1 = ungrouped. */
+    val GROUP_IDS = stringPreferencesKey("groupIds")
     const val DEFAULT_OPACITY = 85
 }
 
@@ -213,7 +217,12 @@ class ActivityWidget : GlanceAppWidget() {
             val running by remember { Graph.dao.running() }.collectAsState(null)
             val current = acts.firstOrNull { it.id == running?.activityId }
             val cols = ((LocalSize.current.width.value - 16f) / t.cell).toInt().coerceIn(1, 8)
-            val sections = groupActivities(acts.filter { !it.archived }, groups, grouped)
+            val shownGroups = prefs[WidgetPrefs.GROUP_IDS].orEmpty().split(',').mapNotNull { it.toLongOrNull() }.toSet()
+            val visible = acts.filter { !it.archived }.let { list ->
+                if (shownGroups.isEmpty()) list
+                else shownGroups.flatMap { filterByGroup(list, groups, it) }.distinctBy { it.id }.sortedBy { list.indexOf(it) }
+            }
+            val sections = groupActivities(visible, groups, grouped)
             GlanceTheme {
                 WidgetFrame(opacity) {
                     CurrentHeader(running, current)

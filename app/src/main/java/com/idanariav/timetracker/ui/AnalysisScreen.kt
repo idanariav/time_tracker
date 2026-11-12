@@ -4,6 +4,7 @@ import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Share2
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -68,6 +69,7 @@ fun AnalysisScreen(padding: PaddingValues) {
     var kind by rememberSaveable { mutableStateOf(PeriodKind.DAY) }
     var anchor by rememberSaveable { mutableStateOf(LocalDate.now()) }
     var view by rememberSaveable { mutableStateOf(View.ACTIVITIES) }
+    var expanded by remember { mutableStateOf(setOf<Long>()) }
     val period = Period(kind, anchor)
     val from = period.startMillis()
     val to = period.endMillis()
@@ -169,7 +171,11 @@ fun AnalysisScreen(padding: PaddingValues) {
         if (slices.isEmpty()) item { Text("No data for this period.", modifier = Modifier.padding(24.dp)) }
         items(slices, key = { it.key }) { s ->
             val pct = if (total > 0) s.ms * 100f / total else 0f
+            val isOpen = view == View.GROUPS && s.key in expanded
             ListItem(
+                modifier = if (view == View.GROUPS) {
+                    Modifier.clickable { expanded = if (isOpen) expanded - s.key else expanded + s.key }
+                } else Modifier,
                 leadingContent = {
                     if (s.icon != null) IconBadge(s.icon, s.color, 32.dp)
                     else Box(Modifier.size(14.dp).clip(CircleShape).background(Color(s.color)))
@@ -183,6 +189,7 @@ fun AnalysisScreen(padding: PaddingValues) {
                             modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
                         )
                         if (kind != PeriodKind.DAY) Text("${formatDuration(s.ms / elapsedDays)}/day avg")
+                        if (view == View.GROUPS && !isOpen) Text("Tap for activities", style = MaterialTheme.typography.bodySmall)
                     }
                 },
                 trailingContent = {
@@ -192,6 +199,27 @@ fun AnalysisScreen(padding: PaddingValues) {
                     }
                 },
             )
+            if (isOpen) {
+                // Drill-down: this group's activities and their share of the group.
+                perActivity.filter { (id, _) -> (actById[id]?.groupId?.takeIf { it in groupById } ?: NO_GROUP) == s.key }
+                    .entries.sortedByDescending { it.value }
+                    .forEach { (id, ms) ->
+                        val a = actById[id]
+                        Row(
+                            Modifier.fillMaxWidth().padding(start = 56.dp, end = 16.dp, top = 4.dp, bottom = 4.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            IconBadge(a?.icon ?: "Circle", a?.color ?: GREY, 24.dp)
+                            Text(a?.name ?: "(deleted)", Modifier.weight(1f).padding(horizontal = 10.dp), maxLines = 1)
+                            Text(formatDuration(ms), style = MaterialTheme.typography.bodyMedium)
+                            Text(
+                                "%.0f%%".format(ms * 100f / s.ms), style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.padding(start = 8.dp),
+                            )
+                        }
+                    }
+            }
         }
     }
 }
