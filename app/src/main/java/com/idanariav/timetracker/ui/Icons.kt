@@ -45,10 +45,13 @@ private val bitmapCache = LruCache<String, Bitmap>(64)
  * the icon is drawn centred on a filled circle of that color.
  */
 fun iconBitmap(name: String, tint: Int, sizePx: Int, background: Int? = null): Bitmap =
-    bitmapCache.get("$name|$tint|$sizePx|$background") ?: run {
+    vectorBitmap(activityIcon(name), name, tint, sizePx, background)
+
+/** Same as [iconBitmap] for any vector; [key] identifies it in the cache. */
+fun vectorBitmap(vector: ImageVector, key: String, tint: Int, sizePx: Int, background: Int? = null): Bitmap =
+    bitmapCache.get("$key|$tint|$sizePx|$background") ?: run {
         val bmp = Bitmap.createBitmap(sizePx, sizePx, Bitmap.Config.ARGB_8888)
         val c = Canvas(bmp)
-        val vector = activityIcon(name)
         if (background != null) {
             c.drawCircle(sizePx / 2f, sizePx / 2f, sizePx / 2f, Paint(Paint.ANTI_ALIAS_FLAG).apply { color = background })
             // Icon at ~55% of the circle, centred.
@@ -59,7 +62,7 @@ fun iconBitmap(name: String, tint: Int, sizePx: Int, background: Int? = null): B
             c.scale(sizePx / vector.viewportWidth, sizePx / vector.viewportHeight)
         }
         drawGroup(vector.root, c, tint)
-        bmp.also { bitmapCache.put("$name|$tint|$sizePx|$background", it) }
+        bmp.also { bitmapCache.put("$key|$tint|$sizePx|$background", it) }
     }
 
 private fun drawGroup(g: VectorGroup, c: Canvas, tint: Int) {

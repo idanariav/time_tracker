@@ -51,6 +51,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.idanariav.timetracker.data.ActivityItem
+import com.idanariav.timetracker.data.Goal
+import com.idanariav.timetracker.domain.groupActivities
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.shape.CircleShape
 import com.idanariav.timetracker.data.Session
 import com.idanariav.timetracker.domain.formatElapsed
 import com.idanariav.timetracker.tracking.Graph
@@ -62,6 +66,9 @@ fun TrackScreen(padding: PaddingValues, snackbar: SnackbarHostState, onEditActiv
     val all by remember { Graph.dao.allActivities() }.collectAsState(emptyList())
     val running by remember { Graph.dao.running() }.collectAsState(null)
     val suggestions by remember { Graph.suggestionFlow(5) }.collectAsState(emptyList())
+    val goals by remember { Graph.dao.goals() }.collectAsState(emptyList())
+    val settings by Graph.prefs.settings.collectAsState()
+    val compact = settings.compactGrid
     val scope = rememberCoroutineScope()
     val haptic = LocalHapticFeedback.current
     var editing by remember { mutableStateOf<Session?>(null) }
@@ -84,7 +91,7 @@ fun TrackScreen(padding: PaddingValues, snackbar: SnackbarHostState, onEditActiv
     }
 
     LazyVerticalGrid(
-        columns = GridCells.Adaptive(96.dp),
+        columns = GridCells.Adaptive(if (compact) 64.dp else 96.dp),
         contentPadding = PaddingValues(
             start = 12.dp, end = 12.dp,
             top = padding.calculateTopPadding() + 4.dp, bottom = padding.calculateBottomPadding() + 12.dp,
@@ -113,20 +120,31 @@ fun TrackScreen(padding: PaddingValues, snackbar: SnackbarHostState, onEditActiv
                 }
             }
         }
-        items(active, key = { it.id }) { a ->
-            ActivityTile(a, a.id == running?.activityId, onClick = { switch(a) }, onLongClick = { onEditActivity(a.id) })
+        val sections = groupActivities(active, goals, settings.groupByGoal)
+        sections.forEach { section ->
+            if (sections.size > 1 || section.goal != null) {
+                item(span = { GridItemSpan(maxLineSpan) }, key = "goal-${section.goal?.id ?: -1}") {
+                    GroupHeader(section.goal)
+                }
+            }
+            items(section.activities, key = { it.id }) { a ->
+                ActivityTile(
+                    a, a.id == running?.activityId, compact,
+                    onClick = { switch(a) }, onLongClick = { onEditActivity(a.id) },
+                )
+            }
         }
-        item {
+        item(key = "new") {
             Column(
-                Modifier.padding(4.dp).clip(RoundedCornerShape(16.dp))
-                    .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(16.dp))
+                Modifier.padding(if (compact) 3.dp else 4.dp).clip(RoundedCornerShape(if (compact) 12.dp else 16.dp))
+                    .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(if (compact) 12.dp else 16.dp))
                     .combinedClickable(onClick = { onEditActivity(null) })
-                    .padding(vertical = 12.dp).fillMaxWidth(),
+                    .padding(vertical = if (compact) 8.dp else 12.dp).fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Icon(Lucide.Plus, null, modifier = Modifier.size(28.dp))
+                Icon(Lucide.Plus, null, modifier = Modifier.size(if (compact) 20.dp else 28.dp))
                 Spacer(Modifier.height(4.dp))
-                Text("New", style = MaterialTheme.typography.labelMedium)
+                Text("New", style = if (compact) MaterialTheme.typography.labelSmall else MaterialTheme.typography.labelMedium)
             }
         }
         item(span = { GridItemSpan(maxLineSpan) }) {
@@ -180,25 +198,40 @@ private fun CurrentCard(running: Session?, act: ActivityItem?, onStop: () -> Uni
     }
 }
 
+@Composable
+private fun GroupHeader(goal: Goal?) {
+    Row(Modifier.padding(start = 6.dp, top = 12.dp, bottom = 2.dp), verticalAlignment = Alignment.CenterVertically) {
+        Box(Modifier.size(8.dp).clip(CircleShape).background(Color(goal?.color ?: 0xFF9E9E9E.toInt())))
+        Text(
+            goal?.name ?: "Other",
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(start = 8.dp),
+        )
+    }
+}
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun ActivityTile(a: ActivityItem, active: Boolean, onClick: () -> Unit, onLongClick: () -> Unit) {
+private fun ActivityTile(a: ActivityItem, active: Boolean, compact: Boolean, onClick: () -> Unit, onLongClick: () -> Unit) {
     val c = Color(a.color)
-    val shape = RoundedCornerShape(16.dp)
+    val shape = RoundedCornerShape(if (compact) 12.dp else 16.dp)
     Column(
-        Modifier.padding(4.dp).clip(shape)
+        Modifier.padding(if (compact) 3.dp else 4.dp).clip(shape)
             .background(if (active) c else c.copy(alpha = 0.18f))
             .combinedClickable(onClick = onClick, onLongClick = onLongClick)
-            .padding(vertical = 12.dp, horizontal = 4.dp).fillMaxWidth(),
+            .padding(vertical = if (compact) 8.dp else 12.dp, horizontal = 4.dp).fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Icon(
-            activityIcon(a.icon), null, modifier = Modifier.size(28.dp),
+            activityIcon(a.icon), null, modifier = Modifier.size(if (compact) 20.dp else 28.dp),
             tint = if (active) onColor(c) else readableTint(a.color),
         )
-        Spacer(Modifier.height(4.dp))
+        Spacer(Modifier.height(if (compact) 2.dp else 4.dp))
         Text(
-            a.name, style = MaterialTheme.typography.labelMedium, maxLines = 1, overflow = TextOverflow.Ellipsis,
+            a.name,
+            style = if (compact) MaterialTheme.typography.labelSmall else MaterialTheme.typography.labelMedium,
+            maxLines = 1, overflow = TextOverflow.Ellipsis,
             color = if (active) onColor(c) else MaterialTheme.colorScheme.onSurface,
             fontWeight = if (active) FontWeight.Bold else FontWeight.Normal,
         )

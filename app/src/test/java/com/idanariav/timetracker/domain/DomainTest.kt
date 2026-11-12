@@ -139,3 +139,30 @@ class CsvTest {
         assertEquals("1970-01-01,\"Work, deep\",Job,1970-01-01 00:00:00,1970-01-01 01:30:00,90.00,\"said \"\"hi\"\"\"", line)
     }
 }
+
+class GroupingTest {
+    private val g1 = Goal(1, "Work", 0, sortOrder = 1)
+    private val g2 = Goal(2, "Rest", 0, sortOrder = 2)
+    private val acts = listOf(
+        ActivityItem(10, "Email", "Mail", 0, goalId = 1),
+        ActivityItem(11, "Commute", "Car", 0),
+        ActivityItem(12, "Sleep", "Moon", 0, goalId = 2),
+        ActivityItem(13, "Orphan", "Circle", 0, goalId = 99),
+        ActivityItem(14, "Work", "Briefcase", 0, goalId = 1),
+    )
+
+    @Test fun sectionsFollowGoalOrderThenOther() {
+        val out = groupActivities(acts, listOf(g1, g2), grouped = true)
+        assertEquals(listOf(1L, 2L, null), out.map { it.goal?.id })
+        assertEquals(listOf(10L, 14L), out[0].activities.map { it.id })
+        assertEquals(listOf(11L, 13L), out[2].activities.map { it.id })
+    }
+
+    @Test fun emptyGoalsAreDroppedAndUngroupedIsOneSection() {
+        val noRest = acts.filter { it.goalId != 2L }
+        assertEquals(listOf(1L, null), groupActivities(noRest, listOf(g1, g2), true).map { it.goal?.id })
+        assertEquals(1, groupActivities(acts, listOf(g1, g2), grouped = false).size)
+        assertEquals(1, groupActivities(acts, emptyList(), grouped = true).size)
+        assertTrue(groupActivities(emptyList(), listOf(g1), true).isEmpty())
+    }
+}

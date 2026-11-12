@@ -4,4 +4,6 @@
     <string name="widget_activities_desc">Current activity and a grid of all activities</string>
     <string name="widget_smart">Smart suggestions</string>
     <string name="widget_smart_desc">Activities suggested for this time of day</string>
+    <string name="widget_quick">Quick pick</string>
+    <string name="widget_quick_desc">Current activity; tap for suggestions and search</string>
 </resources>

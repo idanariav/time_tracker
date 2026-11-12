@@ -105,6 +105,7 @@ class Tracker(private val context: Context, private val db: AppDatabase, private
 
     suspend fun saveGoal(g: Goal) {
         dao.putGoal(if (g.id == 0L) g.copy(sortOrder = dao.maxGoalSort() + 1) else g)
+        refreshSurfaces() // widgets group by goal
     }
 
     suspend fun deleteGoal(id: Long) {
@@ -112,6 +113,7 @@ class Tracker(private val context: Context, private val db: AppDatabase, private
             dao.unassignGoal(id)
             dao.deleteGoal(id)
         }
+        refreshSurfaces()
     }
 
     suspend fun saveRule(r: Rule) {

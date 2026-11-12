@@ -9,12 +9,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.glance.ColorFilter
 import androidx.glance.GlanceId
-import androidx.glance.Image
-import androidx.glance.ImageProvider
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
+import androidx.glance.Image
+import androidx.glance.ImageProvider
 import androidx.glance.LocalSize
 import androidx.glance.action.ActionParameters
 import androidx.glance.action.actionParametersOf
@@ -27,12 +30,12 @@ import androidx.glance.appwidget.action.ActionCallback
 import androidx.glance.appwidget.action.actionRunCallback
 import androidx.glance.appwidget.appWidgetBackground
 import androidx.glance.appwidget.cornerRadius
-import androidx.glance.appwidget.lazy.GridCells
-import androidx.glance.appwidget.lazy.LazyVerticalGrid
-import androidx.glance.appwidget.lazy.items
+import androidx.glance.appwidget.lazy.LazyColumn
 import androidx.glance.appwidget.provideContent
 import androidx.glance.appwidget.updateAll
 import androidx.glance.background
+import androidx.glance.color.ColorProvider as DayNightColor
+import androidx.glance.currentState
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Box
 import androidx.glance.layout.Column
@@ -48,16 +51,31 @@ import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
+import com.composables.icons.lucide.Lucide
+import com.composables.icons.lucide.Timer
 import com.idanariav.timetracker.data.ActivityItem
+import com.idanariav.timetracker.data.Goal
 import com.idanariav.timetracker.data.Session
+import com.idanariav.timetracker.domain.groupActivities
 import com.idanariav.timetracker.tracking.Graph
 import com.idanariav.timetracker.ui.MainActivity
+import com.idanariav.timetracker.ui.QuickPickActivity
 import com.idanariav.timetracker.ui.TimeFmt
 import com.idanariav.timetracker.ui.iconBitmap
+import com.idanariav.timetracker.ui.vectorBitmap
 
 suspend fun refreshWidgets(context: Context) {
     ActivityWidget().updateAll(context)
     SmartWidget().updateAll(context)
+    QuickWidget().updateAll(context)
+}
+
+/** Per-widget settings, stored in each widget's Glance state (written by [WidgetConfigActivity]). */
+object WidgetPrefs {
+    val OPACITY = intPreferencesKey("opacity") // 0..100
+    val COMPACT = booleanPreferencesKey("compact")
+    val GROUPED = booleanPreferencesKey("grouped")
+    const val DEFAULT_OPACITY = 85
 }
 
 private val ActivityIdKey = ActionParameters.Key<Long>("activityId")
@@ -78,6 +96,17 @@ private fun switchAction(id: Long) = actionRunCallback<SwitchActivityAction>(act
 
 private fun contentColor(bg: Color) = ColorProvider(if (bg.luminance() > 0.5f) Color.Black else Color.White)
 
+/** Neutral widget surface at the chosen opacity, light/dark aware. */
+private fun surface(opacity: Int): ColorProvider {
+    val a = opacity.coerceIn(0, 100) / 100f
+    return DayNightColor(day = Color(0xFFF4EFF4).copy(alpha = a), night = Color(0xFF1C1B1F).copy(alpha = a))
+}
+
+private class Tiles(val height: Int, val icon: Int, val text: Int, val cell: Float)
+
+private val Normal = Tiles(height = 58, icon = 22, text = 11, cell = 76f)
+private val Compact = Tiles(height = 44, icon = 18, text = 9, cell = 54f)
+
 /** Lucide icon rendered once in white, then tinted by Glance. */
 @Composable
 private fun WidgetIcon(icon: String, tint: ColorProvider, sizeDp: Int) {
@@ -90,10 +119,10 @@ private fun WidgetIcon(icon: String, tint: ColorProvider, sizeDp: Int) {
 }
 
 @Composable
-private fun WidgetFrame(content: @Composable () -> Unit) {
+private fun WidgetFrame(opacity: Int, content: @Composable () -> Unit) {
     Column(
         GlanceModifier.fillMaxSize().appWidgetBackground().cornerRadius(16.dp)
-            .background(GlanceTheme.colors.widgetBackground).padding(8.dp),
+            .background(surface(opacity)).padding(8.dp),
     ) { content() }
 }
 
@@ -126,20 +155,21 @@ private fun CurrentHeader(running: Session?, current: ActivityItem?) {
 }
 
 @Composable
-private fun Tile(a: ActivityItem, active: Boolean, height: Int = 58) {
+private fun Tile(a: ActivityItem, active: Boolean, t: Tiles) {
     val c = Color(a.color)
     val bg = if (active) c else c.copy(alpha = 0.28f)
-    Box(GlanceModifier.fillMaxWidth().padding(3.dp)) {
+    Box(GlanceModifier.fillMaxWidth().padding(2.dp)) {
         Column(
-            GlanceModifier.fillMaxWidth().height(height.dp).cornerRadius(12.dp).background(bg).clickable(switchAction(a.id)),
+            GlanceModifier.fillMaxWidth().height(t.height.dp).cornerRadius(12.dp).background(bg)
+                .clickable(switchAction(a.id)),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            WidgetIcon(a.icon, if (active) contentColor(c) else GlanceTheme.colors.onSurface, 22)
+            WidgetIcon(a.icon, if (active) contentColor(c) else GlanceTheme.colors.onSurface, t.icon)
             Text(
                 a.name, maxLines = 1,
                 style = TextStyle(
-                    fontSize = 11.sp,
+                    fontSize = t.text.sp,
                     color = if (active) contentColor(c) else GlanceTheme.colors.onSurface,
                 ),
             )
@@ -147,23 +177,56 @@ private fun Tile(a: ActivityItem, active: Boolean, height: Int = 58) {
     }
 }
 
-/** Header with the current activity + a grid of every active activity; tap to switch. */
+/** A full-width row of [cols] equal cells (padding cells keep sizes equal on the last row). */
+@Composable
+private fun TileRow(items: List<ActivityItem>, cols: Int, runningId: Long?, t: Tiles) {
+    Row(GlanceModifier.fillMaxWidth()) {
+        items.forEach { a -> Box(GlanceModifier.defaultWeight()) { Tile(a, a.id == runningId, t) } }
+        repeat(cols - items.size) { Spacer(GlanceModifier.defaultWeight()) }
+    }
+}
+
+@Composable
+private fun GroupLabel(goal: Goal?) {
+    Row(GlanceModifier.fillMaxWidth().padding(start = 4.dp, top = 6.dp, bottom = 2.dp), verticalAlignment = Alignment.CenterVertically) {
+        Box(GlanceModifier.size(7.dp).cornerRadius(4.dp).background(Color(goal?.color ?: 0xFF9E9E9E.toInt()))) {}
+        Spacer(GlanceModifier.width(6.dp))
+        Text(
+            goal?.name ?: "Other",
+            style = TextStyle(color = GlanceTheme.colors.onSurfaceVariant, fontSize = 11.sp, fontWeight = FontWeight.Medium),
+        )
+    }
+}
+
+/** Header with the current activity + every active activity (optionally grouped by goal); tap to switch. */
 class ActivityWidget : GlanceAppWidget() {
     override val sizeMode = SizeMode.Exact
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         provideContent {
+            val prefs = currentState<Preferences>()
+            val opacity = prefs[WidgetPrefs.OPACITY] ?: WidgetPrefs.DEFAULT_OPACITY
+            val t = if (prefs[WidgetPrefs.COMPACT] == true) Compact else Normal
+            val grouped = prefs[WidgetPrefs.GROUPED] ?: true
             val acts by remember { Graph.dao.allActivities() }.collectAsState(emptyList())
+            val goals by remember { Graph.dao.goals() }.collectAsState(emptyList())
             val running by remember { Graph.dao.running() }.collectAsState(null)
             val current = acts.firstOrNull { it.id == running?.activityId }
-            val cols = (LocalSize.current.width.value / 76f).toInt().coerceIn(2, 8)
+            val cols = ((LocalSize.current.width.value - 16f) / t.cell).toInt().coerceIn(1, 8)
+            val sections = groupActivities(acts.filter { !it.archived }, goals, grouped)
             GlanceTheme {
-                WidgetFrame {
+                WidgetFrame(opacity) {
                     CurrentHeader(running, current)
                     Spacer(GlanceModifier.height(4.dp))
-                    LazyVerticalGrid(GridCells.Fixed(cols), GlanceModifier.fillMaxSize()) {
-                        items(acts.filter { !it.archived }, itemId = { it.id }) { a ->
-                            Tile(a, a.id == running?.activityId)
+                    LazyColumn(GlanceModifier.fillMaxSize()) {
+                        var itemId = 1L
+                        sections.forEach { section ->
+                            if (sections.size > 1 || section.goal != null) {
+                                item(itemId++) { GroupLabel(section.goal) }
+                            }
+                            section.activities.chunked(cols).forEach { row ->
+                                item(itemId++) { TileRow(row, cols, running?.activityId, t) }
+                            }
                         }
                     }
                 }
@@ -178,24 +241,70 @@ class SmartWidget : GlanceAppWidget() {
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         provideContent {
+            val prefs = currentState<Preferences>()
+            val opacity = prefs[WidgetPrefs.OPACITY] ?: WidgetPrefs.DEFAULT_OPACITY
+            val t = if (prefs[WidgetPrefs.COMPACT] == true) Compact else Normal
             val acts by remember { Graph.dao.allActivities() }.collectAsState(emptyList())
             val running by remember { Graph.dao.running() }.collectAsState(null)
-            val suggestions by remember { Graph.suggestionFlow(8) }.collectAsState(emptyList())
+            val suggestions by remember { Graph.suggestionFlow(12) }.collectAsState(emptyList())
             val current = acts.firstOrNull { it.id == running?.activityId }
             val size = LocalSize.current
-            val cols = (size.width.value / 84f).toInt().coerceIn(1, 4)
-            val rows = ((size.height.value - 40f) / 64f).toInt().coerceIn(1, 3)
+            val cols = ((size.width.value - 16f) / (t.cell + 8f)).toInt().coerceIn(1, 6)
+            val rows = ((size.height.value - 40f) / (t.height + 6f)).toInt().coerceIn(1, 4)
             GlanceTheme {
-                WidgetFrame {
+                WidgetFrame(opacity) {
                     CurrentHeader(running, current)
                     Spacer(GlanceModifier.height(4.dp))
                     suggestions.take(cols * rows).chunked(cols).forEach { line ->
-                        Row(GlanceModifier.fillMaxWidth()) {
-                            line.forEach { a ->
-                                Box(GlanceModifier.defaultWeight()) { Tile(a, active = false, height = 54) }
-                            }
-                            repeat(cols - line.size) { Spacer(GlanceModifier.defaultWeight()) }
-                        }
+                        TileRow(line, cols, null, t)
+                    }
+                }
+            }
+        }
+    }
+}
+
+/** 1×1: the current activity's icon; tap opens the quick picker (top suggestions + searchable list). */
+class QuickWidget : GlanceAppWidget() {
+    override val sizeMode = SizeMode.Exact
+
+    override suspend fun provideGlance(context: Context, id: GlanceId) {
+        provideContent {
+            val prefs = currentState<Preferences>()
+            val opacity = prefs[WidgetPrefs.OPACITY] ?: WidgetPrefs.DEFAULT_OPACITY
+            val acts by remember { Graph.dao.allActivities() }.collectAsState(emptyList())
+            val running by remember { Graph.dao.running() }.collectAsState(null)
+            val current = acts.firstOrNull { it.id == running?.activityId }
+            val showName = LocalSize.current.height.value >= 64f
+            GlanceTheme {
+                Column(
+                    GlanceModifier.fillMaxSize().appWidgetBackground().cornerRadius(16.dp)
+                        .background(surface(opacity)).padding(4.dp)
+                        .clickable(actionStartActivity<QuickPickActivity>()),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    if (current != null) {
+                        val c = Color(current.color)
+                        Box(
+                            GlanceModifier.size(40.dp).cornerRadius(20.dp).background(c),
+                            contentAlignment = Alignment.Center,
+                        ) { WidgetIcon(current.icon, contentColor(c), 22) }
+                    } else {
+                        Image(
+                            provider = ImageProvider(vectorBitmap(Lucide.Timer, "Timer", android.graphics.Color.WHITE, 64)),
+                            contentDescription = "Pick an activity",
+                            colorFilter = ColorFilter.tint(GlanceTheme.colors.onSurface),
+                            modifier = GlanceModifier.size(28.dp),
+                        )
+                    }
+                    if (showName) {
+                        Text(
+                            current?.name ?: "Track",
+                            maxLines = 1,
+                            style = TextStyle(color = GlanceTheme.colors.onSurface, fontSize = 10.sp),
+                            modifier = GlanceModifier.padding(top = 2.dp),
+                        )
                     }
                 }
             }
@@ -209,4 +318,8 @@ class ActivityWidgetReceiver : GlanceAppWidgetReceiver() {
 
 class SmartWidgetReceiver : GlanceAppWidgetReceiver() {
     override val glanceAppWidget: GlanceAppWidget = SmartWidget()
+}
+
+class QuickWidgetReceiver : GlanceAppWidgetReceiver() {
+    override val glanceAppWidget: GlanceAppWidget = QuickWidget()
 }

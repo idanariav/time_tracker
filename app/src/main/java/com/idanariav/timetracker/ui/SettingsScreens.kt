@@ -137,6 +137,24 @@ fun SettingsScreen(onBack: () -> Unit, push: (Route) -> Unit) {
             item { HorizontalDivider() }
             item {
                 ListItem(
+                    headlineContent = { Text("Group activities by goal") },
+                    supportingContent = { Text("Sections on the Track tab; ungrouped activities go under “Other”") },
+                    trailingContent = {
+                        Switch(s.groupByGoal, onCheckedChange = { v -> Graph.prefs.update { it.copy(groupByGoal = v) } })
+                    },
+                )
+            }
+            item {
+                ListItem(
+                    headlineContent = { Text("Compact activity tiles") },
+                    supportingContent = { Text("Smaller tiles so more fit on screen (also toggled from the Track tab)") },
+                    trailingContent = {
+                        Switch(s.compactGrid, onCheckedChange = { v -> Graph.prefs.update { it.copy(compactGrid = v) } })
+                    },
+                )
+            }
+            item {
+                ListItem(
                     headlineContent = { Text("Ignore short entries") },
                     supportingContent = {
                         Text("Entries shorter than ${formatDuration(s.minFilterSeconds * 1000L)} don't count in goals and analysis (they stay in the log)")

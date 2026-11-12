@@ -1,6 +1,9 @@
 package com.idanariav.timetracker.ui
 
 import com.composables.icons.lucide.Lucide
+import com.composables.icons.lucide.LayoutGrid
+import com.composables.icons.lucide.Grid3x3
+import androidx.compose.runtime.collectAsState
 import com.composables.icons.lucide.Timer
 import com.composables.icons.lucide.Target
 import com.composables.icons.lucide.List
@@ -108,7 +111,18 @@ private fun MainTabs(push: (Route) -> Unit) {
         topBar = {
             TopAppBar(
                 title = { Text(tabs[tab].title) },
-                actions = { IconButton(onClick = { push(Route.Settings) }) { Icon(Lucide.Settings, "Settings") } },
+                actions = {
+                    if (tab == 0) {
+                        val compact = Graph.prefs.settings.collectAsState().value.compactGrid
+                        IconButton(onClick = { Graph.prefs.update { it.copy(compactGrid = !compact) } }) {
+                            Icon(
+                                if (compact) Lucide.LayoutGrid else Lucide.Grid3x3,
+                                if (compact) "Larger tiles" else "Smaller tiles",
+                            )
+                        }
+                    }
+                    IconButton(onClick = { push(Route.Settings) }) { Icon(Lucide.Settings, "Settings") }
+                },
             )
         },
         bottomBar = {
