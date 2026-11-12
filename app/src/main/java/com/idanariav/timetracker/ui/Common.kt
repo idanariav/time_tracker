@@ -68,6 +68,9 @@ object TimeFmt {
 
     val is24Hour get() = is24
 
+    /** "a – b" wrapped in a left-to-right isolate so RTL layouts don't flip it into "b – a". */
+    fun range(a: String, b: String): String = "\u2066$a – $b\u2069"
+
     fun clock(ms: Long): String =
         Instant.ofEpochMilli(ms).atZone(ZoneId.systemDefault()).format(if (is24) f24 else f12)
 

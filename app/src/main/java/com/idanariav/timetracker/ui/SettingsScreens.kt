@@ -470,7 +470,7 @@ private val DayLetters = listOf("M", "T", "W", "T", "F", "S", "S")
 
 private fun Rule.describe(after: ActivityItem?): String {
     fun hm(m: Int) = "%02d:%02d".format(m / 60, m % 60)
-    val time = if (startMinute == endMinute) "All day" else "${hm(startMinute)}–${hm(endMinute)}"
+    val time = if (startMinute == endMinute) "All day" else TimeFmt.range(hm(startMinute), hm(endMinute))
     val days = when (days) {
         Rule.ALL_DAYS -> "every day"
         0b0011111 -> "weekdays"

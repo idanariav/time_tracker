@@ -127,7 +127,7 @@ private fun EntryRow(s: Session, a: ActivityItem?, now: Long, minMs: Long, onCli
         headlineContent = { Text((a?.name ?: "(deleted)") + if (s.endTime == null) "  •  running" else "") },
         supportingContent = {
             Text(
-                "${TimeFmt.dayTime(s.startTime)} – $endText" +
+                TimeFmt.range(TimeFmt.dayTime(s.startTime), endText) +
                     (if (s.note.isNotBlank()) "\n${s.note}" else "") +
                     (if (ignored) "\nIgnored (shorter than the minimum)" else ""),
             )
@@ -145,7 +145,7 @@ private fun GapRow(g: LogRow.Gap, onClick: () -> Unit) {
         headlineContent = {
             Text("Untracked", fontStyle = FontStyle.Italic, color = MaterialTheme.colorScheme.onSurfaceVariant)
         },
-        supportingContent = { Text("${TimeFmt.clock(g.from)} – ${TimeFmt.clock(g.to)} · tap to fill") },
+        supportingContent = { Text("${TimeFmt.range(TimeFmt.clock(g.from), TimeFmt.clock(g.to))} · tap to fill") },
         trailingContent = { Text(formatDuration(g.to - g.from), color = MaterialTheme.colorScheme.onSurfaceVariant) },
     )
 }
