@@ -5,6 +5,8 @@ import androidx.room.withTransaction
 import com.idanariav.timetracker.data.ActivityItem
 import com.idanariav.timetracker.data.AppDatabase
 import com.idanariav.timetracker.data.Goal
+import com.idanariav.timetracker.data.GoalActivity
+import com.idanariav.timetracker.data.Group
 import com.idanariav.timetracker.data.Prefs
 import com.idanariav.timetracker.data.Rule
 import com.idanariav.timetracker.data.Session
@@ -80,17 +82,27 @@ class Tracker(private val context: Context, private val db: AppDatabase, private
         onSessionsChanged()
     }
 
-    suspend fun saveActivity(a: ActivityItem): Long {
-        val toSave = if (a.id == 0L) a.copy(sortOrder = dao.maxActivitySort() + 1) else a
-        val id = dao.putActivity(toSave)
+    /** Saves the activity; when [goalIds] is given, it becomes exactly the set of goals it counts toward. */
+    suspend fun saveActivity(a: ActivityItem, goalIds: Set<Long>? = null): Long {
+        val id = db.withTransaction {
+            val toSave = if (a.id == 0L) a.copy(sortOrder = dao.maxActivitySort() + 1) else a
+            val newId = dao.putActivity(toSave)
+            val id = if (a.id == 0L) newId else a.id
+            if (goalIds != null) {
+                dao.deleteLinksForActivity(id)
+                dao.insertLinks(goalIds.map { GoalActivity(it, id) })
+            }
+            id
+        }
         onActivitiesChanged()
-        return if (a.id == 0L) id else a.id
+        return id
     }
 
     suspend fun deleteActivity(id: Long) {
         db.withTransaction {
             dao.deleteSessionsFor(id)
             dao.deleteRulesFor(id)
+            dao.deleteLinksForActivity(id)
             dao.deleteActivity(id)
         }
         onActivitiesChanged()
@@ -103,15 +115,34 @@ class Tracker(private val context: Context, private val db: AppDatabase, private
         onActivitiesChanged()
     }
 
-    suspend fun saveGoal(g: Goal) {
-        dao.putGoal(if (g.id == 0L) g.copy(sortOrder = dao.maxGoalSort() + 1) else g)
-        refreshSurfaces() // widgets group by goal
+    /** Saves the goal; when [activityIds] is given, it becomes exactly the set of activities it tracks. */
+    suspend fun saveGoal(g: Goal, activityIds: Set<Long>? = null) {
+        db.withTransaction {
+            val newId = dao.putGoal(if (g.id == 0L) g.copy(sortOrder = dao.maxGoalSort() + 1) else g)
+            val id = if (g.id == 0L) newId else g.id
+            if (activityIds != null) {
+                dao.deleteLinksForGoal(id)
+                dao.insertLinks(activityIds.map { GoalActivity(id, it) })
+            }
+        }
     }
 
     suspend fun deleteGoal(id: Long) {
         db.withTransaction {
-            dao.unassignGoal(id)
+            dao.deleteLinksForGoal(id)
             dao.deleteGoal(id)
+        }
+    }
+
+    suspend fun saveGroup(g: Group) {
+        dao.putGroup(if (g.id == 0L) g.copy(sortOrder = dao.maxGroupSort() + 1) else g)
+        refreshSurfaces() // widgets section by group
+    }
+
+    suspend fun deleteGroup(id: Long) {
+        db.withTransaction {
+            dao.unassignGroup(id)
+            dao.deleteGroup(id)
         }
         refreshSurfaces()
     }

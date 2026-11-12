@@ -69,7 +69,7 @@ class QuickPickActivity : ComponentActivity() {
 @Composable
 private fun QuickPick(onDone: () -> Unit) {
     val all by remember { Graph.dao.allActivities() }.collectAsState(emptyList())
-    val goals by remember { Graph.dao.goals() }.collectAsState(emptyList())
+    val groups by remember { Graph.dao.groups() }.collectAsState(emptyList())
     val running by remember { Graph.dao.running() }.collectAsState(null)
     val suggestions by remember { Graph.suggestionFlow(3) }.collectAsState(emptyList())
     val settings by Graph.prefs.settings.collectAsState()
@@ -142,21 +142,21 @@ private fun QuickPick(onDone: () -> Unit) {
                         modifier = Modifier.fillMaxWidth().focusRequester(focus),
                     )
                     val q = query.trim()
-                    val goalNames = goals.associate { it.id to it.name }
+                    val groupNames = groups.associate { it.id to it.name }
                     LazyColumn(Modifier.fillMaxWidth().heightIn(max = 360.dp).padding(top = 8.dp)) {
                         if (q.isNotEmpty()) {
                             val hits = active.filter {
                                 it.name.contains(q, ignoreCase = true) ||
-                                    (goalNames[it.goalId]?.contains(q, ignoreCase = true) ?: false)
+                                    (groupNames[it.groupId]?.contains(q, ignoreCase = true) ?: false)
                             }
                             if (hits.isEmpty()) item { Text("No match", Modifier.padding(12.dp)) }
                             items(hits, key = { it.id }) { a -> PickRow(a, big = false) { pick(a) } }
                         } else {
-                            groupActivities(active, goals, settings.groupByGoal).forEach { section ->
-                                if (section.goal != null || goals.isNotEmpty() && settings.groupByGoal) {
-                                    item(key = "g${section.goal?.id ?: -1}") {
+                            groupActivities(active, groups, settings.groupActivities).forEach { section ->
+                                if (section.group != null || groups.isNotEmpty() && settings.groupActivities) {
+                                    item(key = "g${section.group?.id ?: -1}") {
                                         Text(
-                                            section.goal?.name ?: "Other",
+                                            section.group?.name ?: "Other",
                                             style = MaterialTheme.typography.labelMedium,
                                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                                             modifier = Modifier.padding(start = 8.dp, top = 8.dp, bottom = 2.dp),

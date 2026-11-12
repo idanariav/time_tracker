@@ -31,7 +31,7 @@ object Graph {
     fun init(context: Context) {
         val app = context.applicationContext
         db = Room.databaseBuilder(app, AppDatabase::class.java, "tracker.db")
-            .addMigrations(AppDatabase.MIGRATION_1_2)
+            .addMigrations(AppDatabase.MIGRATION_1_2, AppDatabase.MIGRATION_2_3)
             .build()
         prefs = Prefs(app)
         tracker = Tracker(app, db, prefs)

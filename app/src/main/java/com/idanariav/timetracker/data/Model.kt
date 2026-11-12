@@ -1,11 +1,22 @@
 package com.idanariav.timetracker.data
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
-/** A goal groups activities. [targetMinutes] is a daily target (0 = none); [isLimit] flips it to "stay under". */
+/** Organizes activities into sections (grid, widgets, analysis). Each activity is in at most one group. */
+@Entity(tableName = "activity_groups")
+data class Group(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val name: String,
+    val color: Int,
+    val sortOrder: Int = 0,
+)
+
+/**
+ * A daily target over any set of activities (linked via [GoalActivity]), independent of groups.
+ * [targetMinutes] is the daily target (0 = none); [isLimit] flips it to "stay under".
+ */
 @Entity(tableName = "goals")
 data class Goal(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
@@ -16,14 +27,22 @@ data class Goal(
     val sortOrder: Int = 0,
 )
 
+/** Many-to-many: which activities count toward which goals. */
+@Entity(
+    tableName = "goal_activities",
+    primaryKeys = ["goalId", "activityId"],
+    indices = [Index("activityId")],
+)
+data class GoalActivity(val goalId: Long, val activityId: Long)
+
 @Entity(tableName = "activities")
 data class ActivityItem(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val name: String,
-    /** Lucide icon name (see ui/Icons.kt). Column keeps its v1 name. */
-    @ColumnInfo(name = "emoji") val icon: String,
+    /** Lucide icon name (see ui/Icons.kt). */
+    val icon: String,
     val color: Int,
-    val goalId: Long? = null,
+    val groupId: Long? = null,
     val archived: Boolean = false,
     val sortOrder: Int = 0,
 )

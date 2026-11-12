@@ -58,6 +58,7 @@ sealed interface Route {
     data object Activities : Route
     data class EditActivity(val id: Long?) : Route
     data object Goals : Route
+    data object Groups : Route
     data object Rules : Route
 }
 
@@ -75,6 +76,7 @@ private fun AppRoot() {
         Route.Activities -> ActivitiesScreen(onBack = pop, push = push)
         is Route.EditActivity -> ActivityEditorScreen(top.id, onBack = pop)
         Route.Goals -> GoalsManageScreen(onBack = pop)
+        Route.Groups -> GroupsManageScreen(onBack = pop)
         Route.Rules -> RulesScreen(onBack = pop)
     }
 }

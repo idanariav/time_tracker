@@ -54,7 +54,7 @@ import androidx.glance.unit.ColorProvider
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Timer
 import com.idanariav.timetracker.data.ActivityItem
-import com.idanariav.timetracker.data.Goal
+import com.idanariav.timetracker.data.Group
 import com.idanariav.timetracker.data.Session
 import com.idanariav.timetracker.domain.groupActivities
 import com.idanariav.timetracker.tracking.Graph
@@ -187,12 +187,12 @@ private fun TileRow(items: List<ActivityItem>, cols: Int, runningId: Long?, t: T
 }
 
 @Composable
-private fun GroupLabel(goal: Goal?) {
+private fun GroupLabel(group: Group?) {
     Row(GlanceModifier.fillMaxWidth().padding(start = 4.dp, top = 6.dp, bottom = 2.dp), verticalAlignment = Alignment.CenterVertically) {
-        Box(GlanceModifier.size(7.dp).cornerRadius(4.dp).background(Color(goal?.color ?: 0xFF9E9E9E.toInt()))) {}
+        Box(GlanceModifier.size(7.dp).cornerRadius(4.dp).background(Color(group?.color ?: 0xFF9E9E9E.toInt()))) {}
         Spacer(GlanceModifier.width(6.dp))
         Text(
-            goal?.name ?: "Other",
+            group?.name ?: "Other",
             style = TextStyle(color = GlanceTheme.colors.onSurfaceVariant, fontSize = 11.sp, fontWeight = FontWeight.Medium),
         )
     }
@@ -209,11 +209,11 @@ class ActivityWidget : GlanceAppWidget() {
             val t = if (prefs[WidgetPrefs.COMPACT] == true) Compact else Normal
             val grouped = prefs[WidgetPrefs.GROUPED] ?: true
             val acts by remember { Graph.dao.allActivities() }.collectAsState(emptyList())
-            val goals by remember { Graph.dao.goals() }.collectAsState(emptyList())
+            val groups by remember { Graph.dao.groups() }.collectAsState(emptyList())
             val running by remember { Graph.dao.running() }.collectAsState(null)
             val current = acts.firstOrNull { it.id == running?.activityId }
             val cols = ((LocalSize.current.width.value - 16f) / t.cell).toInt().coerceIn(1, 8)
-            val sections = groupActivities(acts.filter { !it.archived }, goals, grouped)
+            val sections = groupActivities(acts.filter { !it.archived }, groups, grouped)
             GlanceTheme {
                 WidgetFrame(opacity) {
                     CurrentHeader(running, current)
@@ -221,8 +221,8 @@ class ActivityWidget : GlanceAppWidget() {
                     LazyColumn(GlanceModifier.fillMaxSize()) {
                         var itemId = 1L
                         sections.forEach { section ->
-                            if (sections.size > 1 || section.goal != null) {
-                                item(itemId++) { GroupLabel(section.goal) }
+                            if (sections.size > 1 || section.group != null) {
+                                item(itemId++) { GroupLabel(section.group) }
                             }
                             section.activities.chunked(cols).forEach { row ->
                                 item(itemId++) { TileRow(row, cols, running?.activityId, t) }

@@ -35,11 +35,12 @@ import com.idanariav.timetracker.data.Goal
 import com.idanariav.timetracker.domain.Period
 import com.idanariav.timetracker.domain.PeriodKind
 import com.idanariav.timetracker.domain.formatDuration
+import com.idanariav.timetracker.domain.goalMembers
 import com.idanariav.timetracker.domain.totalsByActivity
 import com.idanariav.timetracker.tracking.Graph
 import java.time.LocalDate
 
-private data class GoalRow(val goal: Goal?, val total: Long, val items: List<Pair<ActivityItem, Long>>)
+private data class GoalRow(val goal: Goal?, val total: Long, val items: List<Pair<ActivityItem, Long>>, val tracksNothing: Boolean = false)
 
 @Composable
 fun GoalsScreen(padding: PaddingValues, onManage: () -> Unit) {
@@ -50,19 +51,21 @@ fun GoalsScreen(padding: PaddingValues, onManage: () -> Unit) {
     val sessions by remember(from, to) { Graph.dao.sessionsIn(from, to) }.collectAsState(emptyList())
     val acts by remember { Graph.dao.allActivities() }.collectAsState(emptyList())
     val goals by remember { Graph.dao.goals() }.collectAsState(emptyList())
+    val links by remember { Graph.dao.goalLinks() }.collectAsState(emptyList())
     val settings by Graph.prefs.settings.collectAsState()
     val now = rememberNow(15_000)
 
     val totals = totalsByActivity(sessions, from, to, now, settings.minMs)
     val byId = acts.associateBy { it.id }
-    val goalIds = goals.map { it.id }.toSet()
-    fun rowFor(goal: Goal?, match: (ActivityItem) -> Boolean): GoalRow {
-        val items = totals.mapNotNull { (id, ms) -> byId[id]?.takeIf(match)?.let { it to ms } }
+    val members = goalMembers(links)
+    // A goal's time is the sum of the activities it tracks (goals can overlap; they're independent of groups).
+    val rows = goals.map { g ->
+        val items = members[g.id].orEmpty()
+            .mapNotNull { id -> byId[id]?.let { it to (totals[id] ?: 0L) } }
+            .filter { it.second > 0 }
             .sortedByDescending { it.second }
-        return GoalRow(goal, items.sumOf { it.second }, items)
+        GoalRow(g, items.sumOf { it.second }, items, tracksNothing = members[g.id].isNullOrEmpty())
     }
-    val rows = goals.map { g -> rowFor(g) { it.goalId == g.id } } +
-        listOf(rowFor(null) { it.goalId == null || it.goalId !in goalIds }).filter { it.total > 0 }
 
     LazyColumn(contentPadding = padding) {
         item {
@@ -82,7 +85,7 @@ fun GoalsScreen(padding: PaddingValues, onManage: () -> Unit) {
         items(rows, key = { it.goal?.id ?: -1L }) { GoalCard(it) }
         item {
             TextButton(onClick = onManage, modifier = Modifier.padding(12.dp)) {
-                Text(if (goals.isEmpty()) "Create goals to group activities" else "Edit goals & targets")
+                Text(if (goals.isEmpty()) "Create a goal (a daily target or limit over chosen activities)" else "Edit goals & targets")
             }
         }
     }
@@ -121,6 +124,14 @@ private fun GoalCard(row: GoalRow) {
                 Text(
                     status, style = MaterialTheme.typography.bodySmall,
                     color = if (g.isLimit && over) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+            if (row.tracksNothing) {
+                Text(
+                    "Tracks no activities yet — pick some in Edit goals",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(top = 6.dp),
                 )
             }
             row.items.forEach { (a, ms) ->

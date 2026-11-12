@@ -67,6 +67,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.idanariav.timetracker.data.ActivityItem
 import com.idanariav.timetracker.data.Goal
+import com.idanariav.timetracker.data.Group
 import com.idanariav.timetracker.data.Rule
 import com.idanariav.timetracker.domain.formatDuration
 import com.idanariav.timetracker.link.Links
@@ -122,8 +123,15 @@ fun SettingsScreen(onBack: () -> Unit, push: (Route) -> Unit) {
             }
             item {
                 ListItem(
+                    headlineContent = { Text("Groups") },
+                    supportingContent = { Text("Organize activities into sections (each activity is in at most one)") },
+                    modifier = Modifier.clickable { push(Route.Groups) },
+                )
+            }
+            item {
+                ListItem(
                     headlineContent = { Text("Goals") },
-                    supportingContent = { Text("Group activities and set daily targets or limits") },
+                    supportingContent = { Text("Daily targets or limits over any activities you choose") },
                     modifier = Modifier.clickable { push(Route.Goals) },
                 )
             }
@@ -137,10 +145,10 @@ fun SettingsScreen(onBack: () -> Unit, push: (Route) -> Unit) {
             item { HorizontalDivider() }
             item {
                 ListItem(
-                    headlineContent = { Text("Group activities by goal") },
-                    supportingContent = { Text("Sections on the Track tab; ungrouped activities go under “Other”") },
+                    headlineContent = { Text("Section activities by group") },
+                    supportingContent = { Text("On the Track tab and quick pick; ungrouped activities go under “Other”") },
                     trailingContent = {
-                        Switch(s.groupByGoal, onCheckedChange = { v -> Graph.prefs.update { it.copy(groupByGoal = v) } })
+                        Switch(s.groupActivities, onCheckedChange = { v -> Graph.prefs.update { it.copy(groupActivities = v) } })
                     },
                 )
             }
@@ -221,11 +229,11 @@ fun SettingsScreen(onBack: () -> Unit, push: (Route) -> Unit) {
 @Composable
 fun ActivitiesScreen(onBack: () -> Unit, push: (Route) -> Unit) {
     val all by remember { Graph.dao.allActivities() }.collectAsState(emptyList())
-    val goals by remember { Graph.dao.goals() }.collectAsState(emptyList())
+    val groups by remember { Graph.dao.groups() }.collectAsState(emptyList())
     val scope = rememberCoroutineScope()
     val active = all.filter { !it.archived }
     val archived = all.filter { it.archived }
-    val goalName = goals.associate { it.id to it.name }
+    val groupName = groups.associate { it.id to it.name }
 
     fun move(i: Int, delta: Int) {
         val j = i + delta
@@ -243,7 +251,7 @@ fun ActivitiesScreen(onBack: () -> Unit, push: (Route) -> Unit) {
                     modifier = Modifier.clickable { push(Route.EditActivity(a.id)) },
                     leadingContent = { IconBadge(a.icon, a.color) },
                     headlineContent = { Text(a.name) },
-                    supportingContent = { Text(a.goalId?.let { goalName[it] } ?: "No goal") },
+                    supportingContent = { Text(a.groupId?.let { groupName[it] } ?: "No group") },
                     trailingContent = {
                         Row {
                             IconButton(onClick = { move(i, -1) }, enabled = i > 0) {
@@ -275,12 +283,14 @@ fun ActivitiesScreen(onBack: () -> Unit, push: (Route) -> Unit) {
 @Composable
 fun ActivityEditorScreen(id: Long?, onBack: () -> Unit) {
     val goals by remember { Graph.dao.goals() }.collectAsState(emptyList())
+    val groups by remember { Graph.dao.groups() }.collectAsState(emptyList())
     val scope = rememberCoroutineScope()
     var original by remember { mutableStateOf<ActivityItem?>(null) }
     var name by remember { mutableStateOf("") }
     var icon by remember { mutableStateOf("Star") }
     var color by remember { mutableIntStateOf(Palette[5]) }
-    var goalId by remember { mutableStateOf<Long?>(null) }
+    var groupId by remember { mutableStateOf<Long?>(null) }
+    var goalIds by remember { mutableStateOf(emptySet<Long>()) }
     var archived by remember { mutableStateOf(false) }
     var sessionCount by remember { mutableIntStateOf(0) }
     var confirmDelete by remember { mutableStateOf(false) }
@@ -288,7 +298,8 @@ fun ActivityEditorScreen(id: Long?, onBack: () -> Unit) {
 
     LaunchedEffect(id) {
         if (id != null) Graph.dao.activity(id)?.let { a ->
-            original = a; name = a.name; icon = a.icon; color = a.color; goalId = a.goalId; archived = a.archived
+            original = a; name = a.name; icon = a.icon; color = a.color; groupId = a.groupId; archived = a.archived
+            goalIds = Graph.dao.goalIdsFor(a.id).toSet()
             sessionCount = Graph.dao.sessionCount(a.id)
         }
     }
@@ -311,10 +322,22 @@ fun ActivityEditorScreen(id: Long?, onBack: () -> Unit) {
             IconPicker(icon, color) { icon = it }
             SectionTitle("Color")
             ColorPicker(color) { color = it }
-            SectionTitle("Goal")
+            SectionTitle("Group")
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                FilterChip(goalId == null, { goalId = null }, label = { Text("None") })
-                goals.forEach { g -> FilterChip(goalId == g.id, { goalId = g.id }, label = { Text(g.name) }) }
+                FilterChip(groupId == null, { groupId = null }, label = { Text("None") })
+                groups.forEach { g -> FilterChip(groupId == g.id, { groupId = g.id }, label = { Text(g.name) }) }
+            }
+            if (goals.isNotEmpty()) {
+                SectionTitle("Counts toward goals")
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    goals.forEach { g ->
+                        FilterChip(
+                            g.id in goalIds,
+                            { goalIds = if (g.id in goalIds) goalIds - g.id else goalIds + g.id },
+                            label = { Text(g.name) },
+                        )
+                    }
+                }
             }
             if (id != null) {
                 Row(Modifier.fillMaxWidth().padding(top = 16.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -339,7 +362,8 @@ fun ActivityEditorScreen(id: Long?, onBack: () -> Unit) {
                     scope.launch {
                         val base = original ?: ActivityItem(name = "", icon = "", color = 0)
                         Graph.tracker.saveActivity(
-                            base.copy(name = name.trim(), icon = icon, color = color, goalId = goalId, archived = archived),
+                            base.copy(name = name.trim(), icon = icon, color = color, groupId = groupId, archived = archived),
+                            goalIds,
                         )
                         onBack()
                     }
@@ -399,11 +423,18 @@ private fun NfcWriteDialog(uri: String, onDismiss: () -> Unit) {
 @Composable
 fun GoalsManageScreen(onBack: () -> Unit) {
     val goals by remember { Graph.dao.goals() }.collectAsState(emptyList())
+    val links by remember { Graph.dao.goalLinks() }.collectAsState(emptyList())
+    val acts by remember { Graph.dao.allActivities() }.collectAsState(emptyList())
+    val actName = acts.associate { it.id to it.name }
     var editing by remember { mutableStateOf<Goal?>(null) }
     SubScreen("Goals", onBack, fab = { editing = Goal(name = "", color = Palette[9]) }) { p ->
         LazyColumn(contentPadding = p) {
             if (goals.isEmpty()) item {
-                Text("Goals group activities (e.g. Work = Work + Email) and can have a daily target or limit.", Modifier.padding(16.dp))
+                Text(
+                    "A goal is a daily target (or limit) over the activities you pick — e.g. “Screen time ≤ 2h” " +
+                        "tracking only TV, even though Reading is in the same group.",
+                    Modifier.padding(16.dp),
+                )
             }
             items(goals, key = { it.id }) { g ->
                 ListItem(
@@ -416,19 +447,23 @@ fun GoalsManageScreen(onBack: () -> Unit) {
                                 g.targetMinutes == 0 -> "No target"
                                 g.isLimit -> "Limit ${formatDuration(g.targetMinutes * 60_000L)} / day"
                                 else -> "Target ${formatDuration(g.targetMinutes * 60_000L)} / day"
-                            },
+                            } + " · " + links.filter { it.goalId == g.id }.mapNotNull { actName[it.activityId] }
+                                .ifEmpty { listOf("no activities") }.joinToString(", "),
                         )
                     },
                 )
             }
         }
     }
-    editing?.let { GoalDialog(it) { editing = null } }
+    editing?.let { GoalDialog(it, acts.filter { a -> !a.archived }) { editing = null } }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun GoalDialog(initial: Goal, onDismiss: () -> Unit) {
+private fun GoalDialog(initial: Goal, activities: List<ActivityItem>, onDismiss: () -> Unit) {
     val scope = rememberCoroutineScope()
+    var tracked by remember { mutableStateOf(emptySet<Long>()) }
+    LaunchedEffect(initial.id) { if (initial.id != 0L) tracked = Graph.dao.activityIdsFor(initial.id).toSet() }
     var name by remember { mutableStateOf(initial.name) }
     var color by remember { mutableIntStateOf(initial.color) }
     var target by remember { mutableIntStateOf(initial.targetMinutes) }
@@ -456,6 +491,17 @@ private fun GoalDialog(initial: Goal, onDismiss: () -> Unit) {
                     Text("Treat as a limit (stay under)", Modifier.weight(1f))
                     Switch(limit, { limit = it })
                 }
+                SectionTitle("Tracks these activities")
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                    activities.forEach { a ->
+                        FilterChip(
+                            a.id in tracked,
+                            { tracked = if (a.id in tracked) tracked - a.id else tracked + a.id },
+                            label = { Text(a.name) },
+                            leadingIcon = { ChipIcon(a) },
+                        )
+                    }
+                }
                 if (initial.id != 0L) {
                     TextButton(onClick = { confirmDelete = true }) {
                         Text("Delete goal", color = MaterialTheme.colorScheme.error)
@@ -466,7 +512,10 @@ private fun GoalDialog(initial: Goal, onDismiss: () -> Unit) {
         confirmButton = {
             TextButton(enabled = name.isNotBlank(), onClick = {
                 scope.launch {
-                    Graph.tracker.saveGoal(initial.copy(name = name.trim(), color = color, targetMinutes = target, isLimit = limit))
+                    Graph.tracker.saveGoal(
+                        initial.copy(name = name.trim(), color = color, targetMinutes = target, isLimit = limit),
+                        tracked,
+                    )
                     onDismiss()
                 }
             }) { Text("Save") }
@@ -475,9 +524,82 @@ private fun GoalDialog(initial: Goal, onDismiss: () -> Unit) {
     )
     if (confirmDelete) {
         ConfirmDialog(
-            "Delete “${initial.name}”?", "Its activities become unassigned; no log entries are deleted.", "Delete",
+            "Delete “${initial.name}”?", "Only the goal is removed; activities and log entries stay.", "Delete",
             onDismiss = { confirmDelete = false },
             onConfirm = { scope.launch { Graph.tracker.deleteGoal(initial.id); onDismiss() } },
+        )
+    }
+}
+
+// ---------------------------------------------------------------- Groups
+
+@Composable
+fun GroupsManageScreen(onBack: () -> Unit) {
+    val groups by remember { Graph.dao.groups() }.collectAsState(emptyList())
+    val acts by remember { Graph.dao.allActivities() }.collectAsState(emptyList())
+    var editing by remember { mutableStateOf<Group?>(null) }
+    SubScreen("Groups", onBack, fab = { editing = Group(name = "", color = Palette[5]) }) { p ->
+        LazyColumn(contentPadding = p) {
+            if (groups.isEmpty()) item {
+                Text("Groups organize activities into sections on the Track tab, widgets and analysis.", Modifier.padding(16.dp))
+            }
+            items(groups, key = { it.id }) { g ->
+                ListItem(
+                    modifier = Modifier.clickable { editing = g },
+                    leadingContent = { Box(Modifier.size(20.dp).clip(CircleShape).background(Color(g.color))) },
+                    headlineContent = { Text(g.name) },
+                    supportingContent = {
+                        Text(acts.filter { it.groupId == g.id && !it.archived }.joinToString(", ") { it.name }.ifEmpty { "Empty" })
+                    },
+                )
+            }
+        }
+    }
+    editing?.let { GroupDialog(it) { editing = null } }
+}
+
+@Composable
+private fun GroupDialog(initial: Group, onDismiss: () -> Unit) {
+    val scope = rememberCoroutineScope()
+    var name by remember { mutableStateOf(initial.name) }
+    var color by remember { mutableIntStateOf(initial.color) }
+    var confirmDelete by remember { mutableStateOf(false) }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(if (initial.id == 0L) "New group" else "Edit group") },
+        text = {
+            Column(Modifier.verticalScroll(rememberScrollState())) {
+                OutlinedTextField(name, { name = it }, label = { Text("Name") }, singleLine = true)
+                SectionTitle("Color")
+                ColorPicker(color) { color = it }
+                Text(
+                    "Assign activities to this group from each activity's edit page.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(top = 12.dp),
+                )
+                if (initial.id != 0L) {
+                    TextButton(onClick = { confirmDelete = true }) {
+                        Text("Delete group", color = MaterialTheme.colorScheme.error)
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(enabled = name.isNotBlank(), onClick = {
+                scope.launch {
+                    Graph.tracker.saveGroup(initial.copy(name = name.trim(), color = color))
+                    onDismiss()
+                }
+            }) { Text("Save") }
+        },
+        dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } },
+    )
+    if (confirmDelete) {
+        ConfirmDialog(
+            "Delete “${initial.name}”?", "Its activities move to “Other”; nothing else is deleted.", "Delete",
+            onDismiss = { confirmDelete = false },
+            onConfirm = { scope.launch { Graph.tracker.deleteGroup(initial.id); onDismiss() } },
         )
     }
 }

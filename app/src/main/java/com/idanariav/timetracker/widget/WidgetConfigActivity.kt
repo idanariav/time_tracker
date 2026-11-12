@@ -158,7 +158,7 @@ private fun ConfigScreen(
                 }
                 if (kind.hasGrouping) {
                     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                        Text("Group by goal", Modifier.weight(1f))
+                        Text("Section by group", Modifier.weight(1f))
                         Switch(grouped, { grouped = it })
                     }
                 }

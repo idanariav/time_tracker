@@ -20,7 +20,8 @@ object CsvExport {
             val csv = buildCsv(
                 sessions,
                 dao.allActivitiesOnce().associateBy { it.id },
-                dao.goalsOnce().associateBy { it.id },
+                dao.groupsOnce().associateBy { it.id },
+                goalNamesByActivity(dao.goalsOnce(), dao.goalLinksOnce()),
                 System.currentTimeMillis(),
             )
             val dir = File(context.cacheDir, "exports").apply { mkdirs() }
@@ -38,4 +39,12 @@ object CsvExport {
         }
         context.startActivity(Intent.createChooser(send, "Export CSV"))
     }
+}
+
+private fun goalNamesByActivity(
+    goals: List<com.idanariav.timetracker.data.Goal>,
+    links: List<com.idanariav.timetracker.data.GoalActivity>,
+): Map<Long, List<String>> {
+    val names = goals.associate { it.id to it.name }
+    return links.groupBy({ it.activityId }, { names[it.goalId] }).mapValues { it.value.filterNotNull() }
 }

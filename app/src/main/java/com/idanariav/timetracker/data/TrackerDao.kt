@@ -54,8 +54,46 @@ interface TrackerDao {
     @Query("DELETE FROM goals WHERE id = :id")
     suspend fun deleteGoal(id: Long)
 
-    @Query("UPDATE activities SET goalId = NULL WHERE goalId = :goalId")
-    suspend fun unassignGoal(goalId: Long)
+    // ---- Goal ↔ activity links ----
+    @Query("SELECT * FROM goal_activities")
+    fun goalLinks(): Flow<List<GoalActivity>>
+
+    @Query("SELECT * FROM goal_activities")
+    suspend fun goalLinksOnce(): List<GoalActivity>
+
+    @Query("SELECT goalId FROM goal_activities WHERE activityId = :activityId")
+    suspend fun goalIdsFor(activityId: Long): List<Long>
+
+    @Query("SELECT activityId FROM goal_activities WHERE goalId = :goalId")
+    suspend fun activityIdsFor(goalId: Long): List<Long>
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertLinks(links: List<GoalActivity>)
+
+    @Query("DELETE FROM goal_activities WHERE goalId = :goalId")
+    suspend fun deleteLinksForGoal(goalId: Long)
+
+    @Query("DELETE FROM goal_activities WHERE activityId = :activityId")
+    suspend fun deleteLinksForActivity(activityId: Long)
+
+    // ---- Groups ----
+    @Query("SELECT * FROM activity_groups ORDER BY sortOrder, id")
+    fun groups(): Flow<List<Group>>
+
+    @Query("SELECT * FROM activity_groups ORDER BY sortOrder, id")
+    suspend fun groupsOnce(): List<Group>
+
+    @Query("SELECT COALESCE(MAX(sortOrder), 0) FROM activity_groups")
+    suspend fun maxGroupSort(): Int
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun putGroup(g: Group): Long
+
+    @Query("DELETE FROM activity_groups WHERE id = :id")
+    suspend fun deleteGroup(id: Long)
+
+    @Query("UPDATE activities SET groupId = NULL WHERE groupId = :groupId")
+    suspend fun unassignGroup(groupId: Long)
 
     // ---- Sessions ----
     @Query("SELECT * FROM sessions WHERE endTime IS NULL ORDER BY startTime DESC LIMIT 1")

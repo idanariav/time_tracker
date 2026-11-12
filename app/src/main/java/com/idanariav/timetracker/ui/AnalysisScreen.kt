@@ -47,6 +47,7 @@ import com.idanariav.timetracker.domain.Period
 import com.idanariav.timetracker.domain.PeriodKind
 import com.idanariav.timetracker.domain.counts
 import com.idanariav.timetracker.domain.formatDuration
+import com.idanariav.timetracker.domain.goalTotals
 import com.idanariav.timetracker.domain.startMillis
 import com.idanariav.timetracker.domain.totalsBy
 import com.idanariav.timetracker.tracking.CsvExport
@@ -56,7 +57,9 @@ import java.time.LocalDate
 
 private data class Slice(val key: Long, val label: String, val color: Int, val ms: Long, val icon: String? = null)
 
-private const val NO_GOAL = -1L
+private const val NO_GROUP = -1L
+
+private enum class View { ACTIVITIES, GROUPS, GOALS }
 private const val GREY = 0xFF9E9E9E.toInt()
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -64,13 +67,15 @@ private const val GREY = 0xFF9E9E9E.toInt()
 fun AnalysisScreen(padding: PaddingValues) {
     var kind by rememberSaveable { mutableStateOf(PeriodKind.DAY) }
     var anchor by rememberSaveable { mutableStateOf(LocalDate.now()) }
-    var byGoal by rememberSaveable { mutableStateOf(false) }
+    var view by rememberSaveable { mutableStateOf(View.ACTIVITIES) }
     val period = Period(kind, anchor)
     val from = period.startMillis()
     val to = period.endMillis()
     val sessions by remember(from, to) { Graph.dao.sessionsIn(from, to) }.collectAsState(emptyList())
     val acts by remember { Graph.dao.allActivities() }.collectAsState(emptyList())
     val goals by remember { Graph.dao.goals() }.collectAsState(emptyList())
+    val groups by remember { Graph.dao.groups() }.collectAsState(emptyList())
+    val links by remember { Graph.dao.goalLinks() }.collectAsState(emptyList())
     val settings by Graph.prefs.settings.collectAsState()
     val now = rememberNow(30_000)
     val ctx = LocalContext.current
@@ -78,21 +83,30 @@ fun AnalysisScreen(padding: PaddingValues) {
     val today = LocalDate.now()
 
     val actById = acts.associateBy { it.id }
-    val goalById = goals.associateBy { it.id }
-    val keyOf: (Session) -> Long = { s ->
-        if (!byGoal) s.activityId else actById[s.activityId]?.goalId?.takeIf { it in goalById } ?: NO_GOAL
-    }
-    fun slice(key: Long, ms: Long): Slice = if (!byGoal) {
-        actById[key]?.let { Slice(key, it.name, it.color, ms, it.icon) } ?: Slice(key, "(deleted)", GREY, ms)
-    } else {
-        goalById[key]?.let { Slice(key, it.name, it.color, ms) } ?: Slice(key, "No goal", GREY, ms)
-    }
+    val groupById = groups.associateBy { it.id }
+    val groupKey: (Session) -> Long = { s -> actById[s.activityId]?.groupId?.takeIf { it in groupById } ?: NO_GROUP }
     val counted = sessions.filter { it.counts(now, settings.minMs) }
-    val slices = totalsBy(counted, from, to, now, 0, keyOf)
-        .map { (k, ms) -> slice(k, ms) }
-        .sortedByDescending { it.ms }
-    val colorOf = slices.associate { it.key to Color(it.color) }
-    val total = slices.sumOf { it.ms }
+    val perActivity = totalsBy(counted, from, to, now, 0) { it.activityId }
+    val total = perActivity.values.sum()
+    val slices = when (view) {
+        View.ACTIVITIES -> perActivity.map { (id, ms) ->
+            actById[id]?.let { Slice(id, it.name, it.color, ms, it.icon) } ?: Slice(id, "(deleted)", GREY, ms)
+        }
+        View.GROUPS -> totalsBy(counted, from, to, now, 0, groupKey).map { (id, ms) ->
+            groupById[id]?.let { Slice(id, it.name, it.color, ms) } ?: Slice(id, "Other", GREY, ms)
+        }
+        // Goals can overlap, so their shares needn't add up to 100%.
+        View.GOALS -> goalTotals(links, perActivity).filterValues { it > 0 }.mapNotNull { (id, ms) ->
+            goals.firstOrNull { it.id == id }?.let { Slice(id, it.name, it.color, ms) }
+        }
+    }.sortedByDescending { it.ms }
+    // Charts color by group in the Groups view, by activity otherwise (a session can belong to several goals).
+    val chartKey: (Session) -> Long = if (view == View.GROUPS) groupKey else { s -> s.activityId }
+    val chartColors: Map<Long, Color> = if (view == View.GROUPS) {
+        groups.associate { it.id to Color(it.color) } + (NO_GROUP to Color(GREY))
+    } else {
+        acts.associate { it.id to Color(it.color) }
+    }
     val elapsedDays = period.days().count { it <= today }.coerceAtLeast(1)
 
     LazyColumn(contentPadding = padding) {
@@ -121,11 +135,11 @@ fun AnalysisScreen(padding: PaddingValues) {
             }
             Column(Modifier.padding(horizontal = 16.dp)) {
                 SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
-                    listOf("Activities", "Goals").forEachIndexed { i, l ->
+                    View.entries.forEachIndexed { i, v ->
                         SegmentedButton(
-                            selected = byGoal == (i == 1), onClick = { byGoal = i == 1 },
-                            shape = SegmentedButtonDefaults.itemShape(i, 2),
-                        ) { Text(l) }
+                            selected = view == v, onClick = { view = v },
+                            shape = SegmentedButtonDefaults.itemShape(i, View.entries.size),
+                        ) { Text(v.name.lowercase().replaceFirstChar { it.uppercase() }) }
                     }
                 }
             }
@@ -148,8 +162,8 @@ fun AnalysisScreen(padding: PaddingValues) {
         }
         item {
             Box(Modifier.padding(horizontal = 16.dp)) {
-                if (kind == PeriodKind.DAY) DayTimeline(counted, from, to, now, keyOf, colorOf)
-                else DailyBars(period, counted, now, keyOf, colorOf)
+                if (kind == PeriodKind.DAY) DayTimeline(counted, from, to, now, chartKey, chartColors)
+                else DailyBars(period, counted, now, chartKey, chartColors)
             }
         }
         if (slices.isEmpty()) item { Text("No data for this period.", modifier = Modifier.padding(24.dp)) }

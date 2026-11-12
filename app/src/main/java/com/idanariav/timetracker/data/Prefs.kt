@@ -8,8 +8,8 @@ data class Settings(
     val minFilterEnabled: Boolean = true,
     val minFilterSeconds: Int = 60,
     val notificationEnabled: Boolean = true,
-    /** Track tab: section the grid by goal. */
-    val groupByGoal: Boolean = true,
+    /** Section the activity grid (Track tab, quick pick) by group. */
+    val groupActivities: Boolean = true,
     /** Track tab: smaller tiles so more fit on screen. */
     val compactGrid: Boolean = false,
 ) {
@@ -26,7 +26,7 @@ class Prefs(context: Context) {
         minFilterEnabled = sp.getBoolean("minFilterEnabled", true),
         minFilterSeconds = sp.getInt("minFilterSeconds", 60),
         notificationEnabled = sp.getBoolean("notificationEnabled", true),
-        groupByGoal = sp.getBoolean("groupByGoal", true),
+        groupActivities = sp.getBoolean("groupActivities", true),
         compactGrid = sp.getBoolean("compactGrid", false),
     )
 
@@ -36,7 +36,7 @@ class Prefs(context: Context) {
             .putBoolean("minFilterEnabled", s.minFilterEnabled)
             .putInt("minFilterSeconds", s.minFilterSeconds)
             .putBoolean("notificationEnabled", s.notificationEnabled)
-            .putBoolean("groupByGoal", s.groupByGoal)
+            .putBoolean("groupActivities", s.groupActivities)
             .putBoolean("compactGrid", s.compactGrid)
             .apply()
         state.value = s

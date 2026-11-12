@@ -51,7 +51,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.idanariav.timetracker.data.ActivityItem
-import com.idanariav.timetracker.data.Goal
+import com.idanariav.timetracker.data.Group
 import com.idanariav.timetracker.domain.groupActivities
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.shape.CircleShape
@@ -66,7 +66,7 @@ fun TrackScreen(padding: PaddingValues, snackbar: SnackbarHostState, onEditActiv
     val all by remember { Graph.dao.allActivities() }.collectAsState(emptyList())
     val running by remember { Graph.dao.running() }.collectAsState(null)
     val suggestions by remember { Graph.suggestionFlow(5) }.collectAsState(emptyList())
-    val goals by remember { Graph.dao.goals() }.collectAsState(emptyList())
+    val groups by remember { Graph.dao.groups() }.collectAsState(emptyList())
     val settings by Graph.prefs.settings.collectAsState()
     val compact = settings.compactGrid
     val scope = rememberCoroutineScope()
@@ -120,11 +120,11 @@ fun TrackScreen(padding: PaddingValues, snackbar: SnackbarHostState, onEditActiv
                 }
             }
         }
-        val sections = groupActivities(active, goals, settings.groupByGoal)
+        val sections = groupActivities(active, groups, settings.groupActivities)
         sections.forEach { section ->
-            if (sections.size > 1 || section.goal != null) {
-                item(span = { GridItemSpan(maxLineSpan) }, key = "goal-${section.goal?.id ?: -1}") {
-                    GroupHeader(section.goal)
+            if (sections.size > 1 || section.group != null) {
+                item(span = { GridItemSpan(maxLineSpan) }, key = "group-${section.group?.id ?: -1}") {
+                    GroupHeader(section.group)
                 }
             }
             items(section.activities, key = { it.id }) { a ->
@@ -199,11 +199,11 @@ private fun CurrentCard(running: Session?, act: ActivityItem?, onStop: () -> Uni
 }
 
 @Composable
-private fun GroupHeader(goal: Goal?) {
+private fun GroupHeader(group: Group?) {
     Row(Modifier.padding(start = 6.dp, top = 12.dp, bottom = 2.dp), verticalAlignment = Alignment.CenterVertically) {
-        Box(Modifier.size(8.dp).clip(CircleShape).background(Color(goal?.color ?: 0xFF9E9E9E.toInt())))
+        Box(Modifier.size(8.dp).clip(CircleShape).background(Color(group?.color ?: 0xFF9E9E9E.toInt())))
         Text(
-            goal?.name ?: "Other",
+            group?.name ?: "Other",
             style = MaterialTheme.typography.labelLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(start = 8.dp),

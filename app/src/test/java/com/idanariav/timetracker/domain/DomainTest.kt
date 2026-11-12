@@ -1,7 +1,8 @@
 package com.idanariav.timetracker.domain
 
 import com.idanariav.timetracker.data.ActivityItem
-import com.idanariav.timetracker.data.Goal
+import com.idanariav.timetracker.data.GoalActivity
+import com.idanariav.timetracker.data.Group
 import com.idanariav.timetracker.data.Rule
 import com.idanariav.timetracker.data.Session
 import org.junit.Assert.assertEquals
@@ -129,40 +130,51 @@ class SuggestTest {
 }
 
 class CsvTest {
-    @Test fun escapesAndIncludesGoal() {
-        val a = ActivityItem(1, "Work, deep", "💼", 0, goalId = 5)
+    @Test fun escapesAndIncludesGroupAndGoals() {
+        val a = ActivityItem(1, "Work, deep", "Briefcase", 0, groupId = 5)
         val csv = buildCsv(
             listOf(Session(1, 1, 0, 90 * M, "said \"hi\"")),
-            mapOf(1L to a), mapOf(5L to Goal(5, "Job", 0)), now = 0, zone = UTC,
+            mapOf(1L to a), mapOf(5L to Group(5, "Job", 0)), mapOf(1L to listOf("Focus", "Career")),
+            now = 0, zone = UTC,
         )
         val line = csv.lines()[1]
-        assertEquals("1970-01-01,\"Work, deep\",Job,1970-01-01 00:00:00,1970-01-01 01:30:00,90.00,\"said \"\"hi\"\"\"", line)
+        assertEquals(
+            "1970-01-01,\"Work, deep\",Job,Focus; Career,1970-01-01 00:00:00,1970-01-01 01:30:00,90.00,\"said \"\"hi\"\"\"",
+            line,
+        )
     }
 }
 
 class GroupingTest {
-    private val g1 = Goal(1, "Work", 0, sortOrder = 1)
-    private val g2 = Goal(2, "Rest", 0, sortOrder = 2)
+    private val g1 = Group(1, "Work", 0, sortOrder = 1)
+    private val g2 = Group(2, "Rest", 0, sortOrder = 2)
     private val acts = listOf(
-        ActivityItem(10, "Email", "Mail", 0, goalId = 1),
+        ActivityItem(10, "Email", "Mail", 0, groupId = 1),
         ActivityItem(11, "Commute", "Car", 0),
-        ActivityItem(12, "Sleep", "Moon", 0, goalId = 2),
-        ActivityItem(13, "Orphan", "Circle", 0, goalId = 99),
-        ActivityItem(14, "Work", "Briefcase", 0, goalId = 1),
+        ActivityItem(12, "Sleep", "Moon", 0, groupId = 2),
+        ActivityItem(13, "Orphan", "Circle", 0, groupId = 99),
+        ActivityItem(14, "Work", "Briefcase", 0, groupId = 1),
     )
 
-    @Test fun sectionsFollowGoalOrderThenOther() {
+    @Test fun sectionsFollowGroupOrderThenOther() {
         val out = groupActivities(acts, listOf(g1, g2), grouped = true)
-        assertEquals(listOf(1L, 2L, null), out.map { it.goal?.id })
+        assertEquals(listOf(1L, 2L, null), out.map { it.group?.id })
         assertEquals(listOf(10L, 14L), out[0].activities.map { it.id })
         assertEquals(listOf(11L, 13L), out[2].activities.map { it.id })
     }
 
-    @Test fun emptyGoalsAreDroppedAndUngroupedIsOneSection() {
-        val noRest = acts.filter { it.goalId != 2L }
-        assertEquals(listOf(1L, null), groupActivities(noRest, listOf(g1, g2), true).map { it.goal?.id })
+    @Test fun emptyGroupsAreDroppedAndUngroupedIsOneSection() {
+        val noRest = acts.filter { it.groupId != 2L }
+        assertEquals(listOf(1L, null), groupActivities(noRest, listOf(g1, g2), true).map { it.group?.id })
         assertEquals(1, groupActivities(acts, listOf(g1, g2), grouped = false).size)
         assertEquals(1, groupActivities(acts, emptyList(), grouped = true).size)
         assertTrue(groupActivities(emptyList(), listOf(g1), true).isEmpty())
+    }
+
+    @Test fun goalsSumTheirMembersAndMayOverlap() {
+        // Goal 1 = TV only (a subset of Leisure); goal 2 = TV + Reading.
+        val links = listOf(GoalActivity(1, 3), GoalActivity(2, 3), GoalActivity(2, 4))
+        val perActivity = mapOf(3L to 60 * M, 4L to 30 * M, 5L to 10 * M)
+        assertEquals(mapOf(1L to 60 * M, 2L to 90 * M), goalTotals(links, perActivity))
     }
 }
