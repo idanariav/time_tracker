@@ -1,0 +1,1563 @@
+#cat	accessibility	Accessibility
+#cat	account	Accounts & access
+#cat	animals	Animals
+#cat	arrows	Arrows
+#cat	buildings	Buildings
+#cat	charts	Charts
+#cat	communication	Communication
+#cat	connectivity	Connectivity
+#cat	cursors	Cursors
+#cat	design	Design
+#cat	development	Coding & development
+#cat	devices	Devices
+#cat	emoji	Emoji
+#cat	files	File icons
+#cat	finance	Finance
+#cat	food-beverage	Food & beverage
+#cat	gaming	Gaming
+#cat	home	Home
+#cat	layout	Layout
+#cat	letters-digits	Letters & digits
+#cat	mail	Mail
+#cat	math	Mathematics
+#cat	medical	Medical
+#cat	multimedia	Multimedia
+#cat	nature	Nature
+#cat	navigation	Navigation & places
+#cat	notifications	Notifications
+#cat	people	People
+#cat	photography	Photography
+#cat	science	Science
+#cat	seasons	Seasons
+#cat	security	Security
+#cat	shapes	Shapes
+#cat	shopping	Shopping
+#cat	social	Social
+#cat	sports	Sports
+#cat	sustainability	Sustainability
+#cat	text	Text formatting
+#cat	time	Time & calendar
+#cat	tools	Tools
+#cat	transportation	Transportation
+#cat	travel	Travel
+#cat	weather	Weather
+AArrowDown	design,text	$group:direction-down,$group:letter,font size,formatting,letter,smaller
+AArrowUp	design,text	$group:direction-up,$group:letter,bigger,font size,formatting,larger,letter
+ALargeSmall	design,text	$group:letter,font size,formatting,letter
+Accessibility	accessibility,medical	dda,disability,disabled,wheelchair
+Activity	account,medical,social	action,aftershock,audio,defibrillator,earthquake,emergency room,er,exercise,fitness,healthcare,heart rate monitor,hospital,intensive care,magnitude,motion,movement,music,pulse,richter scale,seismic,shockwave,synthesiser,synthesizer,tremor,vital signs,vitals,waveform
+AirVent	home	ac,air conditioner,central air,climate-control,cooling
+Airplay	connectivity,multimedia	cast,macos,mirroring,monitor,osx,screen,stream
+AlarmClock	devices,notifications,time	$group:clock,morning
+AlarmClockCheck	$extends:alarm-clock	$extends:alarm-clock,$group:check,reminder,wake-up
+AlarmClockMinus	$extends:alarm-clock	$extends:alarm-clock,$group:minus,reminder,unschedule
+AlarmClockOff	$extends:alarm-clock	$extends:alarm-clock,$group:off,disarmed,muted,silence,silent
+AlarmClockPlus	$extends:alarm-clock	$extends:alarm-clock,$group:plus
+AlarmSmoke	devices,home,travel	alert,amenities,carbon monoxide,detector,equipment,fire,safety,warning
+Album	multimedia,photography	book,photo
+AlignCenter	text	alignment,center,text
+AlignCenterHorizontal	layout	flex,items,justify
+AlignCenterVertical	layout	flex,items,justify
+AlignEndHorizontal	layout	$group:position-bottom,flex,items,justify
+AlignEndVertical	layout	$group:position-right,flex,items,justify
+AlignHorizontalDistributeCenter	layout	around,evenly,flex,items,justify,space
+AlignHorizontalDistributeEnd	layout	$group:position-right,flex,items,justify
+AlignHorizontalDistributeStart	layout	$group:position-left,flex,items,justify
+AlignHorizontalJustifyCenter	layout	center,flex,items,justify
+AlignHorizontalJustifyEnd	layout	$group:position-right,flex,items,justify
+AlignHorizontalJustifyStart	layout	$group:position-left,flex,items,justify
+AlignHorizontalSpaceAround	layout	between,center,distribute,flex,items,justify
+AlignHorizontalSpaceBetween	layout	$group:position-left,$group:position-right,around,bottom,flex,items,justify
+AlignJustify	text	alignment,justified,list,menu,text
+AlignLeft	text	$group:position-left,alignment,list,text
+AlignRight	text	$group:position-right,alignment,text
+AlignStartHorizontal	layout	$group:position-top,flex,items,justify
+AlignStartVertical	layout	$group:position-left,flex,items,justify
+AlignVerticalDistributeCenter	layout	around,evenly,flex,items,justify,space
+AlignVerticalDistributeEnd	layout	$group:position-bottom,flex,items,justify
+AlignVerticalDistributeStart	layout	$group:position-top,flex,items,justify
+AlignVerticalJustifyCenter	layout	between,center,distribute,flex,items,justify
+AlignVerticalJustifyEnd	layout	$group:position-bottom,between,distribute,flex,items,justify
+AlignVerticalJustifyStart	layout	$group:position-top,between,distribute,flex,items,justify
+AlignVerticalSpaceAround	layout	between,center,distribute,flex,items,justify
+AlignVerticalSpaceBetween	layout	$group:position-bottom,$group:position-top,between,center,distribute,flex,items,justify
+Ambulance	medical,transportation	ambulance,emergency,first aid,healthcare,medical,rescue,siren,transportation,urgent,vehicle
+Ampersand	development,text	&,and,code,concatenate,join,operator,typography
+Ampersands	development,text	&&,and,code,operator,then
+Amphora	food-beverage	archaeology,artefact,artifact,ceramics,clay,museum,oil,pottery,vase,wine
+Anchor	text,transportation	ship
+Angry	emoji	$group:emoticon,anger,disgust,fury,irritation,rage,resentment
+Annoyed	emoji	$group:emoticon,annoyance,annoyed,frustration,nuisance
+Antenna	communication,connectivity,devices,multimedia	aerial,broadcast,cable,channels,connection,connectivity,frequency,live,receiver,satellite,scan,signal,television,terrestrial,transducer,transmission,tune,tv
+Anvil	gaming,tools	acme,alloy,blacksmith,forge,heavy,iron,materials,metal,weight
+Aperture	photography	camera,exposure,photo,pictures,shutter
+AppWindow	development,layout	application,executable,menu bar,pane
+AppWindowMac	$extends:app-window	$extends:app-window,close button,desktop,macos,maximize,minimize,native app,osx,preferences,title bar,traffic lights
+Apple	food-beverage	bite,core,diet,food,fresh,fruit,green,grocery,harvest,healthy,juicy,nutrition,orchard,organic,plant,produce,raw,red,snack,sweet,tart,vitamin
+Archive	files,mail	backup,box,index,records,storage
+ArchiveRestore	$extends:archive	$extends:archive,unarchive
+ArchiveX	$extends:archive	$extends:archive,$group:x,junk
+Armchair	home	couch,furniture,leisure,lounge,loveseat,sofa
+ArrowBigDown	arrows,gaming	$group:direction-down,$group:navigation-next,backwards,reverse
+ArrowBigDownDash	$extends:arrow-big-down,files	$extends:arrow-big-down,$group:direction-down,download,slow
+ArrowBigLeft	arrows,gaming	$group:direction-left,$group:navigation-previous,indicate turn,previous
+ArrowBigLeftDash	$extends:arrow-big-left	$extends:arrow-big-left,$group:direction-left,corner,turn
+ArrowBigRight	arrows,gaming	$group:direction-right,$group:navigation-next,indicate turn,next
+ArrowBigRightDash	$extends:arrow-big-right	$extends:arrow-big-right,$group:direction-right,corner,turn
+ArrowBigUp	arrows,gaming,text	$group:direction-up,$group:navigation-previous,button,capitalise,capitalize,forward,keyboard,mac,shift
+ArrowBigUpDash	$extends:arrow-big-up	$extends:arrow-big-up,$group:direction-up,boost,capitals,caps lock,faster,speed
+ArrowDown	arrows	$group:direction-down,$group:navigation-next,backwards,reverse
+ArrowDown01	$extends:arrow-down,layout,text	$group:digit,$group:direction-down,$group:sort
+ArrowDown10	$extends:arrow-down,layout,text	$group:digit,$group:direction-down,$group:sort
+ArrowDownAZ	$extends:arrow-down,layout,text	$group:direction-down,$group:letter,$group:sort,alphabetical
+ArrowDownFromLine	$extends:arrow-down,files	$extends:arrow-down,$group:direction-down,download,expand,fold
+ArrowDownLeft	arrows	$group:direction-down-left
+ArrowDownNarrowWide	$extends:arrow-down,layout,text	$group:direction-down,$group:sort
+ArrowDownRight	arrows	$group:direction-down-right
+ArrowDownToDot	$extends:arrow-down	$extends:arrow-down,$group:direction-down,into,location,step,waypoint
+ArrowDownToLine	$extends:arrow-down,development,files	$extends:arrow-down,$extends:download,$group:direction-down,$group:navigation-last,behind,collapse,download,fold,git,version control
+ArrowDownUp	arrows	$group:direction-down,$group:direction-up,$group:sort,2-way,bidirectional,flow,internet,mobile data,move,network,swap,switch,traffic,two-way
+ArrowDownWideNarrow	$extends:arrow-down,layout,text	$group:direction-down,$group:sort
+ArrowDownZA	$extends:arrow-down,layout,text	$group:direction-down,$group:letter,$group:sort,alphabetical,reverse
+ArrowLeft	arrows	$group:direction-left,$group:navigation-previous,<-,previous
+ArrowLeftFromLine	$extends:arrow-left	$extends:arrow-left,$group:direction-left,<-|,expand,fold
+ArrowLeftRight	$extends:arrow-left	$group:direction-left,$group:direction-right,->,2-way,<-,bidirectional,move,reorder,swap,switch,transaction,two-way
+ArrowLeftToLine	$extends:arrow-left	$extends:arrow-left,$group:direction-left,$group:navigation-first,collapse,fold,|<-
+ArrowRight	arrows	$group:direction-right,$group:navigation-next,->,next
+ArrowRightFromLine	$extends:arrow-right	$extends:arrow-right,$group:direction-right,expand,export,fold,|->
+ArrowRightLeft	$extends:arrow-right	$group:direction-left,$group:direction-right,->,2-way,<-,bidirectional,move,reorder,swap,switch,transaction,two-way
+ArrowRightToLine	$extends:arrow-right,development	$extends:arrow-right,$group:direction-right,$group:navigation-last,->|,collapse,fold,indent,keyboard,mac,tab
+ArrowUp	arrows	$group:direction-up,$group:navigation-previous,forward
+ArrowUp01	$extends:arrow-up,layout,text	$group:digit,$group:direction-up,$group:sort
+ArrowUp10	$extends:arrow-up,layout,text	$group:digit,$group:direction-up,$group:sort
+ArrowUpAZ	$extends:arrow-up,layout,text	$group:direction-up,$group:letter,$group:sort,alphabetical
+ArrowUpDown	arrows	$group:direction-down,$group:direction-up,$group:sort,2-way,bidirectional,internet,mobile data,move,network,swap,switch,two-way
+ArrowUpFromDot	$extends:arrow-up	$extends:arrow-up,$group:direction-up,out,step
+ArrowUpFromLine	$extends:arrow-up,development,files	$extends:arrow-up,$group:direction-up,expand,fold,git,push,upload,version control
+ArrowUpLeft	arrows	$group:direction-up-left
+ArrowUpNarrowWide	$extends:arrow-up,layout,text	$group:direction-up,$group:sort
+ArrowUpRight	arrows	$group:direction-up-right
+ArrowUpToLine	$extends:arrow-up,files	$extends:arrow-up,$group:direction-up,$group:navigation-first,collapse,fold,upload
+ArrowUpWideNarrow	$extends:arrow-up,layout,text	$group:direction-up,$group:sort
+ArrowUpZA	$extends:arrow-up,layout,text	$group:direction-up,$group:letter,$group:sort,alphabetical,reverse
+ArrowsUpFromLine	arrows,transportation	$group:direction-up,box,fragile,orientation,package,postage,shipping,this way up
+Asterisk	development,math,text	*,alert,code,glob pattern,indicator,mandatory,mark,multiplication,multiply,notification,operator,pencil,pointer,reference,required,sign,symbol,symbolic,times,wildcard
+AtSign	account,mail,text	$group:letter,@,at,email,mention,message
+Atom	science	atomic,chemistry,electricity,element,energy,molecule,nuclear,particle,physics
+AudioLines	communication,multimedia	airwaves,broadcast,frequency,graphic equaliser,hearing,hertz,levels,listen,music,noise,playback,radio,sine,singer,song,sound,synthesiser,synthesizer,track,vibrate,vocals,voice,wavelength
+AudioWaveform	communication,multimedia	airwaves,broadcast,frequency,hearing,hertz,levels,listen,music,noise,playback,radio,sine,singer,song,sound,synthesiser,synthesizer,track,vibrate,vocals,voice,wavelength
+Award	account,gaming,sports	achievement,badge,expertise,prize,rosette,skill,skills,winner
+Axe	gaming,tools	brigade,chop,equipment,firefighter,fireman,forestry,hatchet,logger,lumberjack,sharp,weapon,woodcutter
+Axis3d	design	coordinates,gizmo,model
+Baby	accessibility,people	child,childproof,children
+Backpack	gaming,travel	bag,camping,childhood,hiking,school,travel
+Badge	account,shapes,social	achievement,award,certification,emblem,insignia,label,official,rosette,scalloped,seal,shape,stamp,starburst,status,sticker
+BadgeAlert	account,social	$extends:badge,$group:exclamation-mark,issue,safety,security
+BadgeCent	finance,shopping	$,cents,discount,dollar,exchange,finance,financial,marketing,monetization,offer,payment,sale,tag,transaction,usd,voucher,¢
+BadgeCheck	social	$extends:badge,$group:check,exclusive,guarantee,premium,pro,vip,warranty
+BadgeDollarSign	finance,shopping	$,discount,exchange,finance,financial,marketing,monetization,offer,payment,sale,tag,transaction,usd,voucher
+BadgeEuro	finance,shopping	$group:currency,discount,marketing,offer,sale,tag,voucher,€
+BadgeHelp	accessibility,social	$extends:badge,$group:question-mark
+BadgeIndianRupee	finance,shopping	discount,exchange,finance,financial,inr,marketing,monetization,offer,payment,sale,tag,transaction,voucher,₹
+BadgeInfo	accessibility,account,letters-digits,social	$extends:badge,$group:letter,help
+BadgeJapaneseYen	finance,shopping	$group:currency,discount,jpy,marketing,offer,sale,tag,voucher,¥
+BadgeMinus	social	$extends:badge,$group:minus
+BadgePercent	finance,math,shopping	$extends:badge,$group:percent,promo,promotion,sell,selling
+BadgePlus	social	$extends:badge,$group:plus
+BadgePoundSterling	finance,shopping	british,discount,exchange,finance,financial,gbp,marketing,monetization,offer,payment,sale,tag,transaction,voucher,£
+BadgeRussianRuble	finance,shopping	discount,exchange,finance,financial,marketing,monetization,offer,payment,rub,sale,tag,transaction,voucher,₽
+BadgeSwissFranc	finance,shopping	chf,discount,exchange,finance,financial,marketing,monetization,offer,payment,sale,tag,transaction,voucher,₣
+BadgeX	social	$extends:badge,$group:x,lost
+BaggageClaim	transportation,travel	baggage,cart,luggage,suitcase,travel,trolley
+Ban	account	cancel,circle,error,failure,forbidden,incorrect,mistake,no,null,prohibited,slash,stop,void,wrong
+Banana	food-beverage	food,fruit
+Bandage	medical	aid,band-aid,care,emergency,first aid,healing,health,injury,medical,patch,patient,plaster,protection,safety,treatment,wound
+Banknote	finance	bill,cash,currency,finance,funds,money,payment,salary,transaction
+Barcode	shopping	buy,cart,checkout,consumer,packaging,product,purchase,retail,scan,till,transaction
+Baseline	text	$group:letter,color,format
+Bath	home,travel	amenities,bathroom,services,shower
+Battery	devices	accumulator,charge,electricity,energy,power
+BatteryCharging	$extends:battery	$extends:battery
+BatteryFull	$extends:battery	$extends:battery
+BatteryLow	$extends:battery	$extends:battery
+BatteryMedium	$extends:battery	$extends:battery
+BatteryWarning	$extends:battery	$extends:battery,$group:exclamation-mark
+Beaker	gaming,science	chemistry,cup,experiment,lab,test
+Bean	food-beverage	food,legume,seed,soy
+BeanOff	$extends:bean	$extends:bean,$group:off,allergy,diet,intolerance,soy free
+Bed	home	furniture,hotel,sleep
+BedDouble	$extends:bed	$extends:bed
+BedSingle	$extends:bed	$extends:bed
+Beef	food-beverage	bbq,course,dish,food,meal,meat,restaurant,steak
+Beer	food-beverage	alcohol,bar,beverage,brewery,drink
+BeerOff	$extends:beer	$extends:beer,$group:off
+Bell	account,notifications	alarm,notification,reminder,sound
+BellDot	$extends:bell	$extends:bell,$group:dot
+BellElectric	devices,home,notifications	alert,brigade,department,doorbell,emergency,entrance,entry,fire alarm,firefighter,fireman,flames,period break,reception,recess,ring,safety,school bell,smoke,station
+BellMinus	notifications	$extends:bell,$group:minus,silent
+BellOff	notifications	$extends:bell,$group:off,silent
+BellPlus	notifications	$extends:bell,$group:plus,silent
+BellRing	notifications	$extends:bell
+BetweenHorizontalEnd	design,layout	$group:position-right,accountancy,add,blocks,cells,chevron,data,enter,entries,entry,excel,grid,insert,left,rectangles,rows,slot,space,spreadsheet,squeeze,table,vertical
+BetweenHorizontalStart	design,layout	$group:position-left,accountancy,add,blocks,cells,chevron,data,enter,entries,entry,excel,grid,insert,rectangles,right,rows,slot,space,spreadsheet,squeeze,table,vertical
+BetweenVerticalEnd	design,layout	$group:position-bottom,add,blocks,cells,chevron,columns,data,enter,entries,entry,grid,insert,rectangles,slot,space,squeeze,table,top
+BetweenVerticalStart	design,layout	$group:position-top,add,blocks,bottom,cells,chevron,columns,data,enter,entries,entry,grid,insert,rectangles,slot,space,squeeze,table
+BicepsFlexed	emoji,sports	arm,athletic,curled,forelimb,muscle,muscular,strong,toned,working out
+Bike	transportation	bicycle,transport,trip
+Binary	development,text	$group:digit,boolean,code,computer,digits,one,zero
+Binoculars	nature,navigation,travel	birdwatching,discovery,field glasses,lookout,lorgnette,monitoring,nature,observation,pince-nez,research,scouting,search,sightseeing,surveillance,tourism,travel,viewpoint,wildlife
+Biohazard	science	biology,chemical,chemistry,element,fallout,waste
+Bird	animals	avian,freedom,peace,tweet,wing
+Bitcoin	finance	$group:currency,blockchain,coin,crypto,cryptocurrency,decentralized,digital,investment,market
+Blend	design,photography	alpha,brightness,colors,colours,connection,couple,filters,hues,lenses,marriage,mixed,mode,multiply,opacity,overlap,overlay,rings,saturation,screen,shades,tints,transparency
+Blinds	home	curtain,home,household,lighting,roller blind,screen,shades,shutter,window
+Blocks	development,layout	addon,build,children,corner,extension,integration,kids,learning,package,plugin,squares,stack,toys
+Bluetooth	connectivity,devices	wireless
+BluetoothConnected	$extends:bluetooth	$extends:bluetooth,paired
+BluetoothOff	$extends:bluetooth	$extends:bluetooth,$group:off,lost
+BluetoothSearching	$extends:bluetooth	$extends:bluetooth,pairing
+Bold	letters-digits,text	$group:letter,b-side,blood type,bold,bus,byte,computing,emphasis,format,strong,transit,uppercase
+Bolt	home,tools	build,configuration,construction,controls,diy,edit,fixed,nut,parts,preferences,screw,settings
+Bomb	development,gaming	blockbuster,crash,error,explode,explosion,explosive,fatal,mine
+Bone	animals,gaming,medical	death,dog,health,pets,skeleton,skull
+Book	development,gaming,text	academy,author,booklet,college,documentation,education,fiction,high school,homework,information,knowledge,leaflet,learning,library,magazine,novel,pamphlet,paperback,reading,research,script,story,student,study,tome,university,writer,writing,written
+BookA	gaming,text	$extends:book,$group:letter,a-z,alphabetical,define,definition,dictionary,encyclopaedia,encyclopedia,language,ordered,thesaurus,translate
+BookAudio	multimedia,text	$extends:audio-lines,$extends:book,audiobook,listening
+BookCheck	$extends:book	$extends:book,$group:check,authored,blank,corrected,documented,educated,examined,graduated,informed,knowledgeable,learned,lesson,marked,passed,plain language,published,read,researched,revealed,schooled,studied,tested,true,truth
+BookCopy	$extends:book	$extends:book,$extends:copy,books,code,coding,copied,copies,fork,git,informed,intellectual,intelligent,knowledgable,knowledgeable,plagiarised,plagiarism,plagiarized,reading list,repository,smart,version control
+BookDashed	development,text	$extends:book,$group:dashed,code,coding,draft,git,repository,screenplay,template,unpublished,untold,unwritten,version control
+BookDown	development	$extends:book,$group:direction-down,code,coding,git,pull,repository,version control
+BookHeadphones	multimedia,text	$extends:book,$extends:headphones,audiobook,listening
+BookHeart	gaming,social,text	$extends:book,$group:heart,crush,diary,emotion,entries,entry,feminine,girls,journal,notepad,notes,organiser,organizer,personal,planner,private,romance,secret,sketchbook,stationery,teenager,teens,therapeutic,therapist,therapy
+BookImage	multimedia,photography,text	$extends:book,$extends:image,album,brochure,browse,catalog,catalogue,collection,event,gallery,images,photos,pictures
+BookKey	development,gaming,security	$extends:book,$group:key,code,coding,git,hidden,repository,revealed,version control
+BookLock	development,gaming,security	$extends:book,$group:lock,code,coding,git,hidden,repository,secret,version control
+BookMarked	$extends:book	$extends:book,code,coding,dictionary,future,git,index,later,reference,repository,saved,version control
+BookMinus	$extends:book	$extends:book,$group:minus,ban,censor,code,coding,downgrade,forbid,git,prohibit,re-educate,repository,uneducated,unlearn,version control
+BookOpen	$extends:book	$extends:book,blank,pages,plain,revealed,screenplay
+BookOpenCheck	$extends:book-open	$extends:book-open,$group:check,authored,corrected,documented,educated,examined,graduated,informed,knowledgeable,learned,lesson,marked,passed,plain language,published,read,researched,schooled,studied,tested,true,truth
+BookOpenText	development,text	$extends:book-open,docs,knowledge base,wiki
+BookPlus	$extends:book	$extends:book,$group:plus,code,coding,git,graduate,improve,inform,learn,level up,publish,re-educate,read,repository,upgrade,version control,write
+BookText	gaming,text	$extends:book,docs,knowledge base,wiki
+BookType	design,gaming,text	$extends:book,$group:letter,collection,fonts,language,synonym,thesaurus,translate
+BookUp	development	$extends:book,$group:direction-up,code,coding,git,push,repository,version control
+BookUp2	$extends:book-up	$extends:book-up,$group:direction-up,force
+BookUser	account,communication,social	$extends:book,$group:user,acquaintances,addresses,details,directory,family,friends,listing,networking,phone numbers
+BookX	gaming,text	$extends:book,$group:x,banned,censored,charlatan,code,coding,disinformation,false,forbidden,git,lies,misinformation,misinformed,prohibited,propaganda,re-education,repository,sophistry,uneducated,unlearn,untruth,version control
+Bookmark	account	attachment,clip,favorite,favourite,file,label,mark,marker,pin,read,save,stick,tag
+BookmarkCheck	$extends:bookmark	$extends:bookmark,$group:check
+BookmarkMinus	$extends:bookmark	$extends:bookmark,$group:minus
+BookmarkPlus	$extends:bookmark	$extends:bookmark,$group:plus
+BookmarkX	$extends:bookmark	$extends:bookmark,$group:x
+BoomBox	devices,multimedia	audio,broadcast,frequency,live,music,radio,sound,speakers
+Bot	development,social	ai,assistant,chat,robot
+BotMessageSquare	$extends:bot	$extends:bot
+BotOff	$extends:bot	$extends:bot,$group:off
+Box	development,gaming,math,shapes	3d,container,cube,geometry,isometric,package,storage
+BoxSelect	cursors,design	$group:dashed,area,box,marquee,rectangular,region,region of interest,selection,square,tool
+Boxes	development,gaming,shapes	cluster,collection,cubes,geometry,group,packages,parts,units
+Braces	development,files	code,curly braces,curly brackets,data,json,token,{,}
+Brackets	development,files	[,],array,code,list,square,token
+Brain	medical,science	ai,artificial intelligence,cerebral,computing,consciousness,deep learning,expertise,genius,insight,intellect,intelligent,machine learning,medical,mental,mind,skill,skills,smart,think,thought
+BrainCircuit	development,science	$extends:brain
+BrainCog	development,science	$extends:brain,$group:cog
+BrickWall	buildings,home	blocks,bricks,builder,cement,construction,labourer,materials,mortar,quantity surveyor,stone
+Briefcase	travel	bag,baggage,career,employment,experience,folder,hiring,job,work
+BriefcaseBusiness	$extends:briefcase	$extends:briefcase,portfolio
+BriefcaseMedical	medical	doctor,first aid,medicine
+BringToFront	design,layout	bring,forward,front,layer,move,order,over,overlap,send
+Brush	design,text,tools	artist,clean,color,draw,paint,refactor,remove,sweep
+Bug	animals,development	beetle,code,debug,defect,error,insect,issue,problem,report,testing,troubleshoot
+BugOff	$extends:bug	$extends:bug,$group:off,exterminate,fixed,kill,pest control,resolved
+BugPlay	$extends:bug	$extends:bug,$group:play,reproduce
+Building	account,buildings	organisation,organization
+Building2	$extends:building	$extends:building,business,city,company,enterprise,skyscraper
+Bus	transportation	bus,coach,road,transport,trip,vehicle
+BusFront	$extends:bus	$extends:bus
+Cable	connectivity,devices,multimedia	audio video,av,charger,computer,connection,connector,console,cord,disconnected,electricity,electronics,energy,equipment,input,interface,link,optical,output,plugs,power,rca,recharging,scart,signal,supply,television,tv,unplugged,wire
+CableCar	transportation,travel	alpine,mountains,resort,ski lift,winter holiday
+Cake	food-beverage,social	baking,birthdate,birthday,candles,celebration,dessert,fondant,gateaux,icing sugar,party,surprise,sweet,wish
+CakeSlice	food-beverage,social	$extends:cake
+Calculator	devices,math	budget,calculating machine,count
+Calendar	time	birthdate,birthday,date,day,event,month,timestamp,year
+CalendarArrowDown	$extends:calendar	$extends:calendar,$group:direction-down,$group:sort
+CalendarArrowUp	$extends:calendar	$extends:calendar,$group:direction-up,$group:sort
+CalendarCheck	$extends:calendar	$extends:calendar,$group:check,schedule,subscribe,today
+CalendarCheck2	$extends:calendar-check	$extends:calendar-check
+CalendarClock	$extends:calendar	$extends:calendar,$group:clock
+CalendarCog	$extends:calendar	$extends:calendar,$group:cog,events
+CalendarDays	$extends:calendar	$extends:calendar,week,weekly
+CalendarFold	$extends:calendar,files	$extends:calendar,ics
+CalendarHeart	$extends:calendar	$extends:calendar,$group:heart,subscribe,valentines day
+CalendarMinus	$extends:calendar	$extends:calendar,$group:minus
+CalendarMinus2	$extends:calendar-minus	$extends:calendar-minus
+CalendarOff	$extends:calendar	$extends:calendar,$group:minus,$group:off
+CalendarPlus	$extends:calendar	$extends:calendar,$group:plus,subscribe
+CalendarPlus2	$extends:calendar-plus	$extends:calendar-plus
+CalendarRange	$extends:calendar	$extends:calendar,period,range,week,weekly
+CalendarSearch	$extends:calendar	$extends:calendar,$group:search,events
+CalendarX	$extends:calendar	$extends:calendar,$group:x,busy
+CalendarX2	$extends:calendar-x	$extends:calendar-x
+Camera	communication,devices,photography	capture,device,equipment,focus,image,lens,photo,photography,shot,video,visual,webcam
+CameraOff	$extends:camera	$extends:camera,$group:off
+Candy	food-beverage	food,sugar,sweet
+CandyCane	$extends:candy	$extends:candy,christmas,xmas
+CandyOff	$extends:candy	$extends:candy,$group:off,allergy,diet,intolerance,sugar free
+Cannabis	nature	cannabis,leaf,weed
+Captions	accessibility,multimedia	accessibility,closed captions,dialogue,subhead,subtitles,transcribe,transcription
+CaptionsOff	$extends:captions	$extends:captions,$group:off
+Car	transportation	drive,journey,trip,vehicle
+CarFront	$extends:car	$extends:car
+CarTaxiFront	$extends:car	$extends:car,cab
+Caravan	nature,transportation,travel	camping,campsite,holiday,mobile home,nomadic,outdoors,tow,trailer,wilderness
+Carrot	food-beverage	eat,food,fresh,healthy,nature,nutrition,orange,organic,produce,root,vegetable
+CaseLower	development,text	$group:letter,characters,letters
+CaseSensitive	text	$group:letter,characters,letters
+CaseUpper	development,text	$group:letter,characters,letters
+CassetteTape	devices,multimedia	audio,music,play,recording
+Cast	connectivity,devices	broadcast,display,media,media streaming,receiver,remote display,screen,screen sharing,stream,streaming,transmit,wireless
+Castle	buildings,gaming,navigation	building,chateau,fortress,palace,stronghold
+Cat	animals	animal,feline,kitten,pet
+Cctv	devices,photography,security	camera,crime,film,recording,surveillance,videotape,watching
+ChartArea	charts	$group:chart
+ChartBar	charts	$group:chart,categorical,comparison
+ChartBarBig	$extends:chart-bar	$extends:chart-bar
+ChartBarDecreasing	$extends:chart-bar	$extends:chart-bar,trending down
+ChartBarIncreasing	$extends:chart-bar	$extends:chart-bar,trending up
+ChartBarStacked	$extends:chart-bar	$extends:chart-bar,multivariate
+ChartCandlestick	charts,finance	$group:chart,assets,commodities,currencies,currency,exchange,financial,hedge fund,markets,portfolio,prices,stocks,trader,trading,valuation,value
+ChartColumn	charts	$group:chart,categorical,comparison
+ChartColumnBig	$extends:chart-column	$extends:chart-column
+ChartColumnDecreasing	$extends:chart-column	$extends:chart-column,trending down
+ChartColumnIncreasing	$extends:chart-column	$extends:chart-column,trending up
+ChartColumnStacked	$extends:chart-column	$extends:chart-column,multivariate
+ChartLine	charts	$group:chart
+ChartNetwork	charts	$group:chart,$group:graph,cluster,web
+ChartNoAxesColumn	$extends:chart-column	$extends:chart-column
+ChartNoAxesColumnDecreasing	$extends:chart-no-axes-column	$extends:chart-no-axes-column,trending down
+ChartNoAxesColumnIncreasing	$extends:chart-no-axes-column	$extends:chart-no-axes-column,trending up
+ChartNoAxesCombined	charts	$group:chart,trending up
+ChartNoAxesGantt	$extends:chart-gantt,development	$extends:chart-gantt,code,coding,intentions
+ChartPie	charts	$group:chart
+ChartScatter	charts	$group:chart
+ChartSpline	charts	$group:chart,continuous,curve,function,interpolation,polynomial,quadratic,smooth
+Check	notifications	$group:check
+CheckCheck	$extends:check	$extends:check,double,received
+ChefHat	food-beverage	apron,baker,baking,cap,catering,cook,cookery,cooking,cuisine,culinary,culinary cap,culinary professional,dining,food,food service,gastronomy,gourmet,headgear,headwear,hospitality,kitchen,kitchen staff,meal,menu,restaurant,toque,toque blanche,uniform
+Cherry	food-beverage	food,fruit
+ChevronDown	arrows	$group:direction-down,$group:navigation-next,backwards,dropdown,reverse,slow
+ChevronFirst	arrows,multimedia	music,previous
+ChevronLast	arrows,multimedia	music,next,skip
+ChevronLeft	arrows,math	$group:direction-left,$group:navigation-previous,<,fewer,less than,menu,previous
+ChevronRight	arrows,development,math	$group:direction-right,$group:navigation-next,>,code,coding,command line,greater,menu,more than,next,prompt,shell,terminal
+ChevronUp	arrows,math	$group:direction-up,$group:navigation-previous,^,ahead,caret,control,ctrl,dropdown,exponential,fast,keyboard,mac,power,superscript
+ChevronsDown	arrows	$group:direction-down,$group:navigation-last,backwards,reverse,slower
+ChevronsDownUp	arrows	$group:direction-down,$group:direction-up,collapse,fold
+ChevronsLeft	arrows	$group:direction-left,$group:navigation-first,corner,turn
+ChevronsLeftRight	arrows	$group:direction-left,$group:direction-right,expand,unfold
+ChevronsLeftRightEllipsis	connectivity,devices	$group:direction-left,$group:direction-right,cable,communication,connection,connector,console,controller,data,hub,input,interface,internet,lan,modem,network,networking,online,output,plug,port,router,signal,slot,socket,switch,web
+ChevronsRight	arrows	$group:direction-right,$group:navigation-last,corner,turn
+ChevronsRightLeft	arrows	$group:direction-left,$group:direction-right,collapse,fold
+ChevronsUp	arrows	$group:direction-up,$group:navigation-first,ahead,boost,faster,forward,speed
+ChevronsUpDown	arrows	$group:direction-down,$group:direction-up,expand,unfold
+Chrome		
+Church	buildings,navigation	building,temple
+Cigarette	medical,transportation,travel	smoking
+CigaretteOff	$extends:cigarette	$extends:cigarette,$group:off,no-smoking
+Circle	shapes	off,record,shape,zero
+CircleAlert	notifications	$group:exclamation-mark
+CircleArrowDown	arrows	$group:direction-down,$group:navigation-next,backwards,button,reverse,sign
+CircleArrowLeft	arrows	$group:direction-left,$group:navigation-previous,<-,button,previous,sign,turn
+CircleArrowOutDownLeft	arrows	$group:direction-down-left,$group:exit
+CircleArrowOutDownRight	arrows	$group:direction-down-right,$group:exit
+CircleArrowOutUpLeft	arrows	$group:direction-up-left,$group:exit,button,escape,keyboard
+CircleArrowOutUpRight	arrows	$group:direction-up-right,$group:exit
+CircleArrowRight	arrows	$group:direction-right,$group:navigation-next,->,button,next,sign,turn
+CircleArrowUp	arrows	$group:direction-up,$group:navigation-previous,button,forward,sign
+CircleCheck	notifications	$group:check
+CircleCheckBig	$extends:circle-check	$extends:circle-check
+CircleChevronDown	arrows	$group:direction-down,$group:navigation-next,back,menu
+CircleChevronLeft	arrows	$group:direction-left,$group:navigation-previous,<,fewer,less than,menu,previous
+CircleChevronRight	arrows	$group:direction-right,$group:navigation-next,>,back,greater,menu,more than
+CircleChevronUp	arrows	$group:direction-up,$group:navigation-previous,^,ahead,caret,menu
+CircleDashed	$extends:circle,development	$group:dashed,code,coding,dot,draft,issue,pending,progress,version control
+CircleDivide	math	/,calculate,math,÷
+CircleDollarSign	finance	$group:currency,marketing
+CircleDot	$extends:circle,development	album,cd,choices,choose,code,coding,compilation,cover,dj,dvd,ep,format,issue,multiple choice,music,pending,platinum,playback,progress,recording,rotate,rpm,sleeve,songs,spin,version control,vinyl
+CircleDotDashed	$extends:circle-dot	$group:dashed,code,coding,draft,issue,pending,progress,version control
+CircleEllipsis	development,layout	...,code,dots,ellipsis,et cetera,etc,extra,further,loader,loading,menu,more,operator,options,overflow,pending,progress,rest,spread,throbber,…
+CircleEqual	math	=,calculate,shape
+CircleFadingArrowUp	arrows,development	$group:direction-up,button,circle,improve,up,upgrade
+CircleFadingPlus	communication,social	$group:plus,content,sharing,social media,stories
+CircleGauge	science,sports,transportation	dashboard,dial,level,measure,meter,pressure,speed
+CircleHelp	accessibility,notifications,text	$group:question-mark
+CircleMinus	math	$group:minus,calculate,code,coding,decrease,downgrade,line,minimum,operator
+CircleOff	$extends:circle	$group:off,diameter,error,failure,incorrect,mistake,no,nothing,null,stop,void,wrong,zero,ø
+CircleParking	letters-digits,navigation,transportation	$group:letter,chemistry,math,music,p-value,page,parking,phosphorus,piano,probability,soft,statistics,uppercase
+CircleParkingOff	$extends:circle-letter-p	$extends:circle-letter-p,$group:off,no parking
+CirclePause	multimedia	$group:pause,audio,music
+CirclePercent	finance,math,shopping,social	$group:percent,sticker,unverified,verified
+CirclePlay	multimedia	$group:play,music
+CirclePlus	development,math	$group:plus,aim,calculate,code,coding,concatenate,crosshair,join,maximum,operator,positive,reticule,scope,sight,target,upgrade
+CirclePower	devices	binary,boolean,button,device,keyboard,off,on,reboot,restart,switch,toggle,troubleshoot
+CircleSlash	development,math	$group:off,diameter,divide,division,error,failure,incorrect,mistake,no,nothing,null,or,stop,void,wrong,zero,ø
+CircleSlash2	$extends:circle-slash,shapes	/,average,avg,ban,diameter,divide,division,half,math,mean,median,normal,nothing,null,split,void,zero,ø
+CircleStop	multimedia	$group:stop,media,music
+CircleUser	account	$group:user
+CircleUserRound	$extends:circle-user	$extends:circle-user
+CircleX	math,notifications	$group:x,error,failure,incorrect,linter,mistake,multiplication,multiply,wrong
+CircuitBoard	development,devices,science	computing,electricity,electronics
+Citrus	food-beverage	fruit,grapefruit,lemon,orange
+Clapperboard	multimedia	action,camera,cinema,cut,entertainment,film,movie,show,television,tv,video
+Clipboard	text	copy,paste
+ClipboardCheck	$extends:clipboard	$extends:clipboard,$group:check,checklist,copied,pasted,result
+ClipboardCopy	$extends:clipboard	$extends:clipboard
+ClipboardList	$extends:clipboard	$extends:clipboard,checklist,tasks
+ClipboardMinus	$extends:clipboard	$extends:clipboard,$group:minus,doctor,document,medical,report
+ClipboardPaste	$extends:clipboard	$extends:clipboard
+ClipboardPen	$extends:clipboard	$extends:clipboard,$group:pen,signature
+ClipboardPenLine	$extends:clipboard-pen	$extends:clipboard-pen
+ClipboardPlus	$extends:clipboard,medical	$extends:clipboard,$group:plus,doctor,document,medical,report
+ClipboardType	$extends:clipboard	$extends:clipboard,$group:letter,format
+ClipboardX	$extends:clipboard	$extends:clipboard,$group:x
+Clock	time	$group:clock,alarm
+Clock1	$extends:clock	$extends:clock
+Clock10	$extends:clock	$extends:clock
+Clock11	$extends:clock	$extends:clock
+Clock12	$extends:clock	$extends:clock,midnight,noon
+Clock2	$extends:clock	$extends:clock
+Clock3	$extends:clock	$extends:clock
+Clock4	$extends:clock	$extends:clock
+Clock5	$extends:clock	$extends:clock
+Clock6	$extends:clock	$extends:clock
+Clock7	$extends:clock	$extends:clock
+Clock8	$extends:clock	$extends:clock
+Clock9	$extends:clock	$extends:clock
+ClockArrowDown	$extends:clock	$extends:clock,$group:direction-down,$group:sort
+ClockArrowUp	$extends:clock	$extends:clock,$group:direction-up,$group:sort
+Cloud	weather	weather
+CloudCog	development	$group:cog,ai,cluster,computing,network
+CloudDownload	arrows,files	import,install,installation
+CloudDrizzle	$extends:cloud	$extends:cloud,shower
+CloudFog	$extends:cloud	$extends:cloud,mist
+CloudHail	$extends:cloud	$extends:cloud,rainfall
+CloudLightning	$extends:cloud	$extends:cloud,bolt,thunder,thunderbolt,thunderstorm
+CloudMoon	$extends:cloud	$extends:cloud,night
+CloudMoonRain	$extends:cloud-moon	$extends:cloud-moon,partly,rainfall
+CloudOff	$extends:cloud,connectivity	$group:off,disconnect
+CloudRain	$extends:cloud	$extends:cloud,rainfall
+CloudRainWind	$extends:cloud-rain	$extends:cloud-rain
+CloudSnow	$extends:cloud	$extends:cloud,blizzard
+CloudSun	$extends:cloud	$extends:cloud,partly
+CloudSunRain	$extends:cloud-sun	$extends:cloud-sun,rainfall
+CloudUpload	arrows,files	deploy,deployment,file
+Cloudy	weather	clouds,weather
+Clover	gaming,nature	leaf,luck,plant
+Club	gaming,shapes	cards,playing,shape,suit
+Code	development,text	$group:code,html,source,xml
+CodeXml	$extends:code	$extends:code
+Codepen		
+Codesandbox		
+Coffee	food-beverage	beverage,cafe,cup,drink,hot,mug,tea
+Cog	account	$group:cog,build,computing,construction,fixed,parts
+Coins	finance,gaming	$group:digit,cash,finance,gamble,money
+Columns2	design,layout,text	center,drawer,even,fold,gutter,half,horizontal,lines,list,middle,pages,pagination,panel,parallel,preview,queue,reflow,series,sidebar,split,typography,vertical
+Columns3	design,layout,text	alignment,center,drawers,even,fold,gutters,horizontal,lines,list,middle,pages,pagination,parallel,preview,queue,reflow,series,sidebars,split,thirds,triple,typography,vertical
+Columns4	design,layout,text	alignment,bars,cell,center,cops,crime,criminal,drawers,enforcement,even,fold,grill,gutters,horizontal,jail,justice,law,lines,list,middle,pages,pagination,parallel,police,preview,prison,queue,reflow,sentence,series,sidebars,split,thirds,triple,typography,vertical
+Combine	development,files	cluster,collection,combine,cubes,gather,merge,packages,parts,units
+Command	development	button,cmd,key,keyboard,mac
+Compass	navigation,travel	browser,direction,east,north,south,west
+Component	design,development	design,element,group,module,part,symbol
+Computer	development,devices,gaming	chassis,codespaces,pc
+ConciergeBell	travel	bell,porter,reception
+Cone	math,shapes	conical,filter,funnel,geometry,hopper,searchlight,spotlight,triangle,triangular
+Construction	development,transportation	barricade,blockade,maintenance,roadwork
+Contact	account,communication,social	acquaintance,family,friend,listing,networking,person,user
+ContactRound	$extends:contact	$extends:contact
+Container	development,transportation	code,coding,devops,environment,freight,shipping,storage,supply chain
+Contrast	accessibility,design,photography	accessibility,display
+Cookie	account,food-beverage	bakery,biscuit,browser,consent,dessert,food,legal,privacy,snack,sweet,tracking,website
+CookingPot	food-beverage,home	breakfast,chef,cooking,dinner,eat,food,kitchen,lunch,meal,pod,recipe,restaurant
+Copy	text	clone,duplicate,multiple
+CopyCheck	$extends:copy,notifications	$extends:copy,$group:check
+CopyMinus	$extends:copy	$extends:copy,$group:minus,collapse
+CopyPlus	$extends:copy	$extends:copy,$group:plus,expand
+CopySlash	$extends:copy	$extends:copy,$group:off,divide,division,error,no,or,split,stop
+CopyX	$extends:copy,notifications	$extends:copy,$group:x,multiplication,multiply
+Copyleft	text	$group:letter,licence
+Copyright	letters-digits,text	$group:letter,carbon,celsius,chemistry,grade,licence,license,rating,temperature,uppercase
+CornerDownLeft	arrows	$group:direction-down,$group:direction-left,arrow,return
+CornerDownRight	arrows,development,text	$group:direction-down,$group:direction-right,arrow,indent,tab
+CornerLeftDown	arrows	$group:direction-down,$group:direction-left,arrow
+CornerLeftUp	arrows	$group:direction-left,$group:direction-up,arrow
+CornerRightDown	arrows	$group:direction-down,$group:direction-right,arrow
+CornerRightUp	arrows	$group:direction-right,$group:direction-up,arrow
+CornerUpLeft	arrows	$group:direction-left,$group:direction-up,arrow
+CornerUpRight	arrows	$group:direction-right,$group:direction-up,arrow
+Cpu	devices	chip,circuit,computer,cores,ghz,gigahertz,memory,processor,ram,specs,technology
+CreativeCommons	text	$group:letter,licence,license
+CreditCard	account,finance	bank,cashier,cc,merchant,payment,purchase
+Croissant	food-beverage	bakery,cooking,food,pastry
+Crop	design,photography	image,photo
+Cross	medical,shapes	first aid,healthcare
+Crosshair	photography	aim,target
+Crown	gaming	circlet,corona,diadem,exclusive,favorite,favourite,king,premium,pro,ruler,tiara,vip,winner
+Cuboid	math,shapes	3d,block,box,brick,butter,carton,cheese,container,crate,geometry,hexahedron,package,parcel,rectangular,shipping,soap,solid,storage,tofu,volume
+CupSoda	food-beverage	beverage,cup,drink,soda,straw,water
+Currency	finance	finance,money
+Cylinder	design,math,shapes	container,elliptical,geometry,pot,shape,storage,tin
+Dam	buildings,navigation,sustainability	electricity,energy,water
+Database	development,devices	archive,artifact,attachment,backup,bytes,container,data,data source,dataset,db,dbms,dump,export,import,log,memory,migration,mysql,pot,query,records,relational,restore,schema,server,servers,snapshot,sql,sqlite,storage,structured data,tables,tin
+DatabaseBackup	$extends:database	$extends:database,arrow,left,rotate,time machine
+DatabaseZap	$extends:database	$extends:database,$extends:zap,cache busting,crash
+Delete	arrows,text	backspace,remove
+Dessert	food-beverage	cake,christmas,custard,dollop,fondant,food,gelato,ice cream,iced bun,icing,pudding,scoop,sugar,sundae,sweet,xmas
+Diameter	design,math,shapes,tools	calculate,circle,geometry,height,measure,shape,size,trigonometry,width
+Diamond	gaming,shapes	cards,oblique,playing,rectangle,rhombus,shape,square,suit
+DiamondMinus	design,multimedia	$group:minus,---,button,calculator,code,coding,decrease,divider,downgrade,horizontal rule,hr,html,keyboard,keyframe,line,markdown,markup,minimum,operator,separator,toolbar
+DiamondPercent	finance,math,shopping,social	$group:percent,sticker,unverified,verified
+DiamondPlus	design,multimedia	$group:plus,aim,calculate,crosshair,keyframe,maximum,positive,reticule,scope,sight,target,toolbar,upgrade
+Dice1	gaming	1,board,dice,game,random,tabletop
+Dice2	gaming	2,board,dice,game,random,tabletop
+Dice3	gaming	3,board,dice,game,random,tabletop
+Dice4	gaming	4,board,dice,game,random,tabletop
+Dice5	gaming	5,board,dice,game,random,tabletop
+Dice6	gaming	6,board,dice,game,random,tabletop
+Dices	gaming	board,dice,game,random,tabletop
+Diff	development,files	compare,difference,math,minus,patch,plus,plus-minus
+Disc	devices,multimedia	album,cd,compilation,cover,dj,dvd,ep,format,music,platinum,playback,recording,rotate,rpm,sleeve,songs,spin,vinyl
+Disc2	$extends:disc	$extends:disc,record
+Disc3	$extends:disc	$extends:disc,record
+DiscAlbum	$extends:disc	$extends:disc
+Divide	development,math	/,calculate,code,division,math,operator,÷
+Dna	medical,science	chromosome,gene,gmo,helix,heredity,nucleic acid
+DnaOff	$extends:dna,food-beverage	$extends:dna,$group:off,gmo free
+Dock	layout	$group:position-bottom,applications,desktop,home,launch,line,macos,menu bar,osx
+Dog	animals	animal,canine,hound,pet,puppy
+DollarSign	finance	$group:currency
+Donut	food-beverage	dessert,doughnut,fast food,hollow,junk food,ring,snack,sprinkles,sugar,sweet,topping,treat
+DoorClosed	home,security,travel	egress,emergency exit,entrance,entry,exit,gate,gateway,ingress
+DoorOpen	home,security,travel	egress,emergency exit,entrance,entry,exit,gate,gateway,ingress,quit
+Dot	shapes,text	.,center,characters,end,final,finish,font,full stop,interpoint,interpunct,middot,period,punctuation,step,type,typography
+Download	arrows,files	export,import,install,installation,pull,save
+DraftingCompass	design,math,tools	arc,calculate,circumference,curve,diameter,draw,geometry,measure,radius,sketch,trigonometry
+Drama	multimedia	drama,entertainment,masks,show,theater,theatre
+Dribbble		
+Drill	devices,home,tools	bit,build,construction,diy,head,hole,power,toolbox
+Droplet	weather	bead,damp,fluid,globule,liquid,moisture,water,weather,wet
+Droplets	weather	bead,damp,fluid,globule,liquid,moisture,water,weather,wet
+Drum	multimedia	audio,backing track,band,bang,bass,beat,concert,drummer,instrument,kit,loud,march,music,noise,performance,play,sound,sticks
+Drumstick	food-beverage	chicken,food,meat
+Dumbbell	navigation,sports	barbell,gym,weight,workout
+Ear	accessibility,medical	accessibility,audio,hearing,noise
+EarOff	$extends:ear	$extends:ear,$group:off,deafness,hard of hearing,hearing loss,silence
+Earth	navigation	browser,globe,http,https,language,translate,website,world,www
+EarthLock	connectivity,security	$extends:earth,$group:lock,connection,encryption,network,vpn
+Eclipse	accessibility,design,science	accessibility,blend,brightness,color,contrast,crescent moon,css,dark,day,display,earth,light,lunar,mode,night,planet,shade,solar,space,styles,sun,switch,toggle
+Egg	animals,food-beverage	bird,breakfast,brunch,chicken,easter,hard,hatch,incubate,morning,nest,shell,soft boiled
+EggFried	food-beverage	breakfast,food
+EggOff	food-beverage	$extends:egg,$group:off,bad egg,egg free,hatched,vegan
+Ellipsis	development,layout	...,3 dots,code,coding,dots,et cetera,etc,extra,further,loader,loading,meatball menu,menu,more,operator,options,overflow,pending,progress,rest,spread,three dots,throbber,…
+EllipsisVertical	layout	...,3 dots,dots,extra,further,kebab,kebab menu,menu,more,options,overflow,spread,three dots,…
+Equal	development,math	=,assignment,calculate,code,math,operator
+EqualNot	$extends:equal	$extends:equal,off,≠
+Eraser	design,text	$group:minus,drawing,pencil,trash,undo
+EthernetPort	connectivity,devices	cable,communication,connection,connector,console,controller,data,hub,input,interface,internet,lan,modem,network,networking,online,output,plug,port,router,signal,slot,socket,switch,web
+Euro	finance	$group:currency
+Expand	arrows,layout	contract,fullscreen,maximize,minimize,scale
+ExternalLink	arrows,social,text	open,outbound,redirect,share
+Eye	accessibility,design,photography,security	display,expose,eyes,preview,read,reveal,see,show,view,visibility,visible,vision,watch
+EyeOff	$extends:eye	$extends:eye,$group:off,conceal,mask
+Facebook		
+Factory	buildings,navigation	building,business,energy,industry,manufacture,sector
+Fan	home	air,blower,cooler,ventilation,ventilator
+FastForward	arrows,multimedia	music
+Feather	animals,nature,text	author,bird,lightweight,literature,manuscript,plumage,plume,poetry,quill,soft,writing
+Fence	buildings,home	diy,garden,materials,panels,picket,property,suburban,territory,woodwork
+FerrisWheel	navigation,travel	amusement park,attraction,big wheel,daisy wheel,entertainment,funfair,observation,theme park
+Figma		
+File	files	document
+FileArchive	$extends:file	$extends:file,archive,package,zip
+FileAudio	$extends:file,multimedia	$extends:file,$extends:headphones,headphones
+FileAudio2	$extends:file,multimedia	$extends:file,$extends:headphones,headphones
+FileAxis3d	$extends:file,design	$extends:axis-3d,$extends:file,3d,axis
+FileBadge	$extends:file	$extends:file,achievement,award,badge,prize,rosette,winner
+FileBadge2	$extends:file	$extends:file,achievement,award,badge,prize,rosette,winner
+FileBox	$extends:file,design,development	$extends:file,3d,ar,asset,augmented reality,blueprint,box,cad,cube,design,draft,geometry,mesh,model,object,package,page,scene,sheet
+FileChartColumn	$extends:chart-column,$extends:file	$extends:chart-column,$extends:file
+FileChartColumnIncreasing	$extends:file-chart-column	$extends:file-chart-column,trending up
+FileChartLine	$extends:chart-line,$extends:file	$extends:chart-line,$extends:file
+FileChartPie	$extends:chart-pie,$extends:file	$extends:chart-pie,$extends:file
+FileCheck	$extends:file	$extends:file,$group:check
+FileCheck2	$extends:file-check	$extends:file-check
+FileClock	$extends:file,time	$extends:file,$group:clock,log
+FileCode	$extends:file,development	$extends:file,$group:code,gist,html,plist,property list,script,xml
+FileCode2	$extends:file-code	$extends:code,$extends:file-code
+FileCog	$extends:file	$extends:file,$group:cog,executable
+FileDiff	$extends:file,development	$extends:file,diff,patch
+FileDigit	$extends:file,development	$extends:file,$group:digit
+FileDown	$extends:file	$extends:download,$extends:file,$group:direction-down,download
+FileHeart	$extends:file	$extends:file,$group:heart,bookmark,quick link
+FileImage	$extends:file,photography	$extends:file,graphics,image,photo,picture
+FileInput	$extends:file	$extends:file
+FileJson	$extends:file,development	$extends:braces,$extends:file
+FileJson2	$extends:file-braces	$extends:file-braces
+FileKey	$extends:file,security	$extends:file,$group:key
+FileKey2	$extends:file,security	$extends:file,$group:key
+FileLock	$extends:file,security	$extends:file,$group:lock
+FileLock2	$extends:file,security	$extends:file,$group:lock
+FileMinus	$extends:file	$extends:file,$group:minus,discard
+FileMinus2	$extends:file-minus	$extends:file-minus
+FileMusic	$extends:file,multimedia	$extends:file,audio,chord,digital,keyboard,keys,midi,noise,notes,octave,piano,playback,recording,sound,track
+FileOutput	$extends:file	$extends:file
+FilePen	$extends:file	$extends:file,$group:pen,signature
+FilePenLine	$extends:file-pen	$extends:file-pen,$group:pen
+FilePlus	$extends:file	$extends:file,$group:plus
+FilePlus2	$extends:file-plus	$extends:file-plus
+FileQuestion	$extends:file	$extends:file,$group:question-mark,404,not found,page not found,readme
+FileScan	$extends:file	$extends:file,$extends:scan,code,scan
+FileSearch	$extends:file	$extends:file,$group:search,browser,lost
+FileSearch2	$extends:file-search	$extends:file-search,$group:search
+FileSliders	$extends:file,development	$extends:file,$extends:sliders-horizontal,admin,cogged,configuration,edit,executable,gear,machinery,mechanical,preferences,system
+FileSpreadsheet	$extends:file	$extends:file,csv,excel,sheet,spreadsheet,table,xls,xlsx
+FileStack	$extends:file,development	$extends:file,$extends:files,history,revisions,version control,versions
+FileSymlink	$extends:file	$extends:file,link,symbolic,symlink
+FileTerminal	$extends:file,development	$extends:file,bash,executable,script,terminal
+FileText	$extends:file,text	$extends:file,data,doc,docs,docx,pdf,txt,word
+FileType	$extends:file,text	$extends:file,$group:letter,type
+FileType2	$extends:file-type	$extends:file-type
+FileUp	$extends:file	$extends:file,$group:direction-up,export,import,upload
+FileVideo	$extends:file	$extends:file,$group:play,film,movie,video
+FileVideo2	$extends:file,multimedia	$extends:file,$extends:video,video
+FileVolume	$extends:file,multimedia	$extends:file,$extends:volume,audio,volume
+FileVolume2	$extends:file,multimedia	$extends:file,audio,music,volume
+FileWarning	$extends:file,notifications	$extends:file,$group:exclamation-mark,hidden,protected
+FileX	$extends:file	$extends:file,$group:x,404,lost,not found,page not found
+FileX2	$extends:file-x	$extends:file-x,$group:x
+Files	files	copy,documents,multiple
+Film	multimedia,photography	camera,cinema,entertainment,movie,reel,video
+Filter	layout	filter,hopper
+FilterX	$extends:funnel	$extends:funnel,$group:x
+Fingerprint	account,security	2fa,authentication,biometric,identity,security
+FireExtinguisher	home,tools	amenities,brigade,compressed,cylinder,department,emergency,equipment,firefighter,fireman,flames,foam,hose,safety,smoke,spray,station,suppress,tank,water
+Fish	animals,food-beverage	course,dish,marine,meal,pet,restaurant,sea,seafood
+FishOff	$extends:fish	$extends:fish,$group:off,allergy,animal,diet,food,intolerance
+FishSymbol	$extends:fish	$extends:fish
+Flag	account,social	attention,banner,goal,marker,milestone,notice,notification,report,signal,warning
+FlagOff	$extends:flag	$extends:flag,$group:off,unflag,unmark
+FlagTriangleLeft	development,navigation	$group:direction-left,marker,pin,report,timeline
+FlagTriangleRight	development,navigation	$group:direction-right,marker,pin,report,timeline
+Flame	gaming,social,weather	brigade,burn,burning,department,ember,embers,emergency,fire,firefighter,fireman,glow,heat,ignite,light,lit,passion,smoke,spark,station
+FlameKindling	nature	campfire,camping,lit,outdoors,sticks,twigs,warmth,wilderness,wood
+Flashlight	devices,photography	beam,bright,emergency,light,safety,tool,torch
+FlashlightOff	$extends:flashlight	$extends:flashlight,$group:off
+FlaskConical	gaming,science	beaker,chemistry,erlenmeyer,experiment,lab,test
+FlaskConicalOff	$extends:flask-conical	$extends:flask-conical,$group:off,non toxic
+FlaskRound	gaming,science	beaker,chemistry,experiment,lab,test
+FlipHorizontal	design,photography	$group:dashed,alignment,mirror,reflect
+FlipHorizontal2	design,photography	$group:dashed,alignment,mirror,reflect
+FlipVertical	design,photography	$group:dashed,alignment,mirror,reflect
+FlipVertical2	design,photography	$group:dashed,alignment,mirror,reflect
+Flower	nature,seasons,sustainability	nature,plant,spring,sustainability
+Flower2	nature,seasons,sustainability	$extends:flower
+Focus	photography	camera,dashed,lens,photo
+FoldHorizontal	arrows,layout	arrow,collapse,dashed,fold,vertical
+FoldVertical	arrows,layout	arrow,collapse,dashed,fold,vertical
+Folder	files	directory
+FolderArchive	$extends:folder	$extends:folder,archive,package,zip
+FolderCheck	$extends:folder	$extends:folder,$group:check
+FolderClock	$extends:folder,time	$extends:folder,$group:clock
+FolderClosed	$extends:folder	$extends:folder,closed
+FolderCode	$extends:folder,development	$extends:folder,$group:code,develop,software
+FolderCog	$extends:folder	$extends:folder,$group:cog,control
+FolderDot	$extends:folder,development	$extends:folder,$group:dot,admin,cogged,configuration,controls,edit,gear,machinery,mechanical,pinned,preferences,project,root,settings,system
+FolderDown	$extends:folder	$extends:folder,$group:direction-down,download,export,import
+FolderGit	$extends:folder,development	$extends:folder,git,project,repo,root
+FolderGit2	$extends:folder-git	$extends:folder-git
+FolderHeart	$extends:folder	$extends:folder,$group:heart,bookmark,quick link
+FolderInput	$extends:folder	$extends:folder,export,import
+FolderKanban	$extends:folder,charts,development	$extends:folder,agile,board,code,coding,intentions,issues,manage,overview,plan,productivity,project,projects,roadmap,root,tickets,work
+FolderKey	$extends:folder,security	$extends:folder,$group:key
+FolderLock	$extends:folder,security	$extends:folder,$group:lock
+FolderMinus	$extends:folder	$extends:folder,$group:minus
+FolderOpen	$extends:folder	$extends:folder
+FolderOpenDot	$extends:folder-open,development	$extends:folder-open,$group:dot,pinned,project,root
+FolderOutput	$extends:folder	$extends:folder,export,import
+FolderPen	$extends:folder	$extends:folder,$group:pen
+FolderPlus	$extends:folder	$extends:folder,$group:plus
+FolderRoot	$extends:folder,development	$extends:folder,git,project,repo,root
+FolderSearch	$extends:folder	$extends:folder,$group:search,browser,lost
+FolderSearch2	$extends:folder-search	$extends:folder-search
+FolderSymlink	$extends:folder	$extends:folder,link,symbolic,symlink
+FolderSync	$extends:folder	$extends:folder,$group:sync,backup,transfer
+FolderTree	$extends:folder	$extends:folder,browser,tree
+FolderUp	$extends:folder	$extends:folder,$group:direction-up,export,import,upload
+FolderX	$extends:folder	$extends:folder,$group:x
+Folders	files	copy,directories,multiple
+Footprints	navigation	feet,foot,shoe,steps,trail,walking
+Forklift	transportation	equipment,heavy-duty,industrial,lifting,logistics,machinery,moving,storage,transport,vehicle,warehouse
+Forward	mail	email,redirect,send,share
+Frame	design,photography	design,logo,tool
+Framer		
+Frown	emoji	$group:emoticon,bad,concern,disappointment,sadness
+Fuel	navigation,transportation	filling-station,gas,petrol,tank
+Fullscreen	layout,multimedia,photography	camera,expand,focus,image,lens,preview,zoom
+GalleryHorizontal	layout,multimedia,photography	album,carousel,images,pictures,portfolio,scroll,swipe
+GalleryHorizontalEnd	$extends:gallery-horizontal,files	$extends:gallery-horizontal,$group:position-right,backup,history,time machine,versions
+GalleryThumbnails	layout,multimedia,photography	album,carousel,images,pictures,portfolio,preview
+GalleryVertical	layout,multimedia,photography	album,carousel,images,pictures,portfolio,scroll,swipe
+GalleryVerticalEnd	$extends:gallery-vertical,files	$extends:gallery-vertical,$group:position-bottom,backup,history,time machine,versions
+Gamepad	devices,gaming	console
+Gamepad2	$extends:gamepad	$extends:gamepad
+Gauge	charts,science,transportation	dashboard,dial,level,measure,meter,pressure,speed
+Gavel	tools	authority,court,decision,hammer,hands,judgment,justice,law,legal,mallet,penalty
+Gem	finance,gaming	crystal,diamond,exclusive,gift,jewellery,marriage,premium,present,price,pro,proposal,ring,ruby,rubygems,special,vip,wedding
+Ghost	gaming	apparition,dead,empty,entity,halloween,haunt,haunted,hidden,invisible,obsolete,outdated,pac-man,phantom,shade,shadow,silhouette,specter,spirit,spooky,wraith
+Gift	gaming,shopping	birthday,box,party,present
+GitBranch	development	code,repository,vcs,version control
+GitBranchPlus	$extends:git-branch	$extends:git-branch,$group:plus
+GitCommitHorizontal	development,navigation	code,station,stop,version control,waypoint
+GitCommitVertical	development,navigation	code,station,stop,version control,waypoint
+GitCompare	development	code,diff,version control
+GitCompareArrows	$extends:git-compare	$extends:git-compare
+GitFork	development	code,version control
+GitGraph	development	$group:graph,code,commit graph,commits,gitlens,version control
+GitMerge	development	ci/cd,cicd,code,version control
+GitPullRequest	development	code,open,version control
+GitPullRequestArrow	$extends:git-pull-request	$extends:git-pull-request
+GitPullRequestClosed	$extends:git-pull-request	$extends:git-pull-request,cancelled,closed,rejected,x
+GitPullRequestCreate	$extends:git-pull-request	$extends:git-pull-request,$group:plus
+GitPullRequestCreateArrow	$extends:git-pull-request-create	$extends:git-pull-request-create
+GitPullRequestDraft	$extends:git-pull-request	$extends:git-pull-request,dashed,draft
+Github		
+Gitlab		
+GlassWater	food-beverage	beverage,drink,glass,water
+Glasses	accessibility	glasses,spectacles
+Globe	connectivity,navigation	browser,connection,country,coverage,earth,global,globe,http,https,internet,language,location,network,planet,publish,translate,website,world,www
+GlobeLock	connectivity,security	$extends:globe,$group:lock,encryption,vpn
+Goal	gaming	bullseye,flag,objective,okr,outcome,result
+Grab	cursors,design,layout	hand
+GraduationCap	buildings	academic,bachelor's,ceremony,diploma,doctorate,education,expertise,hat,learn,master's,mortarboard,school,skill,skills,study,university
+Grape	food-beverage	food,fruit,wine
+Grid2x2	design,layout,text	acre,blocks,columns,distance,geometry,height,land,measure,plot,rows,size,skylight,square meter,surface area,table,width,window
+Grid2x2Check	layout,text	$extends:grid-2x2,$group:check,data
+Grid2x2X	layout,text	$extends:grid-2x2,$group:x,data
+Grid3x3	design,layout,text	columns,rows,table
+Grip	layout	dots,drag,grab,handle,move
+GripHorizontal	$extends:grip	$extends:grip
+GripVertical	$extends:grip	$extends:grip
+Group	design,layout	cluster,collection,cubes,dashed,gather,packages,parts,units
+Guitar	multimedia	acoustic,audio,band,concert,country,instrument,lead,loud,music,noise,performance,play,riff,rock,sound,strings
+Ham	food-beverage	bone,cured,food,gammon,hock,knuckle,meat,pig,pork
+Hammer	home,tools	build,construction,diy,mallet,nails,toolbox
+Hand	accessibility,cursors	bye,goodbye,grab,greeting,hello,hi,mouse,move,wave,welcome
+HandCoins	finance	allowance,banking,borrow,debt,finance,handout,lending,loan,money,mortgage,offers,payment,payroll,pennies,pocket money,received,salary,savings,wage
+HandHeart	social	$group:heart,emotion
+HandHelping	emoji,social	agreement,begging,charity,help,proposal,terms
+HandMetal	emoji,multimedia	rock
+HandPlatter	food-beverage,people	course,dining,dinner,luxury,meal,restaurant,served,table service,waiter,waitress
+Handshake	finance,social	agreement,assistance,business,cooperation,deal,friendship,partnership,terms,union
+HardDrive	development,devices,files	backup,computer,data,disk,hard disk,hardware,media,memory,server,ssd,storage
+HardDriveDownload	$extends:hard-drive	$extends:download,$extends:hard-drive
+HardDriveUpload	$extends:hard-drive	$extends:hard-drive,$extends:upload,save
+HardHat	tools	construction,helmet,safety
+Hash	social,text	hashtag,number,pound
+Haze	weather	fog,mist
+HdmiPort	connectivity,devices,multimedia	audio,av,connector,console,controller,data,input,interface,output,plug,signal,slot,socket,video,visual
+Heading	letters-digits,text	$group:letter,chemistry,heading,height,hospital,hour,html,hydrogen,markdown,markup,measurement,time,uppercase
+Heading1	$extends:letter-h	$extends:letter-h,$group:digit,h1
+Heading2	$extends:letter-h	$extends:letter-h,$group:digit,h2
+Heading3	$extends:letter-h	$extends:letter-h,$group:digit,h3
+Heading4	$extends:letter-h	$extends:letter-h,$group:digit,h4
+Heading5	$extends:letter-h	$extends:letter-h,$group:digit,h5
+Heading6	$extends:letter-h	$extends:letter-h,$group:digit,h6
+Headphones	devices,multimedia	audio,music,sound
+Headset	communication,devices,gaming,multimedia	audio,call,center,customer service,customer support,gaming,headphones,headset,helpdesk,music,phone,sound,telephone,video,voip
+Heart	emoji,gaming,medical,shapes,social	$group:heart,cards,emotion,playing,suit
+HeartCrack	emoji	emotion,heartbreak,sadness
+HeartHandshake	emoji,social	agreement,charity,deal,emotion,handshake,help,insurance,terms,together
+HeartOff	social	$group:off,dislike,emotion,hate,unlike
+HeartPulse	medical	blood pressure,cardiac,diastole,health,heartbeat,medical,pulse,systole
+Heater	devices,home,travel	amenities,comfort,electric,electronics,fire,heating,stove,warmth
+Hexagon	development,shapes	logo,node.js,shape
+Highlighter	design,text	mark,text
+History	arrows,time	$extends:rotate-ccw,$group:clock,ccw,changelog,release notes,time machine,timeline,version
+Hop	food-beverage	beer,brewery,drink
+HopOff	$extends:hop	$extends:hop,$group:off,allergy,diet,hop free,intolerance
+Hospital	buildings,medical,navigation	building,clinic,doctor,emergency room,healthcare,hospice,infirmary,medical,patient,sanatorium,sick,vet,ward
+Hotel	buildings,navigation,travel	building,hostel,inn,motel
+Hourglass	gaming,time	$group:clock,sandglass
+House	buildings,home,navigation	architecture,building,home,homepage,living,residence
+HousePlug	buildings,home,sustainability	$extends:house,autarky,energy
+HousePlus	buildings,medical	$extends:house,$group:plus,medical
+IceCreamBowl	food-beverage	course,dessert,dish,food,gelato,meal,restaurant
+IceCreamCone	food-beverage	food,gelato
+IdCard	account,security	authentication,badge,card,identity,secure
+Image	files,multimedia,photography,text	photo,picture
+ImageDown	$extends:image	$extends:image,$group:direction-down,download,export,save
+ImageMinus	files,multimedia,photography	$extends:image,$group:minus
+ImageOff	files,multimedia,photography	$extends:image,$group:off
+ImagePlay	$extends:image	$extends:image,$group:play,gif
+ImagePlus	files,multimedia,photography	$extends:image,$group:plus
+ImageUp	$extends:image	$extends:image,$group:direction-up,import,upload
+Images	files,multimedia,photography,text	album,collection,copy,gallery,multiple,photo,picture,showcase,slideshow
+Import	arrows,files	save
+Inbox	mail	email
+IndentDecrease	$extends:list,development	tab,text
+IndentIncrease	$extends:list,development	tab,text
+IndianRupee	finance	$group:currency
+Infinity	math,multimedia	ci/cd,cicd,devops,forever,loop,math,pipeline,unlimited
+Info	accessibility,notifications	$group:letter,about,advice,clue,details,help,hint,indicator,information,knowledge,notice,status,support,tooltip
+InspectionPanel	tools	access,cover,materials,metal,screws,tile
+Instagram		
+Italic	letters-digits,text	$group:letter,format,oblique
+IterationCcw	arrows,development	arrow,right
+IterationCw	arrows,development	arrow,left
+JapaneseYen	finance	$group:currency
+Joystick	devices,gaming	console,control stick,game
+Kanban	charts,development	agile,board,code,coding,intentions,issues,manage,overview,plan,productivity,projects,roadmap,tickets,work
+Key	account,security	$group:key,fob,login
+KeyRound	$extends:key	$extends:key
+KeySquare	$extends:key	$extends:key,car key
+Keyboard	development,devices,text	layout,mouse,settings,spell
+KeyboardMusic	devices,multimedia	audio,chord,concert,controller,digital,electric,instrument,keys,midi,music,noise,notes,octave,performance,pianist,piano,play,producer,production,signal,sound,studio
+KeyboardOff	$extends:keyboard	$extends:keyboard,$group:off,unkeys
+Lamp	home	furniture,home,household,lighting
+LampCeiling	$extends:lamp	$extends:lamp
+LampDesk	$extends:lamp	$extends:lamp,desk,office
+LampFloor	$extends:lamp	$extends:lamp,floor
+LampWallDown	$extends:lamp	$extends:lamp,$group:direction-down,wall
+LampWallUp	$extends:lamp	$extends:lamp,$group:direction-up,wall
+LandPlot	math,navigation	acres,allotment,area,distance,flag,golf course,hole,isometric,measure,parcel,plane,property,square metres,surface
+Landmark	buildings,finance,navigation	ancient,architecture,art gallery,bank,building,capitol,classical,columns,doric,finance,government,hall,historic,history,institute,institution,lending,library,loan,money,monument,museum,pediment,pillars,portico,site,structure,temple
+Languages	text	$group:letter,translate
+Laptop	devices	computer,remote,screen
+LaptopMinimal	$extends:laptop	$extends:laptop
+Lasso	cursors,design	cursor,select
+LassoSelect	$extends:lasso	$extends:lasso
+Laugh	emoji	$group:emoticon,broad smile,funny,good,good cheer,happiness,happy,humour,laugh,pleasure
+Layers	design,layout	copies,copy,pages,paperwork,pile,sheets,stack
+Layers2	$extends:layers	$extends:layers,double,duplicate,shortcuts
+Layers3	design,layout	copies,copy,pages,paperwork,pile,sheets,stack
+LayoutDashboard	design,layout	brick,masonry
+LayoutGrid	design,layout	app,home,start
+LayoutList	design,layout,text	image,items,pending,photo,tasks,todo
+LayoutPanelLeft	design,layout	$group:position-left,app,grid,home,start
+LayoutPanelTop	layout	$group:position-top,grid,section,structure,template,webpage,window
+LayoutTemplate	layout	block,section,webpage,window
+Leaf	nature,seasons,sustainability	autumn,energy,nature,plant,sustainability
+LeafyGreen	food-beverage,sustainability	bok choy,cabbage,chard,lettuce,salad,vegetable
+Lectern	communication	podium,pulpit,stand
+LetterText	text	$group:letter,drop cap,font size,format,letter
+Library	multimedia,text	academy,albums,authors,books,collection,college,education,fiction,high school,information,knowledge,knowledge base,learning,music,novels,package,reading,records,research,stories,study,university,vinyl,wiki,written
+LibraryBig	$extends:library	$extends:library
+LifeBuoy	accessibility,medical	customer service,customer support,donut,help,helpdesk,inflatable,life belt,lifesaver,preserver,raft,rescue,ring,ship,wheel
+Ligature	text	$group:letter,alternates,alternatives
+Lightbulb	home,photography	bright,idea,lights,suggest,suggestion
+LightbulbOff	$extends:lightbulb	$extends:lightbulb,$group:off
+Link	text	chain,http,https,url,website,www
+Link2	$extends:link	$extends:link
+Link2Off	$extends:link-2	$extends:link-2,$group:off,unchain
+Linkedin		
+List	text	options
+ListCheck	$extends:list	$group:check,bom,checklist,list
+ListChecks	$extends:list	$group:check,checklist,items,pending
+ListCollapse	$extends:list	accordion,collapse,details,disclosure,expand,fold,hide,items,less,more,show,toggle,unfold
+ListEnd	$extends:list,multimedia	bottom,end,playlist,queue
+ListFilter	$extends:list,layout	$extends:list
+ListMinus	$extends:list,multimedia	$group:minus,playlist,song,unqueue
+ListMusic	multimedia	audio,music,playback,playlist,queue
+ListOrdered	$extends:list	$group:digit,order,queue
+ListPlus	$extends:list,multimedia	$group:plus,playlist,song,track
+ListRestart	$extends:list,multimedia	playlist,refresh,reload,replay,reset
+ListStart	$extends:list,multimedia	next,playlist,queue,start,top
+ListTodo	$extends:list	check,checklist,complete,done,items,pending,tasks,tick,todo
+ListTree	$extends:list,files,layout	browser,tree
+ListVideo	multimedia	playback,playlist,video
+ListX	$extends:list,multimedia	$group:x,playlist,subtract,unqueue
+Loader	cursors	busy,loading,progress,spinner,spinning,throbber,wait
+LoaderCircle	cursors	$extends:loader,circle
+LoaderPinwheel	cursors	$extends:loader,beach ball,freeze,frozen
+Locate	navigation	cross,gps,location,map
+LocateFixed	$extends:locate	$extends:locate
+LocateOff	$extends:locate	$extends:locate,$group:off
+Lock	security	$group:lock,admin
+LockKeyhole	$extends:lock	$extends:lock
+LockKeyholeOpen	$extends:lock-keyhole	$extends:lock-keyhole
+LockOpen	$extends:lock	$extends:lock
+LogIn	account,arrows	arrow,auth,enter,sign in
+LogOut	account,arrows	arrow,auth,exit,quit,sign out
+Logs	development,text	list,logs,menu,options,order,queue,tasks
+Lollipop	food-beverage	candy,dessert,food,lolly,spiral,sugar,sweet
+Luggage	transportation,travel	baggage,luggage,suitcase,travel
+Magnet	design,science	horseshoe,lock,science,snap
+Mail	mail	email,letter,message,unread
+MailCheck	mail	$extends:mail,$group:check,delivered,read,subscribe
+MailMinus	mail	$extends:mail,$group:minus
+MailOpen	mail	$extends:mail,read
+MailPlus	mail	$extends:mail,$group:plus,compose,invitation,invite
+MailQuestion	mail	$extends:mail,$group:question-mark,delivery,undelivered
+MailSearch	mail	$extends:mail,$group:search
+MailWarning	mail,notifications	$extends:mail,$group:exclamation-mark,delivery error
+MailX	mail	$extends:mail,$group:x
+Mailbox	mail	emails,letters,mailing list,messages,newsletter
+Mails	mail	copy,emails,letters,mailing list,messages,multiple,newsletter
+Map	navigation,travel	location,navigation,travel
+MapPin	navigation,travel	drop,location,marker,waypoint
+MapPinCheck	$extends:map-pin	$extends:map-pin,$group:check,added
+MapPinCheckInside	$extends:map-pin-check	$extends:map-pin-check
+MapPinHouse	$extends:map-pin	$extends:map-pin,address,architecture,building,destination,geolocation,home,landmark,living,navigation,place,poi,property,real estate,residence
+MapPinMinus	$extends:map-pin	$extends:map-pin,$group:minus
+MapPinMinusInside	$extends:map-pin-minus	$extends:map-pin-minus
+MapPinOff	navigation,travel	$extends:map-pin,$group:off,remove
+MapPinPlus	$extends:map-pin	$extends:map-pin,$group:plus
+MapPinPlusInside	$extends:map-pin-plus	$extends:map-pin-plus
+MapPinX	$extends:map-pin	$extends:map-pin,$group:x
+MapPinXInside	$extends:map-pin-x	$extends:map-pin-x
+MapPinned	navigation,travel	drop,location,marker,waypoint
+Martini	food-beverage	alcohol,bar,beverage,celebration,cocktail,drink,glass,mixer,party,spirit
+Maximize	design,layout	dashed,expand,fullscreen
+Maximize2	$extends:maximize,arrows	$extends:maximize,arrows
+Medal	gaming,sports	achievement,award,prize,sports,trophy,winner
+Megaphone	communication,multimedia,notifications	advertisement,alert,announcement,attention,loudspeaker,megaphone,notification
+MegaphoneOff	$extends:megaphone	$extends:megaphone,$group:off,silent
+Meh	emoji	$group:emoticon,blank stare,concern,deadpan,irritation,meh,neutral,social masking
+MemoryStick	devices	capacity,chip,circuit,computer,gb,gigabytes,ram,random access,specs,technology
+Menu	layout	bars,hamburger,navigation,options
+Merge	arrows,development	combine,join,unite
+MessageCircle	communication,social	chat,comment,conversation,dialog,feedback,speech bubble
+MessageCircleCode	$extends:message-circle,development	$extends:message-circle,$group:code,code review
+MessageCircleDashed	$extends:message-circle	$extends:message-circle,$group:dashed,draft
+MessageCircleHeart	$extends:message-circle	$extends:message-circle,$group:heart,date,dating,interest,positive,valentine
+MessageCircleMore	$extends:message-circle	$extends:message-circle,...,ellipsis,et cetera,etc,responding,typing,writing,…
+MessageCircleOff	$extends:message-circle	$extends:message-circle,$group:off,$group:x,moderate,mute,silence
+MessageCirclePlus	$extends:message-circle	$extends:message-circle,$group:plus
+MessageCircleQuestion	$extends:message-circle	$extends:message-circle,$group:question-mark
+MessageCircleReply	$extends:message-circle	$extends:message-circle,reply,response
+MessageCircleWarning	$extends:message-circle,notifications	$extends:message-circle,$group:exclamation-mark,abuse,offense,protected,report
+MessageCircleX	$extends:message-circle	$extends:message-circle,$group:x,moderate,mute,silence
+MessageSquare	communication,social	chat,comment,conversation,dialog,feedback,speech bubble
+MessageSquareCode	$extends:message-square,development	$extends:message-square,$group:code,code review
+MessageSquareDashed	$extends:message-square	$extends:message-square,$group:dashed,draft
+MessageSquareDiff	$extends:message-square,development,files	$extends:message-square,add,code review,coding,difference,git,math,minus,patch,plus,plus-minus,version control
+MessageSquareDot	$extends:message-square,notifications	$extends:message-square,$group:dot,unresolved
+MessageSquareHeart	$extends:message-square	$extends:message-square,$group:heart,date,dating,interest,positive,valentine
+MessageSquareMore	$extends:message-square	$extends:message-square,...,ellipsis,et cetera,etc,responding,typing,writing,…
+MessageSquareOff	$extends:message-square	$extends:message-square,$group:off,$group:x,moderate,mute,silence
+MessageSquarePlus	$extends:message-square	$extends:message-square,$group:plus,suggest,suggestion
+MessageSquareQuote	$extends:message-square,text	$extends:message-square,blockquote,indent,quotation,reply,response
+MessageSquareReply	$extends:message-square	$extends:message-square,reply,response
+MessageSquareShare	$extends:message-square	$extends:message-square,forward,network
+MessageSquareText	$extends:message-square	$extends:message-square
+MessageSquareWarning	$extends:message-square,notifications	$extends:message-square,$group:exclamation-mark,abuse,offense,protected,report
+MessageSquareX	$extends:message-square	$extends:message-square,$group:x,moderate,mute,silence
+MessagesSquare	communication,social	chat,comment,conversation,copy,debate,dialog,discussion,feedback,interview,multiple,speech bubbles
+Mic	communication,devices,multimedia	listen,microphone,podcast,radio,record,sound
+MicOff	$extends:mic	$extends:mic,$group:off,mute
+MicVocal	devices,multimedia	$extends:mic,karaoke,lyrics,music,singing,voice
+Microchip	devices	chip,computer,cores,ghz,gigahertz,gpu,integrated circuit,memory,processor,ram,specs,technology
+Microscope	medical,science	education,imaging,medical,research,science
+Microwave	food-beverage,home	bake,cooker,oven,toaster oven
+Milestone	arrows,development,navigation	direction,east,forward,right,signpost,version control,waypoint
+Milk	food-beverage	beverage,bottle,diet,drink,lactose,water
+MilkOff	$extends:milk	$extends:milk,$group:off,allergy,intolerance,lactose free
+Minimize	design,layout	close,exit fullscreen,shrink
+Minimize2	$extends:minimize,arrows	$extends:minimize,arrows
+Minus	development,math,text	$group:minus,---,calculate,code,coding,decrease,decrement,divider,downgrade,horizontal rule,hr,html,line,markdown,markup,minimum,negative,operator,separator,toolbar
+Monitor	devices	computer,desktop,display,external display,screen,screen sharing,tv,virtual machine,vm
+MonitorCheck	$extends:monitor	$extends:monitor,$group:check,active,connected,running
+MonitorCog	$extends:monitor	$extends:monitor,$group:cog,computing,executable,network,system
+MonitorDot	$extends:monitor	$extends:monitor,$group:dot,running
+MonitorDown	$extends:monitor	$extends:monitor,$group:direction-down,cast,download,remote
+MonitorOff	$extends:monitor	$extends:monitor,$group:off,disconnected,offline,power
+MonitorPause	$extends:monitor,multimedia	$extends:monitor,$group:pause,boot,film,hibernate,movie,video
+MonitorPlay	$extends:monitor,multimedia	$extends:monitor,$group:play,boot,film,movie,video
+MonitorSmartphone	$extends:monitor	$extends:monitor,$extends:smartphone,cast,screens,sync
+MonitorSpeaker	$extends:monitor,connectivity	$extends:monitor,audio,cast,connect,presentation,sound,volume
+MonitorStop	$extends:monitor,multimedia	$extends:monitor,$group:stop,film,movie,shutdown,video
+MonitorUp	$extends:monitor	$extends:monitor,$group:direction-up,cast,connect,remote,upload
+MonitorX	$extends:monitor	$extends:monitor,$group:x,disconnected,error,failed,stop,suspend
+Moon	accessibility,weather	dark,night
+MoonStar	$extends:moon	$extends:moon,star
+Mountain	nature	climb,hike,rock
+MountainSnow	nature	alpine,climb,snow
+Mouse	devices	click,device,scroll
+MouseOff	$extends:mouse	$extends:mouse,$group:off
+MousePointer	cursors	click,select
+MousePointer2	$extends:mouse-pointer	$extends:mouse-pointer
+MousePointerBan	$extends:mouse-pointer	blocked,busy,freeze,frozen,loading,wait
+MousePointerClick	$extends:mouse-pointer	$extends:mouse-pointer
+Move	arrows,cursors	arrows
+Move3d	design	$extends:move,axis,coordinates,gizmo,transform,translate
+MoveDiagonal	$extends:move	arrow,double
+MoveDiagonal2	$extends:move-diagonal	$extends:move-diagonal
+MoveDown	arrows	$extends:move,$group:direction-down
+MoveDownLeft	$extends:move	$extends:move,$group:direction-down-left
+MoveDownRight	$extends:move	$extends:move,$group:direction-down-right
+MoveHorizontal	$extends:move	arrow,double
+MoveLeft	arrows	$extends:move,$group:direction-left,back
+MoveRight	arrows	$extends:move,$group:direction-right,trend flat
+MoveUp	arrows	$extends:move,$group:direction-up
+MoveUpLeft	$extends:move	$extends:move,$group:direction-up-left
+MoveUpRight	$extends:move	$extends:move,$group:direction-up-right
+MoveVertical	$extends:move	arrow,double
+Music	multimedia	audio,music,notes,quavers,sound
+Music2	multimedia	audio,music,note,quaver,sound
+Music3	multimedia	audio,crotchet,minim,music,note,quarter note,sound
+Music4	multimedia	audio,music,notes,semiquavers,sound
+Navigation	navigation	location,travel
+Navigation2	$extends:navigation	$extends:navigation
+Navigation2Off	$extends:navigation-2	$extends:navigation-2,$group:off
+NavigationOff	$extends:navigation	$extends:navigation,$group:off
+Network	connectivity,development	$group:graph,tree
+Newspaper	communication,multimedia	article,feed,headline,home,magazine,news
+Nfc	connectivity,devices,finance	contactless,near-field communication,payment
+Notebook	design,text	academy,band,closure,college,diary,elastic,high school,homework,journal,moleskine,notepad,notes,organiser,organizer,planner,reading,research,sketchbook,stationery,strap,student,study,university,writer,writing,written
+NotebookPen	text	$extends:notebook,$group:pen,eraser,noted,rubber
+NotebookTabs	account,communication,social	$extends:notebook,a-z,acquaintances,addresses,alphabetical,contacts,details,directory,family,friends,listing,networking,people,phone numbers
+NotebookText	text	$extends:notebook,docs,knowledge base,lines,opened,pages,paper,wiki,write
+NotepadText	text	academy,college,diary,high school,homework,journal,lines,notebook,notes,opened,organiser,organizer,pages,paper,planner,reading,research,sketchbook,stationery,student,study,university,write,writing,written
+NotepadTextDashed	$extends:notepad-text	$extends:notepad-text,$group:dashed,draft,template
+Nut	food-beverage	acorn,diet,food,hazelnut
+NutOff	$extends:nut	$extends:nut,$group:off,allergy,intolerance
+Octagon	shapes	shape,stop
+OctagonAlert	$extends:octagon,notifications	$group:exclamation-mark
+OctagonPause	$extends:octagon,multimedia	$group:pause,audio,music
+OctagonX	notifications	$group:x,alert,math,stop,warning
+Omega	letters-digits,math,science,text	$group:letter,angular frequency,astronomy,constellations,dynamical systems,education,electrical resistance,engineering,greek,mathematics,ohms,philosophy,physics,symbol
+Option	development	alt,button,key,keyboard,mac
+Orbit	science	moons,physics,planet,satellites,space
+Origami	animals,design	bird,paper
+Package	development,files	archive,box,container,delivery,inventory,logistics,module,order,packed,product,recipient,sealed,shipping,storage,tracking,undelivered,unopened,zip
+Package2	$extends:package	$extends:package
+PackageCheck	$extends:package	$extends:package,$group:check,delivered
+PackageMinus	$extends:package	$extends:package,$group:minus
+PackageOpen	$extends:package	box,container,delivered,opened,storage,unarchive,unpack,unzip
+PackagePlus	$extends:package	$extends:package,$group:plus,install,installation
+PackageSearch	$extends:package	$extends:package,$group:search,product process
+PackageX	development,files	$extends:package,$group:x
+PaintBucket	design,tools	bucket,color,colour,fill,paint
+PaintRoller	design,home,tools	brush,color,colour,decoration,diy
+Paintbrush	design,home,photography,text,tools	brush,color,colour,decoration,design,diy,paintbrush
+PaintbrushVertical	$extends:paintbrush	$extends:paintbrush
+Palette	design,photography	artist,colors,colours,paint,scheme,theme,watercolor,watercolour
+PanelBottom	layout	$group:position-bottom,dock,drawer
+PanelBottomClose	$extends:panel-bottom	$extends:panel-bottom,$group:direction-down,chevron,down,hide
+PanelBottomDashed	$extends:panel-bottom	$extends:panel-bottom,$group:dashed,bleed,guide,layout,margin,padding,reveal,show
+PanelBottomOpen	$extends:panel-bottom	$extends:panel-bottom,$group:direction-up,chevron,reveal,show,up
+PanelLeft	layout	$group:position-left,drawer,primary
+PanelLeftClose	$extends:panel-left	$extends:panel-left,$group:direction-left,<,chevron,hide
+PanelLeftDashed	$extends:panel-left	$extends:panel-left,$group:dashed,bleed,guide,layout,margin,padding,reveal,show,sidebar
+PanelLeftOpen	$extends:panel-left	$extends:panel-left,$group:direction-right,>,chevron,reveal,right,show
+PanelRight	layout	$group:position-right,drawer,secondary,sidebar
+PanelRightClose	$extends:panel-right	$extends:panel-right,$group:direction-right,>,chevron,hide
+PanelRightDashed	$extends:panel-right	$extends:panel-right,$group:dashed,bleed,guide,layout,margin,padding,reveal,show
+PanelRightOpen	$extends:panel-right	$extends:panel-right,$group:direction-left,<,chevron,left,reveal,show
+PanelTop	layout	$group:position-top,browser,drawer,webpage
+PanelTopClose	layout	$extends:panel-top,$group:direction-up,chevron,hide,menu bar,up
+PanelTopDashed	layout	$extends:panel-top,$group:dashed,bleed,guide,layout,margin,menu bar,padding,reveal,show
+PanelTopOpen	layout	$extends:panel-top,$group:direction-down,chevron,down,menu bar,reveal,show
+PanelsLeftBottom	layout	$group:position-bottom,$group:position-left,drawers,primary,sidebar
+PanelsRightBottom	layout	$group:position-bottom,$group:position-right,drawers,secondary,sidebar
+PanelsTopLeft	design,development,layout	$group:position-left,$group:position-top,drawers,menu bar,overview,primary,projects,sidebar,webpage,window
+Paperclip	files,mail	attachment,file
+Parentheses	development,math	(,),args,arguments,brackets,call,code,formula,function,input,math,parameters,parens,parenthesis,token
+ParkingMeter	navigation,transportation	car park,driving,pavement,pay,sidewalk
+PartyPopper	emoji	celebration,confetti,congratulations,emoji,excitement,excites,exciting,party,tada,welcome,🎉,🎊
+Pause	multimedia	$group:pause,music
+PawPrint	animals	bear,cat,dog,domesticated,pets,veterinarian,vets
+PcCase	devices,gaming	chassis,computer,gaming,hardware,personal computer,setup,tower,workstation
+Pen	design,text,tools	$group:pen,artist,biro,felt tip,ink,marker,stationery
+PenLine	$extends:pen	$extends:pen
+PenOff	$extends:pen	$extends:pen,$group:off,frozen,locked,non-editable,read-only,unmodifiable
+PenTool	cursors,design	drawing,path,vector
+Pencil	cursors,design,text,tools	$group:pen,artist,rubber,stationery
+PencilLine	design,text,tools	$extends:pencil,biro,felt tip,ink,marker
+PencilOff	$extends:pencil	$extends:pencil,$group:off,frozen,locked,non-editable,read-only,unmodifiable
+PencilRuler	design,layout,tools	$extends:pencil,breadth,centimeters,cm,depth,dimensions,extent,feet,foot,height,inches,length,measurements,metre,millimeters,mm,size,units,width
+Pentagon	shapes	shape
+Percent	development,finance,math,shopping	$group:percent,modulo,modulus,remainder
+PersonStanding	accessibility,people	accessibility,human,people,stick figure
+PhilippinePeso	finance	$group:currency,peso,php
+Phone	communication,connectivity,devices	call
+PhoneCall	communication,connectivity,devices	ring
+PhoneForwarded	communication,connectivity,devices	$extends:phone
+PhoneIncoming	communication,connectivity,devices	$extends:phone
+PhoneMissed	communication,connectivity,devices	$extends:phone
+PhoneOff	communication,connectivity,devices	$extends:phone,$group:off,mute
+PhoneOutgoing	communication,connectivity,devices	$extends:phone
+Pi	development,letters-digits,math	$group:letter,code,coding,constant,formula,geometry,programming,symbol,trigonometry
+Piano	devices,multimedia	acoustic,audio,chord,concert,instrument,keys,music,noise,notes,octave,performance,pianist,play,sound
+Pickaxe	gaming,tools	advancement,building,construction,crafting,creation,extraction,labor,land worker,mine,mining,progress
+PictureInPicture	multimedia	always on top,display,inset,multitask,play,pop out,video,window
+PictureInPicture2	$extends:picture-in-picture	$extends:picture-in-picture
+PiggyBank	finance	budget,money,savings
+Pilcrow	text	blind,mark,paragraph,paraph,prose,symbol,text,type,typography
+PilcrowLeft	$extends:pilcrow	$extends:pilcrow,$group:direction-left
+PilcrowRight	$extends:pilcrow	$extends:pilcrow,$group:direction-right
+Pill	medical	drug,illness,medication,medicine,pharmacy,prescription,sick,tablet
+PillBottle	$extends:pill	$extends:pill,capsule,container,healthcare,jar,pharmaceutical,supplement,vitamin
+Pin	navigation	fix,lock,map,save
+PinOff	navigation	$extends:pin,$group:off,remove,unfix,unlock,unpin,unsave
+Pipette	design,science	chemistry,color picker,eye dropper,lab
+Pizza	food-beverage	food,pie,quiche
+Plane	navigation,transportation,travel	airplane,plane,trip
+PlaneLanding	transportation,travel	$extends:plane,arrival,landing
+PlaneTakeoff	transportation,travel	$extends:plane,departure,takeoff
+Play	multimedia	$group:play,audio,music,video
+Plug	connectivity,devices	charger,current,electricity,electronics,energy,outlet,power,socket,voltage
+Plug2	$extends:plug	$extends:plug
+PlugZap	devices	$extends:plug,$extends:zap,battery,charge,charging,connect
+Plus	cursors,development,math	$group:plus,aim,calculate,crosshair,maximum,positive,reticule,scope,sight,target,toolbar,upgrade
+Pocket		
+PocketKnife	tools	blade,corkscrew,cutter,gadget,multi-tool,multitask,penknife,swiss army knife
+Podcast	$extends:mic,connectivity	$extends:mic,airwaves,audio,broadcast,live,push to talk,signal,speech,stream,talk,transmission,voice,voice chat,wireless
+Pointer	cursors	mouse
+PointerOff	$extends:pointer	$extends:pointer,$group:off
+Popcorn	food-beverage,multimedia	candy,cinema,films,movies,salted,snack,sugar,sweet
+Popsicle	food-beverage	food,ice cream,ice lolly,sweet
+PoundSterling	finance	$group:currency
+Power	devices	binary,boolean,button,device,keyboard,off,on,quit,reboot,restart,switch,toggle,troubleshoot
+PowerOff	$extends:power	$extends:power,$group:off
+Presentation	communication,design,multimedia	blackboard,chalk,easel,learning,lesson,marker pens,markers,meeting,office,planning,powerpoint,ppt,pptx,project,school,screen,slides,whiteboard
+Printer	devices	device,fax,office
+PrinterCheck	$extends:printer	$extends:printer,$group:check,printed
+Projector	communication,devices,multimedia	cinema,film,home video,meeting,movie,office,planning,presentation,project,slideshow
+Proportions	design,devices,layout,photography	16:9,4:3,adjust,aspect ratio,desktop,dimensions,landscape,mobile,monitor,orientation,portrait,resolution,responsive,rotate,rotation,screens,sizes,widescreen
+Puzzle	development,gaming	component,module,part,piece
+Pyramid	math,shapes,travel	ancient,egyptian,geometry,hierarchy,landmark,prism,structure,tourism,triangle,triangular
+QrCode	development,social	barcode,digital,information,link,scan,url
+Quote	text	quotation
+Rabbit	animals	animal,bunny,fast,hare,hop,pest,pet,rodent,speed
+Radar	communication,navigation,security	detect,find,locate,scan,sonar
+Radiation	science	atomic,element,fallout,molecule,nuclear,particle,physics,radioactive,waste
+Radical	development,math	calculate,formula,math,operator,root,square,symbol
+Radio	connectivity,devices,multimedia	broadcast,connectivity,frequency,live,signal
+RadioReceiver	devices,multimedia	connect,device,music
+RadioTower	$extends:radio	$extends:radio
+Radius	design,math,shapes,tools	calculate,circle,geometry,measure,radii,shape,size,trigonometry
+RailSymbol		
+Rainbow	weather	arc,clear,colors,colours,light,prism,spectrum,sunshine
+Rat	animals	disease,gerbil,mice,mouse,pest,pet,plague,rodent
+Ratio	design,layout,photography	16:9,4:3,adjust,aspect ratio,desktop,dimensions,landscape,mobile,monitor,orientation,portrait,proportions,resolution,responsive,rotate,rotation,screens,sizes,widescreen
+Receipt	finance,shopping	$,bill,cashier,check,counterfoil,currency,dollar,slip,usd,voucher
+ReceiptCent	$extends:receipt	$extends:receipt,cents,¢
+ReceiptEuro	$extends:receipt	$extends:receipt,€
+ReceiptIndianRupee	$extends:receipt	$extends:receipt,inr,₹
+ReceiptJapaneseYen	$extends:receipt	$extends:receipt,jpy,¥
+ReceiptPoundSterling	$extends:receipt	$extends:receipt,$group:currency,british,gbp,£
+ReceiptRussianRuble	$extends:receipt	$extends:receipt,rub,₽
+ReceiptSwissFranc	$extends:receipt	$extends:receipt,chf,₣
+ReceiptText	$extends:receipt	$extends:receipt,conditions,contract,details,small print,terms
+RectangleEllipsis	development,text	...,2fa,authenticate,code,dots,ellipsis,et cetera,etc,extra,field,fill,further,loader,loading,login,menu,more,operator,options,overflow,password,pending,progress,rest,spread,throbber,…
+RectangleHorizontal	design,shapes	16:9,aspect ratio,horizontal,rectangle,shape
+RectangleVertical	design,shapes	9:16,aspect ratio,rectangle,shape,vertical
+Recycle	sustainability	arrows,salvage,sustainability
+Redo	arrows,text	history,rerun,undo
+Redo2	$extends:redo	$extends:redo
+RedoDot	$extends:redo	$extends:redo,forward,over,redo,step
+RefreshCcw	arrows	$group:sync,arrows,circular,rotate
+RefreshCcwDot	$extends:refresh-ccw,development	$extends:refresh-ccw,code,coding,issue,version control
+RefreshCw	arrows	$group:sync,arrows,circular,rotate
+RefreshCwOff	$extends:refresh-cw	$extends:refresh-cw,$group:off,disconnect,error,ignore,no,stop
+Refrigerator	food-beverage,home	chiller,cold storage,cooler,freezer,fridge,icebox
+Regex	development,text	code,search,text
+RemoveFormatting	text	$group:letter,$group:minus,format,times,x
+Repeat	arrows,multimedia	arrows,loop
+Repeat1	arrows,multimedia	$group:digit,replay
+Repeat2	$extends:repeat,social	$extends:repeat,repeat,repost,retweet,share
+Replace	text	change,search,substitute,swap
+ReplaceAll	$extends:replace	$extends:replace
+Reply	mail	email
+ReplyAll	$extends:reply	$extends:reply
+Rewind	arrows,multimedia	music
+Ribbon	emoji,medical,social	awareness,band,cordon,strap,strip,tape
+Rocket	development,gaming	boost,deploy,deployment,launch,release,space,version
+RockingChair	home	chair,comfort,furniture,relax,seat
+RollerCoaster	navigation,travel	amusement park,attraction,entertainment,funfair,theme park
+Rotate3d	design	axis,gizmo,orbit,orientation,transform
+RotateCcw	arrows,design,photography	arrow,backup,counter-clockwise,left,redo,refresh,reload,replay,rerun,restart,retry,reverse,rewind,undo
+RotateCcwSquare	$extends:rotate-ccw	$extends:rotate-ccw,45,90,degrees,image,rotate,°
+RotateCw	arrows,design,photography	arrow,clockwise,redo,refresh,reload,rerun,right
+RotateCwSquare	$extends:rotate-cw	$extends:rotate-cw,45,90,degrees,image,rotate,°
+Route	navigation	auto,detour,direction,directional,flow,forward,gps,journey,location,map,navigate,path,planner,points,reroute,right,stations,stops,turn,waypoint
+RouteOff	$extends:route	$extends:route,$group:off,clear,closed,reset
+Router	connectivity,devices,home	cloud,computer,server
+Rows2	design,layout,text	center,drawer,even,half,horizontal,lines,list,middle,panel,paragraphs,parallel,preview,queue,series,split,vertical
+Rows3	design,layout,text	center,drawers,even,half,horizontal,lines,list,middle,paragraphs,parallel,preview,queue,series,split,vertical
+Rows4	design,layout,text	center,drawers,even,grill,half,horizontal,lines,list,middle,paragraphs,parallel,preview,queue,series,split,vertical
+Rss	development,social	alert,articles,blog,broadcast,channels,content,digest,feed,following,inbox,news,newsletter,notifications,podcast,posts,publishing,reader,subscribe,syndication,updates,weblog
+Ruler	design,layout,math,tools	breadth,centimeters,cm,depth,dimensions,extent,feet,foot,height,inches,length,measurements,metre,millimeters,mm,size,stationery,units,width
+RussianRuble	finance	$group:currency
+Sailboat	transportation,travel	boat,dock,harbor,harbour,ship
+Salad	food-beverage	course,dish,food,health,meal,restaurant,side,vegetables,vegetarian
+Sandwich	food-beverage	dish,food,lunch,meal,restaurant,snack
+Satellite	connectivity,science	orbit,space station,transmitter
+SatelliteDish	connectivity,devices,multimedia	antenna,broadcast,communication,dish aerial,receiver,saucer,signal
+Save	files	floppy disk
+SaveAll	$extends:save	$extends:save,copy,floppy disks
+SaveOff	$extends:save	$extends:save,$group:off,unsalvageable
+Scale	finance,science	balance,compare,decision,ethics,fair,judge,justice,law,legal,license,measure,right,rule,weight
+Scale3d	design	axis,gizmo,size,transform
+Scaling	design	design,resize,scale
+Scan	devices,photography,security,shopping	ar,area,augmented reality,barcode,boundary,bounds,box,camera,checkout,dashed,focus,frame,lens,qr-code,select,square,surveillance,target
+ScanBarcode	devices,shopping	$extends:scan,buy,cart,consumer,packaging,product,purchase,retail,till,transaction
+ScanEye	account,photography,security	$extends:scan,access,authentication,biometric,expand,fullscreen,gallery,identification,image,login,preview,retina,watch,zoom
+ScanFace	account,devices,security	$extends:scan,2fa,access,authentication,biometric,face,identification,login
+ScanLine	devices,shopping	$extends:scan,buy,cart,consumer,packaging,product,purchase,retail,till,transaction
+ScanQrCode	account,devices,security,shopping	$extends:scan,digital,information,qr code,scan,scanner,url
+ScanSearch	accessibility,multimedia,photography	$extends:scan,$group:search,expand,fullscreen,gallery,image,preview
+ScanText	devices,text	$extends:scan,copy,lines,read,recognition,translate
+School	buildings,navigation	academia,assignment,building,campus,childhood,classroom,course,degree,diploma,education,exam,graduation,homework,knowledge,learning,lecture,professor,research,scholar,student,study,tutorial,university
+Scissors	design,text,tools	chop,crafts,cut,snip,stationery
+ScissorsLineDashed	design,tools	$extends:scissors,$group:dashed,along,cut here,diagram,instructions
+ScreenShare	communication,connectivity,devices	desktop,host,monitor
+ScreenShareOff	$extends:screen-share	$extends:screen-share,$group:off,disconnect
+Scroll	development,gaming,text	code,coding,document,list,log,long,notes,paper,parchment,script,scripture,story
+ScrollText	$extends:scroll	$extends:scroll,changelog,release notes
+Search	text	$group:search,enlarge
+SearchCheck	$extends:search	$extends:search,$group:check,found
+SearchCode	$extends:search,development	$extends:search,$group:code,<>,chevrons,grep
+SearchSlash	$extends:search	$extends:search,/,abort,cancel,clear,stop
+SearchX	$extends:search	$extends:search,$group:x,404,not found,page not found,stop
+Section	text	legal,mark,prose,punctuation,symbol,text,type,typography
+Send	communication,mail	email,invitation,invite,mail,message,paper aeroplane,paper airplane,submit
+SendHorizontal	$extends:send	$extends:send
+SendToBack	design,layout	back,backwards,bring,layer,move,order,overlap,send,under
+SeparatorHorizontal	arrows,layout,text	move,split
+SeparatorVertical	arrows,layout,text	move,split
+Server	development,devices	cloud,storage
+ServerCog	$extends:server	$extends:server,$group:cog,computing
+ServerCrash	$extends:server	$extends:server,error,problem
+ServerOff	$extends:server	$extends:server,$group:off
+Settings	account	$group:cog
+Settings2	$extends:settings	$extends:settings,slider
+Shapes	gaming,shapes	blocks,circle,classification,collection,different,equilateral,learning,square,toy,triangle
+Share	social	connections,network
+Share2	$extends:share	$extends:share
+Sheet	files,text	csv,excel,spreadsheets,table,xls,xlsx
+Shell	animals,development,nature,travel	ammonite,bash,beach,biology,bubble gum,carpet,chewing gum,command line,fossil,holiday,hosepipe,hypnosis,hypnotise,ocean,roll,sand,sea life,session,spinner,spiral,string,sugar,sweet,terminal,wrap,zsh
+Shield	account,development,gaming,security	$group:shield,admin,antivirus,armored,armoured,army,audit,battle,block,bravery,cadet,crest,detection,find,foot soldier,infantry,invincibility,invincible,invulnerable,knight,military,pawn,scan,scout,strength,strong,threat,tough,trooper,undamaged,verification,vigilance,vigilant,war
+ShieldAlert	account,development,gaming,notifications,security	$extends:shield,$group:exclamation-mark,alarm,attacked,attention,audited,blocked,compromised,damaged,data leak,defenceless,defenseless,detected,disabled,emergency,expired,exploit,found,hit,inactive,infected,infection,injured,insecure,intercepted,interception,saved,scanned,stopped,thwarted,unarmored,unarmoured,uncertified,undefended,unguarded,unprevented,unprotected,unsafe,unsecured,unshielded,unverified,vulnerability,vulnerable,weakness
+ShieldBan	account,development,gaming,security	$extends:shield,$group:off,attacked,audited,compromised,damaged,data leak,defenceless,defenseless,detected,eliminated,error,expired,exploit,found,hit,infected,infection,injured,insecure,intercepted,interception,saved,scanned,stopped,thwarted,unarmored,unarmoured,uncertified,undefended,unguarded,unprevented,unprotected,unsafe,unsecured,unshielded,unverified,vulnerability,vulnerable,weakness
+ShieldCheck	account,development,gaming,security	$extends:shield,$group:check,activated,active,audited,blocked,certification,certified,checked,cleaned,cleared,defended,disinfected,enabled,found,guarantee,guarded,insurance,passed,prevented,qualified,scanned,secured,tested,uninfected,warranty
+ShieldEllipsis	account,development,gaming,security	$extends:shield,...,armoring,armouring,auditing,blocking,defending,detecting,dots,etc,finding,guarding,loader,loading,more,preventing,progress,protecting,scanning,securing,throbber,upgrading,verifying,…
+ShieldHalf	account,development,gaming,security	$extends:shield,academy,college,education,faction,flag,fraternity,logo,ranking,school,sigil,team,uniform,university
+ShieldMinus	account,development,gaming,security	$extends:shield,$group:minus,clean,damaged,deactivate,decommission,disable,disinfect,downgraded,fix,hit,minimum,patch,relax,stop,unarm,unblock,unguard,unsecure,unshield,weakened
+ShieldOff	account,development,gaming,security	$extends:shield,$group:off,compromised,damaged,data leak,defenceless,defenseless,eliminated,error,expired,exploit,hit,infected,infection,injured,insecure,interception,unarmored,unarmoured,unaudited,undefended,undetected,unguarded,unprevented,unprotected,unsafe,unsecured,unshielded,unverified,vulnerability,vulnerable,weakness
+ShieldPlus	account,development,gaming,medical,security	$extends:shield,$group:plus,activate,enable,enterprise,full,maximum,medic,professional,ultra,upgraded
+ShieldQuestion	account,development,gaming,security	$extends:shield,$group:question-mark,compromised,data leak,defenceless,defenseless,exploit,inactive,infection,insecure,unarmored,unarmoured,uncertified,undefended,undetected,unguarded,unprevented,unprotected,unsafe,unsecured,unshielded,unverified,vulnerability,vulnerable,weakness
+ShieldX	account,development,gaming,security	$extends:shield,$group:x,attacked,audited,blocked,compromised,damaged,data leak,dead,deceased,defenceless,defenseless,detected,eliminated,error,expired,exploit,exterminated,false,found,hit,inactive,infected,infection,injured,insecure,intercepted,interception,prevented,saved,scanned,stopped,thwarted,unarmored,unarmoured,undefended,unguarded,unprotected,unsafe,unsecured,unshielded,unverified,vulnerability,vulnerable,weakness,wrong
+Ship	navigation,transportation,travel	boat,cruise,knots,maritime,nautical mile,navy,ocean liner,releases,sailing,tanker,trip,vessel,yacht
+ShipWheel	$extends:ship	$extends:ship,rudder,steering
+Shirt	shopping	clothes,clothing,shopping,store,t-shirt
+ShoppingBag	shopping	cart,ecommerce,purchase,store
+ShoppingBasket	shopping	cart,e-commerce,ingredients,items,products,purchase,store
+ShoppingCart	shopping	basket,cart,e-commerce,ingredients,items,products,purchase,store,trolley
+Shovel	gaming,nature,tools	dig,spade,treasure
+ShowerHead	home,travel	amenities,bath,bathroom,services,shower
+Shrink	arrows,layout	fullscreen,scale
+Shrub	nature	forest,nature,park,undergrowth
+Shuffle	arrows,multimedia	music,random,reorder
+Sigma	letters-digits,math,science,text	$group:letter,calculate,enumerate,enumeration,formula,math,sum
+Signal	connectivity	2g,3g,4g,5g,connection,gsm,phone,wireless
+SignalHigh	$extends:signal	$extends:signal
+SignalLow	$extends:signal	$extends:signal
+SignalMedium	$extends:signal	$extends:signal
+SignalZero	$extends:signal	$extends:signal,lost
+Signature	text	agreement,approval,authentic,authorize,autograph,contract,cursive,document,format,handwriting,identity,ink,input,legal,personal,scribble,sign,text,unique,verification
+Signpost	arrows,navigation	arrow,bidirectional,checkpoint,direction,east,guide,indicator,left,location,marker,milestone,navigation,pointer,right,route,wayfinding,west
+SignpostBig	$extends:signpost	$extends:signpost
+Siren	medical,notifications	alarm,alert,ambulance,emergency,light,police,security
+SkipBack	arrows,multimedia	arrow,music,previous
+SkipForward	arrows,multimedia	arrow,music,next,skip
+Skull	gaming	bone,danger,death
+Slack		
+Slash	development,math	/,divide,division,or
+Slice	design	cutter,knife,scalpel
+SlidersHorizontal	account	controls,filters,settings
+SlidersVertical	account	controls,settings
+Smartphone	devices	cellphone,device,display,mobile,phone,portable,responsive,screen,touchscreen
+SmartphoneCharging	$extends:smartphone	$extends:smartphone,power
+SmartphoneNfc	connectivity,devices,finance	$extends:smartphone,contactless,near-field communication,payment
+Smile	emoji	$group:emoticon,friendly,good,happiness,happy,ironic,passive aggressive,patronizing,positive,smile
+SmilePlus	communication,emoji,social	$extends:face-slightly-smiling,$extends:group,$group:plus,react
+Snail	animals,food-beverage	animal,delicacy,insect,slow,speed,spiral
+Snowflake	seasons,weather	cold,freeze,snow,weather,winter
+Sofa	home	armchair,couch,furniture,leisure,lounge,loveseat
+Soup	food-beverage	bowl,course,dish,food,meal,restaurant,starter
+Space	text	characters,font,letters,selection,text,typography
+Spade	gaming,shapes	cards,playing,shape,suit
+Sparkle	shapes	$group:sparkles,celebration,effect,filter,night
+Sparkles	gaming,multimedia	$group:sparkles,effect,filter,night
+Speaker	devices,multimedia	audio,bass,dj,music,producer,production,sound,subwoofer,tweeter
+Speech	accessibility,communication	accessibility,dda,disability,disabled,human,people,sound
+SpellCheck	development,text	$group:check,$group:letter,a,code,correction,error,linter,mistake,oversight,spelling,typo
+SpellCheck2	$extends:spell-check	$extends:spell-check
+Spline	design	$group:line,draw,pen,tool
+Split	arrows,development	branch,break,disband,disunite,divide,separate
+SprayCan	design,tools	aerosol,air freshener,color,decoration,deodorant,graffiti,paint,shaving foam
+Sprout	nature,seasons,sustainability	eco,green,growth,leaf,nature,plant,seed,spring,sustainability
+Square	multimedia,shapes	1:1,aspect ratio,audio,music,playback,rectangle,shape,stop,video
+SquareActivity	medical,multimedia,science,social	action,aftershock,audio,defibrillator,earthquake,emergency room,er,exercise,fitness,healthcare,heart rate monitor,hospital,intensive care,magnitude,motion,movement,music,pulse,richter scale,seismic,shockwave,synthesiser,synthesizer,tremor,vital signs,vitals,waveform
+SquareArrowDown	arrows	$group:direction-down,$group:navigation-next,backwards,button,keyboard,reverse,sign
+SquareArrowDownLeft	arrows	$group:direction-down-left,button,keyboard,sign,turn
+SquareArrowDownRight	arrows	$group:direction-down-right,button,keyboard,sign,turn
+SquareArrowLeft	arrows	$group:direction-left,$group:navigation-previous,<-,button,keyboard,previous,sign
+SquareArrowOutDownLeft	arrows	$group:direction-down-left,$group:exit
+SquareArrowOutDownRight	arrows	$group:direction-down-right,$group:exit
+SquareArrowOutUpLeft	arrows	$group:direction-up-left,$group:exit
+SquareArrowOutUpRight	arrows,social	$group:direction-up-right,$group:exit,external,link,open,redirect,share
+SquareArrowRight	arrows	$group:direction-right,$group:navigation-next,->,button,keyboard,next,sign,west
+SquareArrowUp	arrows	$group:direction-up,$group:navigation-previous,button,forward,keyboard,sign
+SquareArrowUpLeft	arrows	$group:direction-up-left,button,keyboard,sign
+SquareArrowUpRight	arrows,social	$group:direction-up-right,button,keyboard,share,sign
+SquareAsterisk	development,math,security,text	*,access,glob pattern,key,mandatory,multiplication,multiply,password,required,secret,wildcard
+SquareBottomDashedScissors	design,development,files,text,tools	$group:dashed,chop,crafts,cut,snippet,stationery
+SquareChartGantt	$extends:chart-gantt,development	$extends:chart-gantt,button,code,coding,intentions,toolbar
+SquareCheck	notifications	$group:check
+SquareCheckBig	$extends:square-check	$extends:square-check
+SquareChevronDown	arrows	$group:direction-down,$group:navigation-next,back,menu,panel
+SquareChevronLeft	arrows	$group:direction-left,$group:navigation-previous,<,button,fewer,keyboard,less than,menu,panel,previous
+SquareChevronRight	arrows,development	$group:direction-right,$group:navigation-next,>,code,coding,command line,console,greater,menu,more than,next,panel,prompt,shell,terminal
+SquareChevronUp	arrows,math	$group:direction-up,$group:navigation-previous,^,ahead,button,caret,control,ctrl,exponential,keyboard,mac,menu,panel,power,superscript
+SquareCode	development,text	$group:code,gist,html,source,xml
+SquareDashedBottom	development,files	$group:dashed,1:1,aspect ratio,code,coding,rectangle,shape,snippet
+SquareDashedBottomCode	$extends:square-dashed-bottom	$extends:square-dashed-bottom,$group:code
+SquareDashedKanban	charts,development	$group:dashed,agile,board,boilerplate,code,coding,draft,intentions,issues,manage,overview,plan,productivity,projects,roadmap,template,tickets,work
+SquareDashedMousePointer	cursors,development	$group:dashed,box,browser,click,dom,element,inspector,mouse,node,pointer,selector,target
+SquareDivide	math	/,calculate,math,÷
+SquareDot	development	.,diff,git,modified
+SquareEqual	math	=,calculate
+SquareFunction	development,letters-digits,math	$group:letter,automation,code,math,programming
+SquareKanban	charts,development	agile,board,button,code,coding,intentions,issues,manage,overview,plan,productivity,projects,roadmap,tickets,toolbar,work
+SquareLibrary	$extends:library	academy,albums,authors,books,collection,college,education,fiction,high school,information,knowledge,learning,music,novels,package,reading,records,research,stories,study,university,vinyl,written
+SquareM	letters-digits,navigation,transportation	$group:letter,line,male,measurement,medium,mega,metre,metro,million,size,subway,track,underground,uppercase
+SquareMenu	layout	bars,hamburger,menu bar,navigation,options,panel
+SquareMinus	development,math,text	$group:minus,---,button,calculator,code,coding,decrease,divider,downgrade,horizontal rule,hr,html,keyboard,line,markdown,markup,minimum,operator,separator,toolbar
+SquareMousePointer	cursors,development	box,browser,click,dom,element,inspector,mouse,node,pointer,selector,target
+SquareParking	letters-digits,navigation,transportation	$group:letter,car park,chemistry,math,music,p-value,page,parking,parking lot,phosphorus,piano,probability,soft,statistics,uppercase
+SquareParkingOff	$extends:square-letter-p	$extends:square-letter-p,$group:off,no parking
+SquarePen	text	$group:pen,artist,biro,felt tip,ink,marker,stationery
+SquarePercent	finance,math,shopping,social	$group:percent,sticker,unverified,verified
+SquarePi	development,letters-digits,math	$group:letter,code,coding,constant,formula,geometry,programming,symbol,trigonometry
+SquarePilcrow	text	blind,mark,paragraph,paraph,prose,symbol,text,type,typography
+SquarePlay	multimedia	$group:play,audio,music,video
+SquarePlus	development,math,text	$group:plus,button,calculate,calculator,code,coding,concatenate,join,keyboard,maximum,operator,positive,toolbar,upgrade
+SquarePower	devices	binary,boolean,button,device,keyboard,off,on,reboot,restart,switch,toggle,troubleshoot
+SquareRadical	development,math	calculate,formula,math,operator,root,square,symbol
+SquareScissors	design,development,files,text,tools	button,chop,crafts,cut,snippet,stationery,toolbar
+SquareSigma	letters-digits,math,text	$group:letter,calculate,enumerate,enumeration,formula,math,sum
+SquareSlash	development,math	/,diff,divide,division,git,ignored,or,shortcut
+SquareSplitHorizontal	layout	divide,split
+SquareSplitVertical	layout	divide,split
+SquareSquare	layout	center,float,rectangle
+SquareStack	development,files,text	backup,clone,copy,duplicate,history,multiple,revisions,version control,versions
+SquareTerminal	development	$group:code,code,command line,prompt,shell
+SquareUser	account	$group:user
+SquareUserRound	$extends:square-user	$extends:square-user
+SquareX	math,notifications	$group:x,math,multiplication,multiply
+Squircle	shapes	shape
+Squirrel	animals	animal,nuts,pest,pet,retrieve,rodent,stash,storage,updates
+Stamp	design,tools	clone,library,loyalty,mark,print
+Star	emoji,gaming,shapes,social	$group:star
+StarHalf	social	$extends:star
+StarOff	social	$extends:star,$group:off,dislike,remove,unlike,unrate
+StepBack	arrows,multimedia	arrow,left,music,previous,reverse
+StepForward	arrows,multimedia	arrow,continue,music,next,right
+Stethoscope	medical,science	heart,lungs,medical,patient,phonendoscope,sound
+Sticker	emoji,social	emotion,feedback,happy,reaction,smile
+StickyNote	social,text	annotation,brainstorm,comment,document,idea,memo,office,page,paper,post-it,reaction,reminder,sheet,stationary,task,todo
+Store	buildings,navigation,shopping	boutique,building,merchant,sell,selling,shop,stand,supermarket
+StretchHorizontal	layout	distribute,flex,items,justify
+StretchVertical	layout	distribute,flex,items,justify
+Strikethrough	text	$group:letter,$group:minus,cross out,format
+Subscript	text	$group:digit,$group:letter
+Sun	accessibility,seasons,sustainability,weather	brightness,light,summer,weather
+SunDim	accessibility,weather	brightness,brightness low,dim,low
+SunMedium	accessibility,weather	brightness,medium
+SunMoon	accessibility	$extends:sun,appearance,auto theme,dark,moon,sun,system theme,theme
+SunSnow	seasons,weather	air conditioning,cold,hot,seasons,temperature,weather
+Sunrise	time,weather	day,morning,time,weather
+Sunset	time,weather	evening,night,time,weather
+Superscript	text	$group:digit,$group:letter,exponent
+SwatchBook	design,photography	brightness,carpet,colors,colours,hue,palette,pantone,samples,saturation,scheme,shades,swatches,textile,theme,tint
+SwissFranc	finance	$group:currency
+SwitchCamera	communication,devices,photography	back,front,photo,selfie
+Sword	gaming	battle,challenge,combat,duel,fantasy,game,knight,medieval,melee,offense,rpg,sharp,war,warrior,weapon
+Swords	gaming	battle,challenge,combat,conflict,crossed,duel,faction,fantasy,game,medieval,melee,opponent,rivalry,rpg,versus,war,warrior,weapon
+Syringe	medical,science	blood,medical,medicine,needle,nozzle,plunger,pump
+Table	files,text	csv,excel,grid,spreadsheet,xls,xlsx
+Table2	$extends:table	$extends:table
+TableCellsMerge	$extends:table	$extends:table,row
+TableCellsSplit	$extends:table	$extends:table,row
+TableColumnsSplit	$extends:table	$extends:table,break,cut,divide,segment,separate
+TableOfContents	text	chapters,content,document structure,documentation,faq,index,knowledge base,manual,navigation,outline,overview,sections,toc
+TableProperties	$extends:table,development	$extends:table,dictionary,hash,object,plist,property list
+TableRowsSplit	$extends:table	$extends:table,break,cut,divide,segment,separate
+Tablet	devices	device,display,mobile,portable,responsive,screen,touchscreen
+TabletSmartphone	$extends:tablet,design,development	$extends:tablet,browser,cellphone,phone,screens,testing
+Tablets	medical	drug,medication,medicine,pharmacy,pills,prescription
+Tag	account,shopping	badge,label,mark,promo,promotion,sell,selling,ticket
+Tags	account,shopping	badges,copy,labels,marks,multiple,tickets
+Tally1	gaming,math	1,bar,cell,count,days,enumerate,first,one,prison,score,sentence
+Tally2	gaming,math	2,bars,cell,count,days,double,enumerate,prison,score,second,sentence,two
+Tally3	gaming,math	3,bars,cell,count,days,enumerate,prison,score,sentence,third,three,triple
+Tally4	gaming,math	4,bars,cell,count,days,enumerate,fourth,prison,quadruple,score,sentence
+Tally5	gaming,math	/,5,bars,cell,count,days,enumerate,fifth,five,prison,score,sentence,slash
+Tangent	design,math,shapes	bezier curve,circle,geometry,shape,tangential,trigonometry
+Target	gaming	bullseye,deadline,logo,objective,okr,outcome,overview,productivity,projects,result,work
+Telescope	science,tools	astronomy,discovery,exploration,explore,focus,observe,perspective,space,stargazing,view,vision
+Tent	nature,travel	camping,campsite,holiday,indian,lodge,native american,nomadic,outdoors,retreat,teepee,tipi,wigwam,wilderness
+TentTree	nature,travel	$extends:tent
+Terminal	development	$group:code,code,command line,prompt,shell
+TestTube	science	ampoule,ampule,chemistry,experiment,flask,lab,phial,test,tube,vial
+TestTubeDiagonal	$extends:test-tube	$extends:test-tube
+TestTubes	science	ampoules,ampules,chemistry,experiment,flasks,lab,phials,test,tubes,vials
+Text	text	$group:position-left,alignment,list,text
+TextCursor	cursors,text	caret,edit,input,insert,select,textarea,type,typing,write,writing
+TextCursorInput	layout,text	select
+TextQuote	text	blockquote,indent,quotation,reply,response
+TextSearch	text	$group:search,copy,data,document,pdf,txt
+TextSelect	cursors,text	$group:dashed,find,search,selection
+Theater	buildings,social	entertainment,musical,podium,stage,theater,theatre
+Thermometer	weather	celsius,fahrenheit,temperature,weather
+ThermometerSnowflake	$extends:thermometer	$extends:thermometer,cold,freeze,freezing
+ThermometerSun	$extends:thermometer	$extends:thermometer,hot,warm
+ThumbsDown	emoji,social	bad,dislike,emotion
+ThumbsUp	emoji,social	emotion,good,like,recommend,recommendation
+Ticket	account,transportation	concert,dashed,entry,event,invitation,invite,pass,perforated,show,voucher
+TicketCheck	transportation	$extends:ticket,$group:check,booked,certified,checked,purchased,receipt,redeemed,used
+TicketMinus	transportation	$extends:ticket,$group:minus,decrease,unbook
+TicketPercent	shopping,transportation	$extends:ticket,$group:percent,book,purchase
+TicketPlus	transportation	$extends:ticket,$group:plus,book,purchase
+TicketSlash	transportation	$extends:ticket,$group:minus,$group:off,banned,barred,cancellation,checked,denied,error,invalidated,marked,redeemed,refunded,refused,spoiled,used,verified,void
+TicketX	transportation	$extends:ticket,$group:x,banned,barred,denied,error,forbidden,invalidated,prohibited,refunded,refused,spoiled,used,void
+Tickets	transportation,travel	concert,dashed,entry,event,pass,perforated,show,travel,trip,voucher
+Timer	time	$group:clock,stopwatch
+TimerOff	$extends:timer	$extends:timer,$group:off
+TimerReset	$extends:timer	$extends:timer
+ToggleLeft	development,layout	$group:position-left,boolean,off,on,switch
+ToggleRight	development,layout	$group:position-right,boolean,off,on,switch
+Tornado	weather	hurricane,storm,weather,wind
+Torus	design,food-beverage,math,shapes	3d,dessert,donut,doughnut,fast food,hollow,junk food,ring,snack,sugar,sweet,treat
+Touchpad	devices	cursor,trackpad
+TouchpadOff	$extends:touchpad	$extends:touchpad,$group:off
+TowerControl	buildings,transportation,travel	airport,lighthouse,tower,transportation,travel
+ToyBrick	development,gaming	addon,block,integration,lego,plugin
+Tractor	food-beverage,sustainability,transportation	equipment,farmer,farming,harvest,ranch,vehicle
+TrafficCone	transportation	block,roadworks,safety,tarmac
+TrainFront	transportation	bullet,fast,high-speed,line,metro,railway,subway,track,underground
+TrainFrontTunnel	$extends:train-front,navigation	$extends:train-front,speed
+TrainTrack	navigation,transportation	line,railway
+TramFront	transportation	line,metro,railway,subway,tourism,track,underground
+Trash	files,mail	$group:minus,bin,cleanup,deletion,discard,empty,garbage,junk,recycle,rubbish,waste
+Trash2	files,mail	$group:minus,bin,cleanup,deletion,discard,empty,garbage,junk,recycle,rubbish,waste
+TreeDeciduous	nature,sustainability	forest,nature,park,tree
+TreePalm	nature,sustainability,travel	island,leisure,vacation
+TreePine	nature,sustainability	forest,nature,park,pine,tree
+Trees	nature,sustainability	forest,nature,park,tree
+Trello		
+TrendingDown	arrows,charts	$group:chart,$group:direction-down
+TrendingUp	arrows,charts	$group:chart,$group:direction-up
+Triangle	shapes	delta,equilateral,hierarchy,pyramid,shape
+TriangleAlert	$extends:triangle,development,notifications	$group:exclamation-mark,linter
+TriangleRight	$extends:triangle,math	$group:direction-right,controller,controls,delta,geometry,incline,increase,ramp,slope,tv remote,volume
+Trophy	gaming,sports	achievement,award,celebration,champion,competition,cup,first,gold,leaderboard,prize,ranking,result,reward,sports,success,tournament,victory,winner
+Truck	transportation	delivery,haulage,lorry,shipping,van
+Turtle	animals	animal,pet,slow,speed,tortoise
+Tv	communication,devices,multimedia	1080p,4k,8k,aerial,broadcast,cable,channels,connection,connectivity,digital,display,entertainment,frequency,hd,high-definition,live,receiver,satellite,scan,showtime,signal,smart,stream,television,terrestrial,transmission,tune,video,widescreen
+TvMinimal	devices,multimedia	$extends:tv,catchup,flat screen,home cinema
+TvMinimalPlay	$extends:tv-minimal	$extends:tv-minimal,$group:play,film,movie,ott
+Twitch		
+Twitter		
+Type	letters-digits,text	$group:letter
+TypeOutline	$extends:type	$extends:type,contour,line,profile,silhouette,stroke
+Umbrella	weather	coverage,insurance,rain,weather
+UmbrellaOff	$extends:umbrella	$extends:umbrella,$group:off,antivirus,risky,uncovered,uninsured,unprotected
+Underline	text	$group:letter,format
+Undo	arrows,text	history,redo,rerun
+Undo2	$extends:undo	$extends:undo,back,direction,return,reverse,revert,u-turn
+UndoDot	$extends:undo	$extends:undo,back,step
+UnfoldHorizontal	arrows,layout	arrow,collapse,dashed,fold,vertical
+UnfoldVertical	arrows,layout	arrow,dashed,expand,vertical
+Ungroup	files,layout	cluster,collection,cubes,packages,parts,separate,units
+University	buildings,navigation	academy,building,childhood,college,education,institute,school
+Unlink	text	unchain,url
+Unlink2	$extends:unlink	$extends:unlink
+Unplug	connectivity,development,devices	disconnect,electricity,electronics,energy,outlet,socket
+Upload	arrows,files	file
+Usb	connectivity,devices	bus,connector,controller,interface,serial,universal
+User	account	$group:user
+UserCheck	$extends:user	$extends:user,$group:check,followed,subscribed
+UserCog	$extends:user	$extends:user,$group:cog
+UserMinus	$extends:user	$extends:user,$group:minus,unfollow,unsubscribe
+UserPen	$extends:user	$extends:user,$group:pen
+UserPlus	$extends:user	$extends:user,$group:plus,follow,invitation,invite,subscribe
+UserRound	$extends:user	$extends:user
+UserRoundCheck	$extends:user-round	$extends:user-round,$group:check,followed,subscribed
+UserRoundCog	$extends:user-round	$extends:user-round,$group:cog
+UserRoundMinus	$extends:user-round	$extends:user-round,$group:minus,unfollow,unsubscribe
+UserRoundPen	$extends:user-round	$extends:user-round,$group:pen
+UserRoundPlus	$extends:user-round	$extends:user-round,$group:plus,follow,invitation,invite,subscribe
+UserRoundSearch	$extends:user-round,social	$extends:user-round,$group:search
+UserRoundX	$extends:user-round	$extends:user-round,$group:x,unavailable,unfollow,unsubscribe
+UserSearch	$extends:user,social	$extends:user,$group:search
+UserX	$extends:user	$extends:user,$group:x,unavailable,unfollow,unsubscribe
+Users	account,people	$group:user,group
+UsersRound	$extends:users	$extends:users
+Utensils	food-beverage,navigation,travel	breakfast,cutlery,dinner,flatware,food,fork,knife,meal,restaurant,silverware,supper,tableware
+UtensilsCrossed	$extends:utensils	$extends:utensils
+UtilityPole	buildings,home,sustainability	electricity,energy,phone,power lines,telegraph pole,transmission line
+Variable	development,math	$group:letter,(,),algebra,brackets,calculate,code,coding,parameter,parentheses,parenthesis,programming,symbol,x
+Vault	finance,home,security	bank,coffer,deposit,lockbox,locker,safe,safety,secure,storage,strongbox,valuables
+Vegan	food-beverage,sustainability	$group:letter,animal rights,diet,fruitarian,herbivorous,vegetarian
+VenetianMask	account,gaming	impersonate,incognito,mask,masquerade,secret
+Vibrate	devices,notifications	haptic feedback,notification,rumble,screen,smartphone
+VibrateOff	devices,notifications	$extends:vibrate,$group:off,notifications
+Video	communication,devices,multimedia,photography	camcorder,camera,film,motion picture,movie,recording,reel
+VideoOff	$extends:video	$extends:video,$group:off
+Videotape	devices,files,multimedia,photography	cassette,film,motion picture,movie,recording,showreel,vhs
+View	design,photography	eye,look
+Voicemail	communication,devices	audio,cassette,phone,recording,reel,tape
+Volume	communication,multimedia	music,mute,sound,speaker
+Volume1	$extends:volume	$extends:volume
+Volume2	$extends:volume	$extends:volume
+VolumeX	$extends:volume	$extends:volume
+Vote	social	ballot,check,political,poll,social,tick,vote
+Wallet	account,finance	budget,finance,money,pocket
+WalletCards	$extends:wallet	$extends:wallet,banking,cards,cash,cc,consumer,credit,debit,payment,purchase,retail,shopping,transport,wallet
+WalletMinimal	$extends:wallet	$extends:wallet
+Wallpaper	devices,photography	art,background,cover,decor,design,image,lock screen,pattern,screen,texture,visual
+Wand	cursors,design,gaming,photography	$group:sparkles,magician,selection,wizard
+WandSparkles	$extends:wand	$extends:wand
+Warehouse	buildings,navigation	building,depository,depot,logistics,repository,stockroom,storage,storehouse
+WashingMachine	devices,home,travel	amenities,clothes,cycle,drum,electronics,rinse,spin,tumble dryer
+Watch	time	$group:clock
+Waves	multimedia,navigation,sustainability,weather	frequency,hertz,ocean,sea,sound,swimming,vibrate,water,wavelength
+Waypoints	development,navigation,security	$group:graph,bounce,indirection,journey,path,planner,proxy,reroute,shared,spread,stations,stops,viral,virtual private network,vpn
+Webcam	communication,devices	camera,security
+Webhook	development	api,callback,interface,push
+WebhookOff	$extends:webhook	$extends:webhook,$group:off
+Weight	math	balance,geometry,heavy,lead,mass,measure,metal,scales
+Wheat	food-beverage	cereal,corn,gluten,grain
+WheatOff	$extends:wheat	$extends:wheat,$group:off,allergy,diet,gluten free,intolerance
+WholeWord	text	$group:letter,characters,letters,selection
+Wifi	connectivity,devices	connection,network,signal,wireless
+WifiHigh	$extends:wifi	$extends:wifi
+WifiLow	$extends:wifi	$extends:wifi
+WifiOff	$extends:wifi	$extends:wifi,$group:off,disconnected
+WifiZero	$extends:wifi	$extends:wifi
+Wind	sustainability,weather	air,blow,weather
+Wine	food-beverage	alcohol,bar,beverage,drink,glass,sommelier,vineyard,winery
+WineOff	$extends:wine	$extends:wine,$group:off,abstaining,abstinence,alcohol free,allergy,intolerance,teetotalism
+Workflow	development	$group:graph,action,automation,ci,ci/cd,cicd,connection,continuous integration,deploy,devops,node,pipeline
+Worm	animals,security	computer virus,crawl,grub,invertebrate,larva,malware,pest control,slither,snake,wiggle
+WrapText	text	break,lines,paragraph,words
+Wrench	account,development,tools	account,build,construction,diy,settings,spanner,toolbox
+X	letters-digits,math,notifications	$group:letter,$group:x,math,multiplication,multiply
+Youtube		
+Zap	devices,photography,weather	camera,electricity,energy,flash,lightning,power,quick,thunder,thunderbolt
+ZapOff	devices,photography	$extends:zap,$group:off
+ZoomIn	accessibility,design,layout,photography	$group:plus,magnifying glass
+ZoomOut	accessibility,design,layout,photography	$group:minus,magnifying glass

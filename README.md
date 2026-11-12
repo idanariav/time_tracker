@@ -55,6 +55,14 @@ adb install -r app/build/outputs/apk/release/app-release.apk   # signed with the
 
 ## Icons
 
-All icons come from [Lucide](https://lucide.dev) via `com.composables:icons-lucide`. Activities store the icon *name*
-(curated list in `ui/Icons.kt`); surfaces that can't draw an `ImageVector` (widgets, notification, launcher
-shortcuts) get a bitmap from `iconBitmap()`. DB v2 migrates v1 emoji to the closest Lucide icon.
+All ~1,520 icons of [Lucide](https://lucide.dev) (via `com.composables:icons-lucide`) are available. Activities store
+the icon *name*. The editor suggests icons matching the activity's name (icon names + Lucide tags) and offers a full
+browser (search, Lucide categories, a hand-picked "Common" set). Surfaces that can't draw an `ImageVector` (widgets,
+notification, launcher shortcuts) get a bitmap from `iconBitmap()`. DB v2 migrated v1 emoji to the closest icon.
+
+`ui/LucideCatalog.kt` (name → icon) and `assets/lucide_icons.tsv` (tags/categories) are generated; after upgrading
+the icons library, re-run:
+
+```sh
+python3 tools/gen_lucide_catalog.py --aar <icons-lucide-android-X.aar> --repo <extracted lucide-icons/lucide repo>
+```

@@ -172,28 +172,6 @@ fun ColorPicker(selected: Int, onSelect: (Int) -> Unit) {
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-fun IconPicker(selected: String, color: Int, onSelect: (String) -> Unit) {
-    val c = Color(color)
-    FlowRow(horizontalArrangement = Arrangement.spacedBy(4.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        ActivityIcons.forEach { (name, vector) ->
-            val isSel = name == selected
-            Box(
-                Modifier.size(44.dp).clip(CircleShape)
-                    .background(if (isSel) c else Color.Transparent)
-                    .clickable { onSelect(name) },
-                contentAlignment = Alignment.Center,
-            ) {
-                Icon(
-                    vector, name, modifier = Modifier.size(22.dp),
-                    tint = if (isSel) onColor(c) else MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
-        }
-    }
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TimePickDialog(hour: Int, minute: Int, onDismiss: () -> Unit, onPick: (Int, Int) -> Unit) {

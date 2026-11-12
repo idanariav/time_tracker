@@ -340,7 +340,7 @@ fun ActivityEditorScreen(id: Long?, initialGroupId: Long? = null, onBack: () -> 
                 )
             }
             SectionTitle("Icon")
-            IconPicker(icon, color) { icon = it }
+            IconChooser(name, icon, color) { icon = it }
             SectionTitle("Color")
             ColorPicker(color) { color = it }
             SectionTitle("Group")

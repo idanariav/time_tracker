@@ -12,30 +12,36 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.VectorGroup
 import androidx.compose.ui.graphics.vector.VectorPath
 import androidx.compose.ui.graphics.vector.toPath
-import com.composables.icons.lucide.*
+import com.composables.icons.lucide.Circle
+import com.composables.icons.lucide.Lucide
+import com.idanariav.timetracker.domain.IconCatalogData
+import com.idanariav.timetracker.domain.parseIconCatalog
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
-/** Curated Lucide icons for activities, keyed by the name stored in the DB. Order = picker order. */
-val ActivityIcons: Map<String, ImageVector> = linkedMapOf(
-    "Moon" to Lucide.Moon, "Bed" to Lucide.Bed, "Briefcase" to Lucide.Briefcase, "Laptop" to Lucide.Laptop,
-    "Code" to Lucide.Code, "Mail" to Lucide.Mail, "Phone" to Lucide.Phone, "MessageCircle" to Lucide.MessageCircle,
-    "Users" to Lucide.Users, "NotebookPen" to Lucide.NotebookPen, "BookOpen" to Lucide.BookOpen,
-    "GraduationCap" to Lucide.GraduationCap, "Brain" to Lucide.Brain, "Languages" to Lucide.Languages,
-    "Dumbbell" to Lucide.Dumbbell, "Footprints" to Lucide.Footprints, "Bike" to Lucide.Bike,
-    "PersonStanding" to Lucide.PersonStanding, "Waves" to Lucide.Waves, "Utensils" to Lucide.Utensils,
-    "Coffee" to Lucide.Coffee, "CookingPot" to Lucide.CookingPot, "ShoppingCart" to Lucide.ShoppingCart,
-    "Brush" to Lucide.Brush, "Shirt" to Lucide.Shirt, "ShowerHead" to Lucide.ShowerHead, "Hammer" to Lucide.Hammer,
-    "Wrench" to Lucide.Wrench, "Car" to Lucide.Car, "Bus" to Lucide.Bus, "TrainFront" to Lucide.TrainFront,
-    "Plane" to Lucide.Plane, "House" to Lucide.House, "Baby" to Lucide.Baby, "Heart" to Lucide.Heart,
-    "Dog" to Lucide.Dog, "Cat" to Lucide.Cat, "Tv" to Lucide.Tv, "Gamepad2" to Lucide.Gamepad2,
-    "Clapperboard" to Lucide.Clapperboard, "Music" to Lucide.Music, "Headphones" to Lucide.Headphones,
-    "Guitar" to Lucide.Guitar, "Mic" to Lucide.Mic, "Palette" to Lucide.Palette, "Camera" to Lucide.Camera,
-    "Trees" to Lucide.Trees, "Sprout" to Lucide.Sprout, "Flower2" to Lucide.Flower2, "Sun" to Lucide.Sun,
-    "Stethoscope" to Lucide.Stethoscope, "Pill" to Lucide.Pill, "Wallet" to Lucide.Wallet,
-    "Smartphone" to Lucide.Smartphone, "PartyPopper" to Lucide.PartyPopper, "Sparkles" to Lucide.Sparkles,
-    "Puzzle" to Lucide.Puzzle, "Star" to Lucide.Star, "Circle" to Lucide.Circle,
+/** Hand-picked everyday icons: the "Common" set shown first in the icon picker. */
+val CommonIcons: List<String> = listOf(
+    "Moon", "Bed", "Briefcase", "Laptop", "Code", "Mail", "Phone", "MessageCircle",
+    "Users", "NotebookPen", "BookOpen", "GraduationCap", "Brain", "Languages", "Dumbbell", "Footprints",
+    "Bike", "PersonStanding", "Waves", "Utensils", "Coffee", "CookingPot", "ShoppingCart", "Brush",
+    "Shirt", "ShowerHead", "Hammer", "Wrench", "Car", "Bus", "TrainFront", "Plane",
+    "House", "Baby", "Heart", "Dog", "Cat", "Tv", "Gamepad2", "Clapperboard",
+    "Music", "Headphones", "Guitar", "Mic", "Palette", "Camera", "Trees", "Sprout",
+    "Flower2", "Sun", "Stethoscope", "Pill", "Wallet", "Smartphone", "PartyPopper", "Sparkles",
+    "Puzzle", "Star", "Circle",
 )
 
-fun activityIcon(name: String): ImageVector = ActivityIcons[name] ?: Lucide.Circle
+/** Any Lucide icon by name (see [LucideCatalog]); unknown names fall back to a circle. */
+fun activityIcon(name: String): ImageVector = LucideCatalog.icon(name) ?: Lucide.Circle
+
+/** Lazily loaded search metadata (tags/categories) for all icons, from assets/lucide_icons.tsv. */
+object IconCatalog {
+    @Volatile private var cached: IconCatalogData? = null
+
+    suspend fun load(context: android.content.Context): IconCatalogData = cached ?: withContext(Dispatchers.IO) {
+        context.assets.open("lucide_icons.tsv").bufferedReader().useLines { parseIconCatalog(it) }
+    }.also { cached = it }
+}
 
 private val bitmapCache = LruCache<String, Bitmap>(64)
 

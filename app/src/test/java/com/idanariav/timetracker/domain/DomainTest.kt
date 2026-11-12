@@ -218,3 +218,35 @@ class GroupingTest {
         assertEquals(mapOf(1L to 60 * M, 2L to 90 * M), goalTotals(links, perActivity))
     }
 }
+
+class IconSearchTest {
+    private val data = parseIconCatalog(
+        sequenceOf(
+            "#cat\tweather\tWeather",
+            "Moon\taccessibility,weather\tdark,night",
+            "Bed\thome\tfurniture,hotel,sleep",
+            "BedDouble\thome\tfurniture,sleep",
+            "Waves\tweather\tocean,sea,swimming,water",
+            "MoonStar\tweather\tnight",
+            "",
+        ),
+    )
+
+    @Test fun parsesCategoriesAndIcons() {
+        assertEquals(listOf("weather" to "Weather"), data.categories)
+        assertEquals(listOf("dark", "night"), data.icons.first { it.name == "Moon" }.tags)
+    }
+
+    @Test fun nameMatchesRankBeforeTagMatches() {
+        assertEquals(listOf("Moon", "MoonStar"), searchIcons(data.icons, "moon"))
+        assertEquals(listOf("Bed", "BedDouble"), searchIcons(data.icons, "sleep"))
+        assertEquals(listOf("Waves"), searchIcons(data.icons, "Swimming"))
+    }
+
+    @Test fun multiWordActivityNamesAndCategories() {
+        // Any word may match; e.g. an activity called "Night swim".
+        assertEquals(setOf("Moon", "MoonStar", "Waves"), searchIcons(data.icons, "Night swim").toSet())
+        assertEquals(listOf("Moon", "Waves", "MoonStar"), searchIcons(data.icons, "", "weather"))
+        assertTrue(searchIcons(data.icons, "x").size == data.icons.size) // 1-letter queries are ignored
+    }
+}
